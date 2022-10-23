@@ -1,0 +1,165 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a [routerLink]="" class="brand-link">
+    <img src="assets/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light">LekkiHill</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+                 with font-awesome or any other icon font library -->
+        <li [class]="page == 'clinic'? 'menu-open active' : ''" class="nav-item">
+          <a [routerLink]="['/clinic']" [class]="page == 'clinic'? 'nav-link active' : 'nav-link'"
+            data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+            <i class="nav-icon fas fa-building"></i>
+            <p>Clinic</p>
+          </a>
+        </li>
+        <li [class]="page == 'patients'? 'nav-item menu-open' : 'nav-item'">
+          <a [routerLink]="" [class]="page == 'patients'? 'nav-link active' : 'nav-link'">
+            <i class="nav-icon fas fa-copy"></i>
+            <p>
+              Patients
+              <i class="fas fa-angle-left right"></i>
+              <span class="badge badge-info right">6</span>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/patients']"
+                [class]="page == 'patients' && subPage == 'manage'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Manage</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/patients']"
+                [class]="page == 'patients' && subPage == 'manage'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Manage</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/patients']"
+                [class]="page == 'patients' && subPage == 'manage'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Medications</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/patients']"
+                [class]="page == 'patients' && subPage == 'manage'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Labouratory</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/patients']"
+                [class]="page == 'patients' && subPage == 'manage'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Massage</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li [class]="page == 'appointments'? 'menu-open active' : ''" class="nav-item">
+          <a [routerLink]="['/appointments']" [class]="page == 'appointments'? 'nav-link active' : 'nav-link'"
+            data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+            <i class="nav-icon fas fa-building"></i>
+            <p>Appointments
+              <span class="badge badge-info right">6</span>
+            </p>
+          </a>
+        </li>
+        <li [class]="page == 'finance'? 'nav-item menu-open' : 'nav-item'">
+          <a [routerLink]="" [class]="page == 'finance'? 'nav-link active' : 'nav-link'">
+            <i class="nav-icon fas fa-copy"></i>
+            <p>
+              Finance
+              <i class="fas fa-angle-left right"></i>
+              <span class="badge badge-info right">6</span>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/finance']"
+                [class]="page == 'finance' && subPage == 'manage'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Manage</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/finance/components']"
+                [class]="page == 'finance' && subPage == 'components'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Component</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/finance/report']"
+                [class]="page == 'finance' && subPage == 'report'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Report</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li [class]="page == 'inventory'? 'nav-item menu-open' : 'nav-item'">
+          <a [routerLink]="" [class]="page == 'inventory'? 'nav-link active' : 'nav-link'">
+            <i class="nav-icon fas fa-copy"></i>
+            <p>
+              Inventory
+              <i class="fas fa-angle-left right"></i>
+              <span class="badge badge-info right">6</span>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/inventory']"
+                [class]="page == 'inventory' && subPage == 'manage'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Manage</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/inventory/category']"
+                [class]="page == 'inventory' && subPage == 'category'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Category</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/inventory/report']"
+                [class]="page == 'inventory' && subPage == 'report'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Report</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li [class]="page == 'visitors'? 'menu-open active' : ''" class="nav-item">
+          <a [routerLink]="['/visitors']" [class]="page == 'visitors'? 'nav-link active' : 'nav-link'"
+            data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+            <i class="nav-icon fas fa-building"></i>
+            <p>Visitors</p>
+          </a>
+        </li>
+        <li [class]="page == 'settings'? 'menu-open active' : ''" class="nav-item">
+          <a [routerLink]="['/settings']" [class]="page == 'settings'? 'nav-link active' : 'nav-link'"
+            data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+            <i class="nav-icon fas fa-building"></i>
+            <p>Settings</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

@@ -1,0 +1,252 @@
+<div class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <app-header></app-header>
+    <app-sidebar [page]="'patients'" [subPage]="'manage'"></app-sidebar>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Patients</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Patients</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="sticky-top mb-3">
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h4 class="card-title">{{formHeader}}</h4>
+                  </div>
+                  <!-- form start -->
+                  <form [formGroup]="loginForm">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" required
+                          [ngClass]="(last_name.invalid && (last_name.dirty || last_name.touched)) ? 'form-control is-invalid' : (last_name.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="last_name" id="last_name" placeholder="Last Name">
+                        <div *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="last_name.errors.required">Last Name is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" required
+                          [ngClass]="(first_name.invalid && (first_name.dirty || first_name.touched)) ? 'form-control is-invalid' : (first_name.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="first_name" id="first_name" placeholder="First Name">
+                        <div *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="first_name.errors.required">First Name is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" step="1" required
+                          [ngClass]="(age.invalid && (age.dirty || age.touched)) ? 'form-control is-invalid' : (age.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="age" id="age" placeholder="Age">
+                        <div *ngIf="age.invalid && (age.dirty || age.touched)" class="invalid-feedback">
+                          <div *ngIf="age.errors.required">Age is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="phone_number">Phone Number</label>
+                        <input type="number" required
+                          [ngClass]="(phone_number.invalid && (phone_number.dirty || phone_number.touched)) ? 'form-control is-invalid' : (phone_number.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="phone_number" id="phone_number" placeholder="Phone Number">
+                        <div *ngIf="phone_number.invalid && (phone_number.dirty || phone_number.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="phone_number.errors.required">Phone Number is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="areas">Gender</label>
+                        <select required
+                          [ngClass]="(sex.invalid && (sex.dirty || sex.touched)) ? 'form-control is-invalid' : (sex.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="sex" id="sex" multiple>
+                          <option value="">Select One</option>
+                          <option value="Female">Female</option>
+                          <option value="Male">Male</option>
+                        </select>
+                        <div *ngIf="sex.invalid && (sex.dirty || sex.touched)" class="invalid-feedback">
+                          <div *ngIf="sex.errors.required">Gender is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="email">E-Mail Address</label>
+                        <input type="number" required
+                          [ngClass]="(email.invalid && (email.dirty || email.touched)) ? 'form-control is-invalid' : (email.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="email" id="email" placeholder="Email">
+                        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback">
+                          <div *ngIf="email.errors.required">E-mail is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea required
+                          [ngClass]="(address.invalid && (address.dirty || address.touched)) ? 'form-control is-invalid' : (address.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="address" id="address" placeholder="Address"></textarea>
+                        <div *ngIf="address.invalid && (address.dirty || address.touched)" class="invalid-feedback">
+                          <div *ngIf="address.errors.required">Address is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="next_of_Kin">Next of Kin Name</label>
+                        <input type="number" step="0.01" required required
+                          [ngClass]="(next_of_Kin.invalid && (next_of_Kin.dirty || next_of_Kin.touched)) ? 'form-control is-invalid' : (next_of_Kin.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="next_of_Kin" id="next_of_Kin" placeholder="">
+                        <div *ngIf="next_of_Kin.invalid && (next_of_Kin.dirty || next_of_Kin.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="next_of_Kin.errors.required">Next of kin is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="next_of_contact">Next of Kin Number</label>
+                        <input type="number" required
+                          [ngClass]="(next_of_contact.invalid && (next_of_contact.dirty || next_of_contact.touched)) ? 'form-control is-invalid' : (next_of_contact.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="next_of_contact" id="next_of_contact" placeholder="Next of Kin Contact">
+                        <div *ngIf="next_of_contact.invalid && (next_of_contact.dirty || next_of_contact.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="next_of_contact.errors.required">next of kin contact is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="next_of_address">Next of Kin Address</label>
+                        <textarea required
+                          [ngClass]="(next_of_address.invalid && (next_of_address.dirty || next_of_address.touched)) ? 'form-control is-invalid' : (next_of_address.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="next_of_address" id="next_of_address"
+                          placeholder="Next of Kin Address"></textarea>
+                        <div *ngIf="next_of_address.invalid && (next_of_address.dirty || next_of_address.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="next_of_address.errors.required">next of kin address is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="allergies">Allegies</label>
+                        <textarea required
+                          [ngClass]="(allergies.invalid && (allergies.dirty || allergies.touched)) ? 'form-control is-invalid' : (allergies.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="allergies" id="allergies" placeholder="Allegies"></textarea>
+                        <div *ngIf="allergies.invalid && (allergies.dirty || allergies.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="allergies.errors.required">allergies is required</div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                      <input type="hidden" formControlName="ref" id="ref">
+                      <button type="submit" [disabled]="!loginForm.valid || loginForm.pending || processing"
+                        (click)="onCreate()" class="btn btn-primary">{{buttonText}}</button>&nbsp;
+                      <button type="button" [hidden]="!edit" (click)="onCancel()"
+                        class="btn btn-primary">Cancel</button>
+                    </div>
+                  </form>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+              <div class="card card-primary card-outline">
+                <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                <!-- Default box -->
+                <div class="card card-solid" [hidden]='loading'>
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-edit"></i>
+                      {{mainHeader}}
+                    </h3>
+                    <div class="text-right">
+                      <div class="btn-group">
+                        <div class="input-group-sm">
+                          <input type="text" class="form-control" placeholder="Search Mail">
+                        </div>
+                        <button [routerLink]="['/adverts/Deleted']" class="btn btn-primary btn-sm" type="button"><i
+                            class="fas fa-search"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Names</th>
+                          <th>DoB</th>
+                          <th>Sex</th>
+                          <th>E-Mail</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let patientRow of patientList; let i = index">
+                            <td>{{count.prevRow + 1 + i}}
+                            </td>
+                          <td><a [routerLink]="['/patients/view', patientRow.ref]">{{"> " + patientRow.lastName + " " + patientRow.firstName}}</a></td>
+                          <td>{{patientRow.age}}</td>
+                          <td>{{patientRow.sex}}</td>
+                          <td>{{patientRow.email}}</td>
+                          <td>{{patientRow.date.created}}</td>
+                          <td>{{patientRow.date.modified}}</td>
+                        </tr>
+                        <tr *ngIf="patientList.length == 0">
+                          <td colspan="6" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>Country Name</th>
+                          <th>ISO Code</th>
+                          <th>Currency</th>
+                          <th>Min. Payment</th>
+                          <th>Status</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer" *ngIf="patientList.length > 0">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getPatients($event)"></app-pagination>
+                  </div>
+                  <!-- /.card-footer -->
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /.content-wrapper -->
+    <app-footer></app-footer>
+  </div>
+  <!-- ./wrapper -->
+</div>

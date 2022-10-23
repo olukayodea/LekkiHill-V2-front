@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  localKey: 'lQiqiv58A7lOQlVc',
+  baseUrl: 'http://127.0.0.1/lekkihill-v2/v1/',
 };
 
 /*
