@@ -4,6 +4,8 @@ import { AppointmentsComponent } from './appointments/appointments.component';
 import { ClinicComponent } from './clinic/clinic.component';
 import { DemoComponent } from './demo/demo.component';
 import { FinanceComponent } from './finance/finance.component';
+import { ManageComponentsComponent } from './finance/manage-components/manage-components.component';
+import { ViewInvoiceComponent } from './finance/view-invoice/view-invoice.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { LoginComponent } from './login/login.component';
 import { PatientComponent } from './patient/patient.component';
@@ -27,7 +29,11 @@ const routes: Routes = [
   { path: "visitors", component: VisitorsComponent },
 
   { path: "inventory", component: InventoryComponent },
-
+  
+  { path: "finance/components", component: ManageComponentsComponent },
+  { path: "finance/report", component: FinanceComponent },
+  { path: "finance/view/:id", component: ViewInvoiceComponent },
+  { path: "finance/:view", component: FinanceComponent },
   { path: "finance", component: FinanceComponent },
 
   { path: "clinic", component: ClinicComponent },

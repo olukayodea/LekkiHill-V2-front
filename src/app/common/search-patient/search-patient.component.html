@@ -1,0 +1,26 @@
+  <!-- form start -->
+  <form [formGroup]="searchForm">
+      <div class="form-group">
+        <label for="last_name">Search Patient</label>
+        <input type="text" required
+          [ngClass]="(query.invalid && (query.dirty || query.touched)) ? 'form-control is-invalid' : (query.valid)? 'form-control is-valid':'form-control'"
+          formControlName="query" id="query" placeholder="Search">
+        <div *ngIf="query.invalid && (query.dirty || query.touched)" class="invalid-feedback">
+          <div *ngIf="query.errors.required">Search Query is required</div>
+        </div>
+      </div>
+      <img [hidden]='!loading' width="64" [class]="loading?'mx-auto d-block':''" src="assets/img/loading_2.gif">
+      <div *ngIf="!loading && searchSttring != ''" class="card-body box-profile">
+          <p *ngIf="patientList.length > 0">Search for "<b>{{searchSttring}}</b>" brought back <b>{{count.totalRows}}</b> {{addS("result row", count.totalRows)}}</p>
+          <ul class="list-group list-group-unbordered mb-3" *ngIf="patientList.length > 0">
+              <li class="list-group-item" *ngFor="let reportRow of patientList;">
+                  <b><a [routerLink]="" (click)="respond(reportRow.ref, reportRow.lastName, reportRow.firstName)">{{reportRow.lastName}} {{reportRow.firstName}}</a></b><br>
+                  <small>{{reportRow.email}}</small>
+              </li>
+
+          </ul>
+          <app-pagination [url]='url' [counts]='count'(refresh)="searchPatients(searchSttring, $event)"></app-pagination>
+    </div>
+    <!-- /.card-body -->
+  </form>
+  <!-- /.card-body -->

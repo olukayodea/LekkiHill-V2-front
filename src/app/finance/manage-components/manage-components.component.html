@@ -1,0 +1,209 @@
+<div class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <app-header></app-header>
+      <app-sidebar [page]="'finance'" [subPage]="'components'"></app-sidebar>
+  
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1 class="m-0">Invoice Component</h1>
+              </div><!-- /.col -->
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item">Finance</li>
+                  <li class="breadcrumb-item active">Component</li>
+                </ol>
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+          </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+  
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="sticky-top mb-3">
+                  <div class="card card-primary card-outline">
+                    <div class="card-header">
+                      <h4 class="card-title">{{formHeader}}</h4>
+                    </div>
+                    <!-- form start -->
+                    <form [formGroup]="loginForm">
+                      <div class="card-body">
+                        <div class="form-group">
+                          <label for="title">Component Title</label>
+                          <input type="text" required
+                            [ngClass]="(title.invalid && (title.dirty || title.touched)) ? 'form-control is-invalid' : (title.valid)? 'form-control is-valid':'form-control'"
+                            formControlName="title" id="title" placeholder="Title">
+                          <div *ngIf="title.invalid && (title.dirty || title.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="last_name.errors.required">Component Title is required</div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="first_name">Unit Cost</label>
+                          <input type="number" step="0.01" required
+                            [ngClass]="(cost.invalid && (cost.dirty || cost.touched)) ? 'form-control is-invalid' : (cost.valid)? 'form-control is-valid':'form-control'"
+                            formControlName="cost" id="cost" placeholder="Cost">
+                          <div *ngIf="cost.invalid && (cost.dirty || cost.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="cost.errors.required">Cost is required</div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="description">Description</label>
+                          <textarea [ngClass]="(description.invalid && (description.dirty || description.touched)) ? 'form-control is-invalid' : (description.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="description" id="description" placeholder="Description"></textarea>
+                          <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
+                            <div *ngIf="description.errors.maxLength">Description should not be longer than 100 characters</div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+  
+                      <div class="card-footer">
+                        <input type="hidden" formControlName="ref" id="ref">
+                        <button type="submit" [disabled]="!loginForm.valid || loginForm.pending || processing"
+                          (click)="onCreate()" class="btn btn-primary">{{buttonText}}</button>&nbsp;
+                        <button type="button" [hidden]="!edit" (click)="onCancel()"
+                          class="btn btn-primary">Cancel</button>
+                      </div>
+                    </form>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                </div>
+              </div>
+              <!-- /.col -->
+              <div class="col-md-9">
+                <div class="card card-primary card-outline">
+                  <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''" src="assets/img/loading.gif">
+  
+                  <!-- Default box -->
+                  <div class="card card-solid" [hidden]='loading'>
+                    <div class="card-header">
+                      <h3 class="card-title">
+                        <i class="fas fa-edit"></i>
+                        {{mainHeader}}
+                        <small *ngIf="searchResult"><br>{{searchRowData}}</small>
+                      </h3>
+                      <form [formGroup]="searchForm">
+                        <div class="text-right">
+                          <div class="btn-group">
+                            <div class="input-group-sm">
+                              <input type="text" formControlName="q" required
+                                [ngClass]="(q.invalid && (q.dirty || q.touched)) ? 'form-control is-invalid' : (q.valid)? 'form-control is-valid':'form-control'"
+                                id="q" placeholder="Search">
+                            </div>
+                            <button type="submit" [disabled]="!searchForm.valid || searchForm.pending || processing"
+                              (click)="onSearch()" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                            <button *ngIf="searchResult" type="button" (click)="onSearchClose()"
+                              class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                      <table class="table table-hover text-nowrap">
+                        <thead>
+                          <tr>
+                            <th>&nbsp;</th>
+                            <th>Titile</th>
+                            <th>Cost</th>
+                            <th>Created By</th>
+                            <th>Modified By</th>
+                            <th>Created</th>
+                            <th>Last Modified</th>
+                            <th>&nbsp;</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let invoiceRow of invoiceComponentList; let i = index">
+                            <td>{{count.prevRow + 1 + i}}</td>
+                            <td>{{invoiceRow.title}}&nbsp;
+                              <span
+                                [class]="invoiceRow.status.active === true ? 'badge bg-success' : 'badge bg-danger'"
+                                [innerHTML]="invoiceRow.status.active === true ? 'Active' : 'In-Active'"></span>
+                            </td>
+                            <td [innerHTML]="invoiceRow.cost.label"></td>
+                            <td>{{invoiceRow.createdBy.name}}</td>
+                            <td>{{invoiceRow.lastModifiedBy.name}}</td>
+                            <td>{{invoiceRow.date.created}}</td>
+                            <td>{{invoiceRow.date.modified}}</td>
+                            <th><button type="button" data-toggle="modal" data-target="#modal-delete" (click)="getDataForModal(invoiceRow.title, invoiceRow.ref)"
+                                class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button></th>
+                          </tr>
+                          <tr *ngIf="invoiceComponentList.length == 0">
+                            <td colspan="6" class="text-center">No record to show</td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th>&nbsp;</th>
+                            <th>Titile</th>
+                            <th>Cost</th>
+                            <th>Created By</th>
+                            <th>Modified By</th>
+                            <th>Created</th>
+                            <th>Last Modified</th>
+                            <th>&nbsp;</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer" *ngIf="invoiceComponentList.length > 0 && !searchResult">
+                      <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getInvoiceComponent($event)"></app-pagination>
+                    </div>
+                    <div class="card-footer" *ngIf="invoiceComponentList.length > 0 && searchResult">
+                      <app-pagination [url]='pageUrl' [counts]='count' (refresh)="search(query, $event)"></app-pagination>
+                    </div>
+                    <!-- /.card-footer -->
+                  </div>
+                </div>
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+        <!-- /.content-wrapper -->
+  
+      </div>
+      <!-- /.content-wrapper -->
+      <app-footer></app-footer>
+    </div>
+    <!-- ./wrapper -->
+  </div>
+  
+<div class="modal fade" id="modal-delete">
+    <div class="modal-dialog">
+      <div class="modal-content bg-secondary">
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Billing Component</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p [innerHTML]="'This action will remove '+componentName+'. This action is not reversable, are you sure you want to continue ?'"></p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-outline-light" (click)="deleteComponent(componentRef)">Delete Component</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

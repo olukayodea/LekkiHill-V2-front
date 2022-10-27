@@ -31,6 +31,17 @@ export class Error {
     message: string;
 }
 
+export class DateFormat {
+    due: string;
+    created: string;
+    modified: string;
+}
+
+export class MoneyFormat {
+    value: number;
+    label: string;
+}
+
 export class MiniUserData {
     userId: number;
     otherName: string;

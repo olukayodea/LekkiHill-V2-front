@@ -76,6 +76,7 @@ export class PaginationComponent implements OnInit, OnChanges {
     }
   }
 
+  // the function will be activated when the search is clicked 
   route(value:number) {
     this.refresh.next(value);
   }

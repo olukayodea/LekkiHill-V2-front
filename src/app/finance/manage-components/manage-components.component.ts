@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Counts } from '../_models/data';
-import { PatientsData } from '../_models/patients';
-import { ApiService } from '../_services/api.service';
-import { ChecksService } from '../_services/checks.service';
-import { NotificationService } from '../_services/notification.service';
+import { Validators, FormBuilder } from '@angular/forms';
+import { Params, ActivatedRoute, Router } from '@angular/router';
+import { Counts } from 'src/app/_models/data';
+import { InvoiceComponentData } from 'src/app/_models/invoiceComponent';
+import { ApiService } from 'src/app/_services/api.service';
+import { ChecksService } from 'src/app/_services/checks.service';
+import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
-  selector: 'app-patient',
-  templateUrl: './patient.component.html',
-  styleUrls: ['./patient.component.css']
+  selector: 'app-manage-components',
+  templateUrl: './manage-components.component.html',
+  styleUrls: ['./manage-components.component.css']
 })
-export class PatientComponent implements OnInit {
+export class ManageComponentsComponent implements OnInit {
   routeParams: Params;
   queryParams: Params;
 
@@ -21,9 +21,8 @@ export class PatientComponent implements OnInit {
 
   pageUrl = this.router.url.slice(1);
 
-  mainHeader: string = "All Patients";
-  formHeader: string = "Add New Patient";
-  view: string = "";
+  mainHeader: string = "All Invoice Components";
+  formHeader: string = "Add New Invoice Component";
   searchRowData: string = "";
   query: string = "";
 
@@ -35,42 +34,26 @@ export class PatientComponent implements OnInit {
   error: string;
   errorMsg: boolean;
 
-  buttonText: string = "Add New Patient";
+  buttonText: string = "Add New Invoice Component";
 
-  patientList: PatientsData[] = [];
+  invoiceComponentList: InvoiceComponentData[] = [];
 
   edit: boolean = false;
   searchResult: boolean = false;
 
-  date: Date;
+  componentName: string;
+  componentRef: number;
 
   loginForm = this.fb.group({
     ref: [""],
-    last_name: ['', Validators.required],
-    first_name: ['', Validators.required],
-    age: ['', Validators.required],
-    phone_number: ['', Validators.required],
-    sex: ['', Validators.required],
-    email: ['', Validators.required],
-    address: ['', Validators.required],
-    next_of_Kin: ['', Validators.required],
-    next_of_contact: ['', Validators.required],
-    next_of_address: ['', Validators.required],
-    allergies: ['', Validators.required]
+    title: ['', Validators.required],
+    cost: ['', Validators.required],
+    description: ['', Validators.maxLength(100)]
   });
 
-  get ref() { return this.loginForm.get('ref'); }
-  get last_name() { return this.loginForm.get('last_name'); }
-  get first_name() { return this.loginForm.get('first_name'); }
-  get age() { return this.loginForm.get('age'); }
-  get phone_number() { return this.loginForm.get('phone_number'); }
-  get sex() { return this.loginForm.get('sex'); }
-  get email() { return this.loginForm.get('email'); }
-  get address() { return this.loginForm.get('address'); }
-  get next_of_Kin() { return this.loginForm.get('next_of_Kin'); }
-  get next_of_contact() { return this.loginForm.get('next_of_contact'); }
-  get next_of_address() { return this.loginForm.get('next_of_address'); }
-  get allergies() { return this.loginForm.get('allergies'); }
+  get title() { return this.loginForm.get('title'); }
+  get cost() { return this.loginForm.get('cost'); }
+  get description() { return this.loginForm.get('description'); }
 
   searchForm = this.fb.group({
     q: ['', Validators.required]
@@ -97,20 +80,19 @@ export class PatientComponent implements OnInit {
     } else {
       this.page = 1;
     }
-    this.getPatients(this.page);
-    this.date = new Date;
+    this.getInvoiceComponent(this.page);
   }
 
-  getPatients(page) {
+  getInvoiceComponent(page) {
     this.loading = true;
 
-    this.apiService.getPatients(page).subscribe(
+    this.apiService.getInvoiceComponent(page).subscribe(
       data => {
         this.checkService.checkLoggedin(data);
         this.loading = false
         if (data.success == true) {
           this.count = data.counts;
-          this.patientList = data.data;
+          this.invoiceComponentList = data.data;
         } else {
           this.notifyService.showError(data.error.message, "Error")
         }
@@ -121,26 +103,27 @@ export class PatientComponent implements OnInit {
   onSearch() {
     this.query = this.searchForm.value.q;
     this.search(this.query, this.page);
+    this.mainHeader = "All Invoice Components";
   }
 
   onSearchClose() {
     this.searchForm.reset();
     this.searchResult = false;
-    this.mainHeader = "All Patients";
-    this.getPatients(this.page);
+
+    this.getInvoiceComponent(this.page);
   }
 
   search(q:string, page:number) {
     this.loading = true;
 
-    this.apiService.searchPatients(q, page).subscribe(
+    this.apiService.searchInvoiceComponent(q, page).subscribe(
       data => {
         this.checkService.checkLoggedin(data);
         this.loading = false
         if (data.success == true) {
           this.searchResult = true;
           this.count = data.counts;
-          this.patientList = data.data;
+          this.invoiceComponentList = data.data;
           this.mainHeader = "Search Result for '" + q + "'";
           this.searchRowData = (data.data.length > 0 && data.counts.totalRows > 0) ? data.counts.totalRows + " rows(s) found" : "No matching rows found";
           this.searchForm.reset();
@@ -154,64 +137,56 @@ export class PatientComponent implements OnInit {
 
   onCreate() {
     var data: object = {
-      last_name: this.loginForm.value.title,
-      first_name: this.loginForm.value.first_name,
-      age: this.loginForm.value.age,
-      phone_number: this.loginForm.value.phone_number,
-      sex: this.loginForm.value.sex,
-      email: this.loginForm.value.email,
-      address: this.loginForm.value.address,
-      next_of_Kin: this.loginForm.value.next_of_Kin,
-      next_of_contact: this.loginForm.value.next_of_contact,
-      next_of_address: this.loginForm.value.next_of_address,
-      allergies: this.loginForm.value.allergies
+      title: this.loginForm.value.title,
+      cost: this.loginForm.value.cost,
+      description: this.loginForm.value.description
     };
 
     if (this.edit === true) {
       data['ref'] = this.loginForm.value.ref;
 
-      this.editPatient(data);
+      this.editInvoiceComponent(data);
     } else {
-      this.createPatient(data);
+      this.createInvoiceComponent(data);
     }
   }
 
-  createPatient(data) {
+  createInvoiceComponent(data) {
     this.processing = true;
 
     this.buttonText = "Saving...";
-    this.apiService.createPatient(data).subscribe(
+    this.apiService.createInvoiceComponent(data).subscribe(
       user => {
         this.checkService.checkLoggedin(user);
         this.processing = false
         if (user.success == true) {
-          this.notifyService.showSuccess("Created " + data.title + " as a Patient", "Patient Created");
+          this.notifyService.showSuccess("Created " + data.title + " as a Invoice Component", "Invoice Component Created");
           this.ngOnInit();
           this.loginForm.reset();
         } else {
           this.notifyService.showError(user.error.message, "Error")
         }
-        this.buttonText = "Add New Patient";
+        this.buttonText = "Add New Invoice Component";
       }
     );
   }
 
-  editPatient(data) {
+  editInvoiceComponent(data) {
     this.processing = true;
 
     this.buttonText = "Saving Changes...";
-    this.apiService.editPatient(data).subscribe(
+    this.apiService.editInvoiceComponent(data).subscribe(
       user => {
         this.checkService.checkLoggedin(user);
         this.processing = false
         if (user.success == true) {
-          this.notifyService.showSuccess("saved changes made to Patient", "Patient Modified");
+          this.notifyService.showSuccess("saved changes made to Invoice Component", "Invoice Component Modified");
           this.ngOnInit();
           this.loginForm.reset();
         } else {
           this.notifyService.showError(user.error.message, "Error")
         }
-        this.buttonText = "Add New Patient";
+        this.buttonText = "Add New Invoice Component";
         this.edit = false;
       }
     );
@@ -220,7 +195,30 @@ export class PatientComponent implements OnInit {
   onCancel() {
     this.edit = false;
     this.loginForm.reset();
-    this.formHeader = this.buttonText = "Add New Patient";
+    this.formHeader = this.buttonText = "Add New Invoice Component";
+  }
+
+  getDataForModal(name:string, ref:number) {
+    this.componentName = name;
+    this.componentRef = ref;
+  }
+
+  deleteComponent(ref:number) {
+    this.processing = true;
+
+    this.apiService.deleteComponent(ref).subscribe(
+      user => {
+        this.checkService.checkLoggedin(user);
+        this.processing = false
+        if (user.success == true) {
+          this.notifyService.showSuccess("Component Removed Successfully", "Billing Component Deleted");
+          this.ngOnInit();
+        } else {
+          this.notifyService.showError(user.error.message, "Error")
+        }
+        document.getElementById('modal-delete').click();
+      }
+    );
   }
 
   getRouteParams() {

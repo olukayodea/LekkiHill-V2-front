@@ -1,8 +1,8 @@
-import { Counts } from "./data";
+import { Counts, DateFormat } from "./data";
 import { AdminDataMin } from "./users";
 
 export class Patients {
-    success: true|false;
+    success: true | false;
     results: string;
     error: Error;
     counts: Counts
@@ -10,15 +10,15 @@ export class Patients {
 }
 
 export class OnePatient {
-    success: true|false;
+    success: true | false;
     error: Error;
     results: string;
     data: PatientsData;
-  }
+}
 
 export class PatientsData {
-
     ref: number;
+    patienrNumber: string;
     lastName: string;
     firstName: string;
     age: string;
@@ -34,12 +34,10 @@ export class PatientsData {
     allergies: string;
     type: string;
     createdBy: AdminDataMin;
-    date: {
-        created: string;
-        modified: string;
-    }
+    date: DateFormat;
 
     constructor() {
         this.createdBy = new AdminDataMin();
-      }
+        this.date = new DateFormat();
+    }
 }

@@ -1,1 +1,209 @@
-<p>finance works!</p>
+<div class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <app-header></app-header>
+    <app-sidebar [page]="'finance'" [subPage]="'manage'"></app-sidebar>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Invoices</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item">Finance</li>
+                <li class="breadcrumb-item active">Invoices</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="sticky-top mb-3">
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h4 class="card-title">{{formHeader}}</h4>
+                  </div>
+                  <!-- form start -->
+                  <form [formGroup]="loginForm">
+                    <div class="card-body">
+                        <app-search-patient (refresh)="getPatientData($event)" (busy)="setBusy()"></app-search-patient>
+                      <div class="form-group" *ngIf="showForm">
+                        <label for="componentId">Invoice Component</label>
+                        <select required
+                          [ngClass]="(componentId.invalid && (componentId.dirty || componentId.touched)) ? 'form-control is-invalid' : (componentId.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="componentId" id="componentId">
+                          <option value="">Select One</option>
+                          <option *ngFor="let invoiceComponentRow of invoiceComponentList;let i = index" value="{{i}}">{{invoiceComponentRow.title}}</option>
+                        </select>
+                        <div *ngIf="componentId.invalid && (componentId.dirty || componentId.touched)" class="invalid-feedback">
+                          <div *ngIf="componentId.errors.required">Select an Invoice</div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="showForm">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" required
+                          [ngClass]="(quantity.invalid && (quantity.dirty || quantity.touched)) ? 'form-control is-invalid' : (quantity.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="quantity" id="quantity" placeholder="Quantity">
+                        <div *ngIf="quantity.invalid && (quantity.dirty || quantity.touched)" class="invalid-feedback">
+                          <div *ngIf="quantity.errors.required">Quantity is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="showForm">
+                        <label for="description">Description</label>
+                        <textarea required
+                          [ngClass]="(description.invalid && (description.dirty || description.touched)) ? 'form-control is-invalid' : (description.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="description" id="description" placeholder="Description"></textarea>
+                        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
+                          <div *ngIf="description.errors.required">Description is required</div>
+                        </div>
+                      </div>
+
+                      <button type="button" [hidden]="!showForm" [disabled]="!loginForm.valid || loginForm.pending || processing" (click)="addComponent()"
+                        class="btn btn-primary">Add to Invoice</button>
+                      <small *ngIf="!showForm">To create new invoice, please select a patient by searching for the patient above</small>
+
+                      <ul class="list-group list-group-unbordered mb-3" *ngIf="showForm">
+                        <br><br>
+                        <li class="list-group-item" *ngFor="let row of componentList; let i = index">
+                            <b [innerHTML]="row.title"></b> <a class="float-right">{{row.quantity}} x <span [innerHTML]="row.cost.label"></span> </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Total</b> <a class="float-right"> &#8358;{{total.toLocaleString()}}</a>
+                        </li>
+                    </ul>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer" *ngIf="showForm">
+                      <input type="hidden" formControlName="ref" id="ref">
+                      <button type="submit" [disabled]="!submitButton || !submit || processing"
+                        (click)="onCreate()" class="btn btn-primary">{{buttonText}}</button>&nbsp;
+                      <button type="button" [hidden]="!edit" (click)="onCancel()"
+                        class="btn btn-primary">Cancel</button>
+                    </div>
+                  </form>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+              <div class="card card-primary card-outline">
+                <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                <!-- Default box -->
+                <div class="card card-solid" [hidden]='loading'>
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-edit"></i>
+                      {{mainHeader}}
+                      <small *ngIf="searchResult"><br>{{searchRowData}}</small>
+                    </h3>
+                    <form [formGroup]="searchForm">
+                      <div class="text-right">
+                        <div class="btn-group">
+                          <a [routerLink]="['/finance']" [class]="allActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">All</a>&nbsp;
+                          <a [routerLink]="['/finance/UnPaid']" [class]="unpaidActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'" type="button">Un-Paid
+                            Invoice</a>&nbsp;
+                          <a [routerLink]="['/finance/partiallyPaid']" [class]="partialActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">Partially Paid</a>&nbsp;
+                          <a [routerLink]="['/finance/Paid']" [class]="paidActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'" type="button">Paid
+                            Invoice</a>&nbsp;
+                          <div class="input-group-sm">
+                            <input type="text" formControlName="q" required
+                              [ngClass]="(q.invalid && (q.dirty || q.touched)) ? 'form-control is-invalid' : (q.valid)? 'form-control is-valid':'form-control'"
+                              id="q" placeholder="Search">
+                          </div>
+                          <button type="submit" [disabled]="!searchForm.valid || searchForm.pending || processing"
+                            (click)="onSearch()" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                          <button *ngIf="searchResult" type="button" (click)="onSearchClose()"
+                            class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Invoice</th>
+                          <th>Customer</th>
+                          <th>Amount</th>
+                          <th>Due</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let invoiceRow of invoiceList; let i = index">
+                          <td>{{count.prevRow + 1 + i}}
+                          </td>
+                          <td><a [routerLink]="['/finance/view', invoiceRow.ref]">{{invoiceRow.invoiceNumber}}</a>&nbsp;
+                            <span
+                              [class]="invoiceRow.status.partiallyPaid === true ? 'badge bg-warning' : invoiceRow.status.paid === true ? 'badge bg-success' : 'badge bg-danger'"
+                              [innerHTML]="invoiceRow.status.unPaid === true ? 'Unpaid' : invoiceRow.status.partiallyPaid === true ? 'Partially Paid' : 'Paid'"></span></td>
+                          <td><a
+                              [routerLink]="['/patients/view', invoiceRow.patient.ref]">{{invoiceRow.patient.lastName + " " + invoiceRow.patient.firstName}}</a>
+                          </td>
+                          <td [innerHTML]="invoiceRow.amount.label"></td>
+                          <td [innerHTML]="invoiceRow.due.label"></td>
+                          <td>{{invoiceRow.date.created}}</td>
+                          <td>{{invoiceRow.date.modified}}</td>
+                        </tr>
+                        <tr *ngIf="invoiceList.length == 0">
+                          <td colspan="6" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Invoice</th>
+                          <th>Customer</th>
+                          <th>Amount</th>
+                          <th>Due</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer" *ngIf="invoiceList.length > 0 && !searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getInvoice($event)"></app-pagination>
+                  </div>
+                  <div class="card-footer" *ngIf="invoiceList.length > 0 && searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="search(query, $event)"></app-pagination>
+                  </div>
+                  <!-- /.card-footer -->
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /.content-wrapper -->
+    <app-footer></app-footer>
+  </div>
+  <!-- ./wrapper -->
+</div>

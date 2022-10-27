@@ -23,6 +23,9 @@ import { FinanceComponent } from './finance/finance.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { VisitorsComponent } from './visitors/visitors.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ViewInvoiceComponent } from './finance/view-invoice/view-invoice.component';
+import { ManageComponentsComponent } from './finance/manage-components/manage-components.component';
+import { SearchPatientComponent } from './common/search-patient/search-patient.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,10 @@ import { SettingsComponent } from './settings/settings.component';
     FinanceComponent,
     InventoryComponent,
     VisitorsComponent,
-    SettingsComponent
+    SettingsComponent,
+    ViewInvoiceComponent,
+    ManageComponentsComponent,
+    SearchPatientComponent,
   ],
   imports: [
     BrowserModule,

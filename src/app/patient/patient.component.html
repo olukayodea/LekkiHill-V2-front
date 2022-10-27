@@ -57,12 +57,12 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="age">Age</label>
-                        <input type="number" step="1" required
+                        <label for="age">Date of Birth</label>
+                        <input type="date" step="1" required
                           [ngClass]="(age.invalid && (age.dirty || age.touched)) ? 'form-control is-invalid' : (age.valid)? 'form-control is-valid':'form-control'"
-                          formControlName="age" id="age" placeholder="Age">
+                          max="{{date | date:'yyyy-MM-dd'}}" formControlName="age" id="age" placeholder="Date of Birth">
                         <div *ngIf="age.invalid && (age.dirty || age.touched)" class="invalid-feedback">
-                          <div *ngIf="age.errors.required">Age is required</div>
+                          <div *ngIf="age.errors.required">Date of Birth is required</div>
                         </div>
                       </div>
                       <div class="form-group">
@@ -76,10 +76,10 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="areas">Gender</label>
+                        <label for="sex">Gender</label>
                         <select required
                           [ngClass]="(sex.invalid && (sex.dirty || sex.touched)) ? 'form-control is-invalid' : (sex.valid)? 'form-control is-valid':'form-control'"
-                          formControlName="sex" id="sex" multiple>
+                          formControlName="sex" id="sex">
                           <option value="">Select One</option>
                           <option value="Female">Female</option>
                           <option value="Male">Male</option>
@@ -90,7 +90,7 @@
                       </div>
                       <div class="form-group">
                         <label for="email">E-Mail Address</label>
-                        <input type="number" required
+                        <input type="email" required
                           [ngClass]="(email.invalid && (email.dirty || email.touched)) ? 'form-control is-invalid' : (email.valid)? 'form-control is-valid':'form-control'"
                           formControlName="email" id="email" placeholder="Email">
                         <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback">
@@ -108,9 +108,9 @@
                       </div>
                       <div class="form-group">
                         <label for="next_of_Kin">Next of Kin Name</label>
-                        <input type="number" step="0.01" required required
+                        <input type="text" step="0.01" required required
                           [ngClass]="(next_of_Kin.invalid && (next_of_Kin.dirty || next_of_Kin.touched)) ? 'form-control is-invalid' : (next_of_Kin.valid)? 'form-control is-valid':'form-control'"
-                          formControlName="next_of_Kin" id="next_of_Kin" placeholder="">
+                          formControlName="next_of_Kin" id="next_of_Kin" placeholder="Next of Kin Name">
                         <div *ngIf="next_of_Kin.invalid && (next_of_Kin.dirty || next_of_Kin.touched)"
                           class="invalid-feedback">
                           <div *ngIf="next_of_Kin.errors.required">Next of kin is required</div>
@@ -174,22 +174,30 @@
                     <h3 class="card-title">
                       <i class="fas fa-edit"></i>
                       {{mainHeader}}
+                      <small *ngIf="searchResult"><br>{{searchRowData}}</small>
                     </h3>
-                    <div class="text-right">
-                      <div class="btn-group">
-                        <div class="input-group-sm">
-                          <input type="text" class="form-control" placeholder="Search Mail">
+                    <form [formGroup]="searchForm">
+                      <div class="text-right">
+                        <div class="btn-group">
+                          <div class="input-group-sm">
+                            <input type="text" formControlName="q" required
+                              [ngClass]="(q.invalid && (q.dirty || q.touched)) ? 'form-control is-invalid' : (q.valid)? 'form-control is-valid':'form-control'"
+                              id="q" placeholder="Search">
+                          </div>
+                          <button type="submit" [disabled]="!searchForm.valid || searchForm.pending || processing"
+                            (click)="onSearch()" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                          <button *ngIf="searchResult" type="button" (click)="onSearchClose()"
+                            class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
                         </div>
-                        <button [routerLink]="['/adverts/Deleted']" class="btn btn-primary btn-sm" type="button"><i
-                            class="fas fa-search"></i></button>
                       </div>
-                    </div>
+                    </form>
                   </div>
                   <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                       <thead>
                         <tr>
                           <th>&nbsp;</th>
+                          <th>ID</th>
                           <th>Names</th>
                           <th>DoB</th>
                           <th>Sex</th>
@@ -200,9 +208,14 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let patientRow of patientList; let i = index">
-                            <td>{{count.prevRow + 1 + i}}
-                            </td>
-                          <td><a [routerLink]="['/patients/view', patientRow.ref]">{{"> " + patientRow.lastName + " " + patientRow.firstName}}</a></td>
+                          <td>{{count.prevRow + 1 + i}}
+                          </td>
+                          <td><a
+                              [routerLink]="['/patients/view', patientRow.ref]">{{ patientRow.patienrNumber }}</a>
+                          </td>
+                          <td><a
+                              [routerLink]="['/patients/view', patientRow.ref]">{{ patientRow.lastName + " " + patientRow.firstName}}</a>
+                          </td>
                           <td>{{patientRow.age}}</td>
                           <td>{{patientRow.sex}}</td>
                           <td>{{patientRow.email}}</td>
@@ -210,26 +223,29 @@
                           <td>{{patientRow.date.modified}}</td>
                         </tr>
                         <tr *ngIf="patientList.length == 0">
-                          <td colspan="6" class="text-center">No record to show</td>
+                          <td colspan="8" class="text-center">No record to show</td>
                         </tr>
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th>Country Name</th>
-                          <th>ISO Code</th>
-                          <th>Currency</th>
-                          <th>Min. Payment</th>
-                          <th>Status</th>
+                          <th>&nbsp;</th>
+                          <th>ID</th>
+                          <th>Names</th>
+                          <th>DoB</th>
+                          <th>Sex</th>
+                          <th>E-Mail</th>
                           <th>Created</th>
                           <th>Last Modified</th>
-                          <th>&nbsp;</th>
                         </tr>
                       </tfoot>
                     </table>
                   </div>
                   <!-- /.card-body -->
-                  <div class="card-footer" *ngIf="patientList.length > 0">
+                  <div class="card-footer" *ngIf="patientList.length > 0 && !searchResult">
                     <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getPatients($event)"></app-pagination>
+                  </div>
+                  <div class="card-footer" *ngIf="patientList.length > 0 && searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="search(query, $event)"></app-pagination>
                   </div>
                   <!-- /.card-footer -->
                 </div>

@@ -6,6 +6,8 @@ import { environment } from '../../environments/environment';
 import { ChecksService } from './checks.service';
 import { User } from '../_models/users';
 import { OnePatient, Patients } from '../_models/patients';
+import { Invoice, OneInvoice } from '../_models/invoice';
+import { InvoiceComponent, OneInvoiceComponent } from '../_models/invoiceComponent';
 
 @Injectable({
   providedIn: 'root'
@@ -94,6 +96,40 @@ export class ApiService {
     return responseData;
   }
 
+  createInvoice(data): Observable<OneInvoice> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.post(this.baseUrl + 'invoice/manage', JSON.stringify(data), httpOptions);
+
+    return responseData;
+  }
+
+  createInvoiceComponent(data): Observable<OneInvoiceComponent> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.post(this.baseUrl + 'billingComponent/manage', JSON.stringify(data), httpOptions);
+
+    return responseData;
+  }
+
   editPatient(data): Observable<OnePatient> {
     var token = this.checkService.getToken();
     var gateway_passcode = btoa(this.product_key + "_" + token);
@@ -112,6 +148,43 @@ export class ApiService {
     return responseData;
   }
 
+  editInvoiceComponent(data): Observable<OneInvoiceComponent> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+
+    const responseData = this.put(this.baseUrl + 'billingComponent/manage', JSON.stringify(data), httpOptions);
+
+    return responseData;
+  }
+
+  postPayment(data): Observable<OneInvoice> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+
+    const responseData = this.put(this.baseUrl + 'invoice/pay', JSON.stringify(data), httpOptions);
+
+    return responseData;
+  }
+
+
   getPatients(page:number): Observable<Patients> {
     var token = this.checkService.getToken();
     var gateway_passcode = btoa(this.product_key + "_" + token);
@@ -125,6 +198,159 @@ export class ApiService {
       })
     }
     const responseData = this.get(this.baseUrl + 'patient/manage/list?page='+page, httpOptions);
+
+    return responseData;
+  }
+
+  getOneInvoice(ref:number): Observable<OneInvoice> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'invoice/manage/' + ref, httpOptions);
+
+    return responseData;
+  }
+
+  getInvoice(page:number, view:string): Observable<Invoice> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'invoice/manage/list/' + view +'?page='+page, httpOptions);
+
+    return responseData;
+  }
+
+  getActiveInvoiceComponent(): Observable<InvoiceComponent> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'invoice/component', httpOptions);
+
+    return responseData;
+  }
+
+  getInvoiceComponent(page:number): Observable<InvoiceComponent> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'billingComponent/manage/list/?page='+page, httpOptions);
+
+    return responseData;
+  }
+
+  searchPatients(q:string, page:number): Observable<Patients> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'patient/manage/search/'+ encodeURI(q.trim()) +'?page='+page, httpOptions);
+
+    return responseData;
+  }
+
+  searchInvoice(q:string, page:number): Observable<Invoice> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'invoice/manage/search/'+ encodeURI(q.trim()) +'?page='+page, httpOptions);
+
+    return responseData;
+  }
+
+  searchInvoiceComponent(q:string, page:number): Observable<InvoiceComponent> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'billingComponent/manage/search/'+ encodeURI(q.trim()) +'?page='+page, httpOptions);
+
+    return responseData;
+  }
+
+  deleteComponent(ref): Observable<OneInvoiceComponent> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.delete(this.baseUrl + 'billingComponent/manage/'+ref, httpOptions);
+
+    return responseData;
+  }
+
+  deleteInvoice(ref): Observable<OneInvoice> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.delete(this.baseUrl + 'invoice/manage/'+ref, httpOptions);
 
     return responseData;
   }
