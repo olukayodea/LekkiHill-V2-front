@@ -4,6 +4,7 @@ import { Params, ActivatedRoute, Router } from '@angular/router';
 import { Counts, MoneyFormat } from '../_models/data';
 import { InvoiceData } from '../_models/invoice';
 import { InvoiceComponentData } from '../_models/invoiceComponent';
+import { PatientsData } from '../_models/patients';
 import { ApiService } from '../_services/api.service';
 import { ChecksService } from '../_services/checks.service';
 import { NotificationService } from '../_services/notification.service';
@@ -93,26 +94,26 @@ export class FinanceComponent implements OnInit {
     if (this.routeParams['view'] !== undefined) {
       this.view = this.routeParams['view'];
       if (this.view == "UnPaid") {
-        this.mainHeader = "List Unpaid Invoices";
+        this.mainHeader = "Unpaid Invoices";
         this.unpaidActive = true;
         this.partialActive = false;
         this.paidActive = false;
         this.allActive = false;
       } else if (this.view == "partiallyPaid") {
-        this.mainHeader = "List pPartially Paid Invoices";
+        this.mainHeader = "Partially Paid Invoices";
         this.unpaidActive = false;
         this.partialActive = true;
         this.paidActive = false;
         this.allActive = false;
       } else if (this.view == "Paid") {
-        this.mainHeader = "List Paid Invoices";
+        this.mainHeader = "Paid Invoices";
         this.unpaidActive = false;
         this.partialActive = false;
         this.paidActive = true;
         this.allActive = false;
       } else {
         this.view = "UnPaid";
-        this.mainHeader = "List Unpaid Invoices";
+        this.mainHeader = "Unpaid Invoices";
         this.unpaidActive = true;
         this.partialActive = false;
         this.paidActive = false;
@@ -147,9 +148,10 @@ export class FinanceComponent implements OnInit {
     );
   }
 
-  getPatientData( ref:number ) {
-    this.patient_id = ref;
-    if (ref > 1) {
+  getPatientData( data:{id:number, data:PatientsData} ) {
+    console.log(data);
+    this.patient_id = data.id;
+    if (data.id > 1) {
       this.submitButton = true;
     }
     this.showForm = true;
@@ -213,13 +215,13 @@ export class FinanceComponent implements OnInit {
     this.searchResult = false;
 
     if (this.view == "UnPaid") {
-      this.mainHeader = "List Unpaid Invoices";
+      this.mainHeader = "Unpaid Invoices";
       this.unpaidActive = true;
       this.partialActive = false;
       this.paidActive = false;
       this.allActive = false;
     } else if (this.view == "partiallyPaid") {
-      this.mainHeader = "List pPartially Paid Invoices";
+      this.mainHeader = "Partially Paid Invoices";
       this.unpaidActive = false;
       this.partialActive = true;
       this.paidActive = false;

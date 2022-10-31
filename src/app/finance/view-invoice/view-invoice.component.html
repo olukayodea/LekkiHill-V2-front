@@ -14,9 +14,9 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item">Finance</li>
-                <li class="breadcrumb-item active">Invoices</li>
+                <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/finance']">Finance</a></li>
+                <li class="breadcrumb-item active">{{invoiceData.invoiceNumber}}</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -34,7 +34,8 @@
                   <div class="card-body box-profile">
                     <h3 class="profile-username text-center">{{invoiceData.invoiceNumber}}</h3>
                     <p class="text-muted text-center">
-                      {{invoiceData.patient.lastName + " " + invoiceData.patient.firstName}}</p>
+                        <a
+                        [routerLink]="['/patients/view', invoiceData.patient.ref]">{{invoiceData.patient.lastName + " " + invoiceData.patient.firstName}}</a></p>
                   </div>
                   <!-- form start -->
                   <div class="card-body">
@@ -206,7 +207,7 @@
                   <!-- this row will not appear when printing -->
                   <div class="row no-print">
                     <div class="col-12">
-                      <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
+                      <a [routerLink]="['/finance/print/', invoiceData.ref]" rel="noopener" target="_blank" class="btn btn-default"><i
                           class="fas fa-print"></i> Print</a>
                       <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i>
                         Submit
@@ -235,28 +236,3 @@
   </div>
   <!-- ./wrapper -->
 </div>
-
-<div class="modal fade" id="modal-delete">
-  <div class="modal-dialog">
-    <div class="modal-content bg-secondary">
-      <div class="modal-header">
-        <h4 class="modal-title">Delete Invoice</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p
-          [innerHTML]="'This action will delete invoice ' + invoiceData.invoiceNumber + '. This action is not reversable, are you sure you want to continue ?'">
-        </p>
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-light" (click)="deleteInvoice()">Delete Invoice</button>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->

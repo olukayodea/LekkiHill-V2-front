@@ -14,8 +14,8 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item">Finance</li>
+                <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="">Finance</a></li>
                 <li class="breadcrumb-item active">Invoices</li>
               </ol>
             </div><!-- /.col -->
@@ -66,6 +66,7 @@
                           formControlName="description" id="description" placeholder="Description"></textarea>
                         <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
                           <div *ngIf="description.errors.required">Description is required</div>
+                            <div *ngIf="description.errors.maxLength">Description should not be longer than 100 characters</div>
                         </div>
                       </div>
 
@@ -165,7 +166,7 @@
                           <td>{{invoiceRow.date.modified}}</td>
                         </tr>
                         <tr *ngIf="invoiceList.length == 0">
-                          <td colspan="6" class="text-center">No record to show</td>
+                          <td colspan="7" class="text-center">No record to show</td>
                         </tr>
                       </tbody>
                       <tfoot>

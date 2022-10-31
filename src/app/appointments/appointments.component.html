@@ -1,26 +1,28 @@
 <div class="hold-transition sidebar-mini">
   <div class="wrapper">
     <app-header></app-header>
-    <app-sidebar></app-sidebar>
+    <app-sidebar [page]="'appointments'" [subPage]="subPage"></app-sidebar>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
-      <section class="content-header">
+      <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>Calendar</h1>
-            </div>
+              <h1 class="m-0">Appointments</h1>
+            </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Calendar</li>
+                <li class="breadcrumb-item">Appointments</li>
+                <li class="breadcrumb-item active">{{mainHeader}}</li>
               </ol>
-            </div>
-          </div>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
         </div><!-- /.container-fluid -->
-      </section>
+      </div>
+      <!-- /.content-header -->
 
       <!-- Main content -->
       <section class="content">
@@ -28,64 +30,298 @@
           <div class="row">
             <div class="col-md-3">
               <div class="sticky-top mb-3">
-                <div class="card">
-                  <div class="card-header">
-                    <h4 class="card-title">Draggable Events</h4>
+
+                <div class="card card-primary card-outline" *ngIf="showDetails">
+                  <div class="card-body box-profile">
+                    <h3 class="profile-username text-center">{{appointmentsData.procedure}} <i
+                      class="fa-solid fa-pen" (click)="getEdit(appointmentsData)"
+                      *ngIf="!appointmentsData.status.passed"></i></h3>
+                    <p class="text-muted text-center" *ngIf="appointmentsData.returning">
+                      <a
+                        [routerLink]="['/patients/view', appointmentsData.patient.ref]">{{appointmentsData.patient.lastName + " " + appointmentsData.patient.firstName}}</a>
+                    </p>
+                    <p class="text-muted text-center" *ngIf="!appointmentsData.returning">
+                      {{appointmentsData.names}}
+                    </p>
                   </div>
+                  <!-- form start -->
                   <div class="card-body">
-                    <!-- the events -->
-                    <div id="external-events">
-                      <div class="external-event bg-success">Lunch</div>
-                      <div class="external-event bg-warning">Go home</div>
-                      <div class="external-event bg-info">Do homework</div>
-                      <div class="external-event bg-primary">Work on UI design</div>
-                      <div class="external-event bg-danger">Sleep tight</div>
-                      <div class="checkbox">
-                        <label for="drop-remove">
-                          <input type="checkbox" id="drop-remove">
-                          remove after drop
-                        </label>
+                    <ul class="list-group list-group-unbordered mb-3">
+                      <li class="list-group-item">
+                        <b>Email</b> <a class="float-right">{{appointmentsData.email}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Phone Number</b> <a class="float-right">{{appointmentsData.phone}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Location</b> <a class="float-right">{{appointmentsData.location}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Procedure</b> <a class="float-right">{{appointmentsData.procedure}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Message</b> <a class="float-right">{{appointmentsData.message}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Email</b> <a class="float-right">{{appointmentsData.email}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Status</b> <a class="float-right">
+                          <span
+                            [class]="appointmentsData.status.new === true ? 'badge bg-secondary' : (appointmentsData.status.passed === false && appointmentsData.status.scheduled === true) ? 'badge bg-success' : appointmentsData.status.passed === true ? 'badge bg-warning' : 'badge bg-danger'"
+                            [innerHTML]="appointmentsData.status.new === true ? 'Uscheduled' : (appointmentsData.status.passed === false && appointmentsData.status.scheduled === true) ? 'Scheduled' : appointmentsData.status.passed === true ? 'Passed' : 'Cancelled'"></span>
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Appointment</b> <a class="float-right">{{appointmentsData.date.next}}</a>
+                      </li>
+                      <li class="list-group-item" *ngIf="appointmentsData.createdBy.lastName !== undefined">
+                        <b>Created By</b> <a
+                          class="float-right">{{appointmentsData.createdBy.lastName + "  " + appointmentsData.createdBy.firstName}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Time</b> <a class="float-right">{{appointmentsData.date.created}}</a>
+                      </li>
+                      <li class="list-group-item" *ngIf="appointmentsData.lastModifiedBy.lastName !== undefined">
+                        <b>Last Modified By</b> <a
+                          class="float-right">{{appointmentsData.lastModifiedBy.lastName + "  " + appointmentsData.lastModifiedBy.firstName}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Last Modified</b> <a class="float-right">{{appointmentsData.date.modified}}</a>
+                      </li>
+                    </ul>
+                    <form *ngIf="!appointmentsData.status.cancelled" [formGroup]="extendForm">
+                      <div class="form-group">
+                        <label for="appointmentDate">Appointment Date</label>
+                        <input type="datetime-local" required
+                          [ngClass]="(appointmentDate.invalid && (appointmentDate.dirty || appointmentDate.touched)) ? 'form-control is-invalid' : (appointmentDate.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="appointmentDate" id="appointmentDate" placeholder="Appointment Date"
+                          min="{{date | date:'yyyy-MM-ddTHH:mm'}}">
+                        <div *ngIf="appointmentDate.invalid && (appointmentDate.dirty || appointmentDate.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="appointmentDate.errors.required">appointment date is required</div>
+                        </div>
                       </div>
-                    </div>
+                      <!-- /.card-body -->
+
+
+                      <button [disabled]='!extendForm.valid || extendForm.pending || processing' (click)="schedule()"
+                        class="btn btn-success btn-block"><b>Schedule Appointment</b></button><br>
+                    </form>
+                    <button *ngIf="appointmentsData.status.new" [disabled]='processing' data-toggle="modal"
+                      data-target="#modal-delete" class="btn btn-danger btn-block"><b>Delete</b></button>
+                    <button *ngIf="appointmentsData.status.scheduled" [disabled]='processing' data-toggle="modal"
+                      data-target="#modal-cancel" class="btn btn-danger btn-block"><b>Cancel Appointment</b></button>
+
                   </div>
+                  <!-- /.card-body -->
+                  <!-- /.card-body -->
+                </div>
+                <div class="card card-primary card-outline" *ngIf="!showDetails">
+                  <div class="card-header">
+                    <h4 class="card-title">{{formHeader}}</h4>
+                  </div>
+                  <!-- form start -->
+                  <form [formGroup]="loginForm">
+                    <div class="card-body">
+                      <app-search-patient *ngIf="!edit" #searchPatientComponent (refresh)="getPatientData($event)"
+                        (busy)="setBusy($event)"></app-search-patient>
+
+                      <div class="form-group" *ngIf="edit">
+                        <label for="names">Patient Name</label>
+                        <input type="text" required
+                          [ngClass]="'form-control'"
+                          formControlName="names" readonly id="names" placeholder="Names">
+                      </div>
+                      <div class="form-group" *ngIf="showForm || edit">
+                        <label for="email">E-Mail</label>
+                        <input type="email" required
+                          [ngClass]="(email.invalid && (email.dirty || email.touched)) ? 'form-control is-invalid' : (email.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="email" id="email" placeholder="E-Mail">
+                        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback">
+                          <div *ngIf="email.errors.required">E-Mail is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="showForm || edit">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" required
+                          [ngClass]="(phone.invalid && (phone.dirty || phone.touched)) ? 'form-control is-invalid' : (email.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="phone" id="phone" placeholder="Phone Number">
+                        <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="invalid-feedback">
+                          <div *ngIf="phone.errors.required">Phone number is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="showForm || edit">
+                        <label for="location">Location</label>
+                        <select required
+                          [ngClass]="(location.invalid && (location.dirty || location.touched)) ? 'form-control is-invalid' : (location.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="location" id="location">
+                          <option value="">Select One</option>
+                          <option value="Lagos">Lagos</option>
+                          <option value="Abuja">Abuja</option>
+                          <option value="Rivers">Rivers</option>
+                          <option value="Outside Nigeria">Outside Nigeria</option>
+                        </select>
+                        <div *ngIf="location.invalid && (location.dirty || location.touched)" class="invalid-feedback">
+                          <div *ngIf="location.errors.required">Select an Location</div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="showForm || edit">
+                        <label for="procedure">Procedure</label>
+                        <select required
+                          [ngClass]="(procedure.invalid && (procedure.dirty || procedure.touched)) ? 'form-control is-invalid' : (procedure.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="procedure" id="procedure">
+                          <option value="">Select One</option>
+                          <option value="Boady Confidence">Boady Confidence</option>
+                          <option value="Facials">Facials</option>
+                          <option value="Breast">Breast</option>
+                          <option value="Skin">Skin</option>
+                        </select>
+                        <div *ngIf="procedure.invalid && (procedure.dirty || procedure.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="procedure.errors.required">Select an Procedure</div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="showForm || edit">
+                        <label for="next_appointment">Appointment Date</label>
+                        <input type="datetime-local" required
+                          [ngClass]="(next_appointment.invalid && (next_appointment.dirty || next_appointment.touched)) ? 'form-control is-invalid' : (next_appointment.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="next_appointment" id="next_appointment" placeholder="Appointment Date"
+                          min="{{date | date:'yyyy-MM-ddTHH:mm'}}">
+                        <div *ngIf="next_appointment.invalid && (next_appointment.dirty || next_appointment.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="next_appointment.errors.required">appointment date is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="showForm || edit">
+                        <label for="message">Message</label>
+                        <textarea
+                          [ngClass]="(message.invalid && (message.dirty || message.touched)) ? 'form-control is-invalid' : (message.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="message" id="message" placeholder="Description"></textarea>
+                        <div *ngIf="message.invalid && (message.dirty || message.touched)" class="invalid-feedback">
+                          <div *ngIf="message.errors.maxLength">Message is required</div>
+                        </div>
+                      </div>
+                      <small *ngIf="!showForm && !edit">To create new appointment, please select a patient by searching
+                        for the
+                        patient or typing the patient name is the patient is not found</small>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer" *ngIf="showForm || showForm || edit">
+                      <input type="hidden" formControlName="ref" id="ref">
+                      <button type="submit" [disabled]="!loginForm.valid || loginForm.pending || processing"
+                        (click)="onCreate()" class="btn btn-primary">{{buttonText}}</button>&nbsp;
+                      <button type="button" [hidden]="!edit" (click)="onCancel()"
+                        class="btn btn-primary">Cancel</button>
+                    </div>
+                  </form>
                   <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Create Event</h3>
-                  </div>
-                  <div class="card-body">
-                    <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                      <ul class="fc-color-picker" id="color-chooser">
-                        <li><a class="text-primary" href="#"><i class="fas fa-square"></i></a></li>
-                        <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
-                        <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
-                        <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
-                        <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
-                      </ul>
-                    </div>
-                    <!-- /btn-group -->
-                    <div class="input-group">
-                      <input id="new-event" type="text" class="form-control" placeholder="Event Title">
-
-                      <div class="input-group-append">
-                        <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
-                      </div>
-                      <!-- /btn-group -->
-                    </div>
-                    <!-- /input-group -->
-                  </div>
-                </div>
               </div>
             </div>
             <!-- /.col -->
             <div class="col-md-9">
-              <div class="card card-primary">
-                <div class="card-body p-0">
-                  <!-- THE CALENDAR -->
+              <div class="card card-primary card-outline">
+                <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                <!-- Default box -->
+                <div class="card card-solid" [hidden]='loading'>
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-edit"></i>
+                      {{mainHeader}}
+                      <small *ngIf="searchResult"><br>{{searchRowData}}</small>
+                    </h3>
+                    <form [formGroup]="searchForm">
+                      <div class="text-right">
+                        <div class="btn-group">
+                          <a *ngIf="!filter" [routerLink]="['/appointments']"
+                            [class]="allActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">All</a>&nbsp;
+                          <a *ngIf="!filter" [routerLink]="['/appointments/new']"
+                            [class]="newActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">Unscheduled</a>&nbsp;
+                          <a *ngIf="!filter" [routerLink]="['/appointments/scheduled']"
+                            [class]="scheduledActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">Scheduled</a>&nbsp;
+                          <a *ngIf="!filter" [routerLink]="['/appointments/cancelled']"
+                            [class]="cancelledActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">Cancelled</a>&nbsp;
+                          <div class="input-group-sm">
+                            <input type="text" formControlName="q" required
+                              [ngClass]="(q.invalid && (q.dirty || q.touched)) ? 'form-control is-invalid' : (q.valid)? 'form-control is-valid':'form-control'"
+                              id="q" placeholder="Search">
+                          </div>
+                          <button type="submit" [disabled]="!searchForm.valid || searchForm.pending || processing"
+                            (click)="onSearch()" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                          <button *ngIf="searchResult" type="button" (click)="onSearchClose()"
+                            class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>Name</th>
+                          <th>Procedure</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let appointmentRow of appointmentList; let i = index">
+                          <td><i class="fa-solid fa-trash-can" data-toggle="modal" *ngIf="appointmentRow.status.new"
+                              data-target="#modal-delete" (click)="getData(appointmentRow)"></i> &nbsp; <i
+                              class="fa-solid fa-pen" (click)="getEdit(appointmentRow)"
+                              *ngIf="!appointmentRow.status.passed"></i></td>
+                          <td>{{count.prevRow + 1 + i}}
+                          </td>
+                          <td><a [routerLink]="" (click)="open(appointmentRow)"><span
+                                [innerHTML]="stringDivider(appointmentRow.names, 40)"></span></a>&nbsp;
+                            <span
+                              [class]="appointmentRow.status.new === true ? 'badge bg-secondary' : (appointmentRow.status.passed === false && appointmentRow.status.scheduled === true) ? 'badge bg-success' : appointmentRow.status.passed === true ? 'badge bg-warning' : 'badge bg-danger'"
+                              [innerHTML]="appointmentRow.status.new === true ? 'Uscheduled' : (appointmentRow.status.passed === false && appointmentRow.status.scheduled === true) ? 'Scheduled' : appointmentRow.status.passed === true ? 'Passed' : 'Cancelled'"></span>
+                          </td>
+                          <td>{{appointmentRow.procedure}}</td>
+                          <td><a href="mailTo:{{appointmentRow.email}}" target="_blank">{{appointmentRow.email}}</a>
+                          </td>
+                          <td><a href="tel:{{appointmentRow.phone}}" target="_blank">{{appointmentRow.phone}}</a></td>
+                          <td>{{appointmentRow.date.modified}}</td>
+                        </tr>
+                        <tr *ngIf="appointmentList.length == 0">
+                          <td colspan="7" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>Name</th>
+                          <th>Procedure</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer" *ngIf="appointmentList.length > 0 && !searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getAppointment($event)">
+                    </app-pagination>
+                  </div>
+                  <div class="card-footer" *ngIf="appointmentList.length > 0 && searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="search(query, $event)"></app-pagination>
+                  </div>
+                  <!-- /.card-footer -->
                 </div>
-                <!-- /.card-body -->
               </div>
               <!-- /.card -->
             </div>
@@ -95,10 +331,63 @@
         </div><!-- /.container-fluid -->
       </section>
       <!-- /.content -->
+      <!-- /.content-wrapper -->
+
     </div>
     <!-- /.content-wrapper -->
-
     <app-footer></app-footer>
   </div>
   <!-- ./wrapper -->
 </div>
+
+<div class="modal fade" id="modal-cancel">
+  <div class="modal-dialog">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header">
+        <h4 class="modal-title">Cancel Appointment</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p
+          [innerHTML]="'This action will cancel the appointment for ' + appointmentsData.names + '. This action is not reversable, are you sure you want to continue ?'">
+        </p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-light" (click)="cancelAppointment(appointmentsData)">Cancel
+          Appointment</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="modal-delete">
+  <div class="modal-dialog">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Appointment</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p
+          [innerHTML]="'This action will delete the appointment for ' + appointmentsData.names + '. This action is not reversable, are you sure you want to continue ?'">
+        </p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-light" (click)="deleteAppointment(appointmentsData)">Delete
+          Appointment</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

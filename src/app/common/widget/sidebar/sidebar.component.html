@@ -23,7 +23,7 @@
         </li>
         <li [class]="page == 'patients'? 'nav-item menu-open' : 'nav-item'">
           <a [routerLink]="" [class]="page == 'patients'? 'nav-link active' : 'nav-link'">
-            <i class="nav-icon fas fa-copy"></i>
+            <i class="nav-icon fa fa-hospital-user"></i>
             <p>
               Patients
               <i class="fas fa-angle-left right"></i>
@@ -62,17 +62,48 @@
           </ul>
         </li>
         <li [class]="page == 'appointments'? 'menu-open active' : ''" class="nav-item">
-          <a [routerLink]="['/appointments']" [class]="page == 'appointments'? 'nav-link active' : 'nav-link'"
-            data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
-            <i class="nav-icon fas fa-building"></i>
-            <p>Appointments
+          <a [routerLink]="" [class]="page == 'appointments'? 'nav-link active' : 'nav-link'">
+            <i class="nav-icon fa-solid fa-calendar-days"></i>
+            <p>
+              Appointments
+              <i class="fas fa-angle-left right"></i>
               <span class="badge badge-info right">6</span>
             </p>
           </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/appointments/new']"
+                [class]="page == 'appointments' && subPage == 'schedule'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Schedule</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/appointments/today']"
+                [class]="page == 'appointments' && subPage == 'today'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Today</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/appointments/upcoming']"
+                [class]="page == 'appointments' && subPage == 'upcoming'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Upcoming</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/appointments/past']"
+                [class]="page == 'appointments' && subPage == 'past'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Past</p>
+              </a>
+            </li>
+          </ul>
         </li>
         <li [class]="page == 'finance'? 'nav-item menu-open' : 'nav-item'">
           <a [routerLink]="" [class]="page == 'finance'? 'nav-link active' : 'nav-link'">
-            <i class="nav-icon fas fa-copy"></i>
+            <i class="nav-icon fa fa-coins"></i>
             <p>
               Finance
               <i class="fas fa-angle-left right"></i>
@@ -105,7 +136,7 @@
         </li>
         <li [class]="page == 'inventory'? 'nav-item menu-open' : 'nav-item'">
           <a [routerLink]="" [class]="page == 'inventory'? 'nav-link active' : 'nav-link'">
-            <i class="nav-icon fas fa-copy"></i>
+            <i class="nav-icon fa fa-warehouse"></i>
             <p>
               Inventory
               <i class="fas fa-angle-left right"></i>
@@ -139,14 +170,14 @@
         <li [class]="page == 'visitors'? 'menu-open active' : ''" class="nav-item">
           <a [routerLink]="['/visitors']" [class]="page == 'visitors'? 'nav-link active' : 'nav-link'"
             data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
-            <i class="nav-icon fas fa-building"></i>
+            <i class="nav-icon fa fa-taxi"></i>
             <p>Visitors</p>
           </a>
         </li>
         <li [class]="page == 'settings'? 'menu-open active' : ''" class="nav-item">
           <a [routerLink]="['/settings']" [class]="page == 'settings'? 'nav-link active' : 'nav-link'"
             data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
-            <i class="nav-icon fas fa-building"></i>
+            <i class="nav-icon fa fa-gear"></i>
             <p>Settings</p>
           </a>
         </li>

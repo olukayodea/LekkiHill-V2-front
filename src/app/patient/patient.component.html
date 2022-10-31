@@ -14,7 +14,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
                 <li class="breadcrumb-item active">Patients</li>
               </ol>
             </div><!-- /.col -->
@@ -108,7 +108,7 @@
                       </div>
                       <div class="form-group">
                         <label for="next_of_Kin">Next of Kin Name</label>
-                        <input type="text" step="0.01" required required
+                        <input type="text" required required
                           [ngClass]="(next_of_Kin.invalid && (next_of_Kin.dirty || next_of_Kin.touched)) ? 'form-control is-invalid' : (next_of_Kin.valid)? 'form-control is-valid':'form-control'"
                           formControlName="next_of_Kin" id="next_of_Kin" placeholder="Next of Kin Name">
                         <div *ngIf="next_of_Kin.invalid && (next_of_Kin.dirty || next_of_Kin.touched)"

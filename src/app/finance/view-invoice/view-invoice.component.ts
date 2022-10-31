@@ -90,7 +90,6 @@ export class ViewInvoiceComponent implements OnInit {
     );
   }
   
-
   deleteInvoice() {
     this.processing = true;
 

@@ -26,6 +26,7 @@ export class SearchPatientComponent implements OnInit, OnChanges {
   searchSttring: string = "";
 
   patientList: PatientsData[] = [];
+  patientsData: PatientsData;
   loading: boolean = false;
 
   searchForm = this.fb.group({
@@ -53,19 +54,22 @@ export class SearchPatientComponent implements OnInit, OnChanges {
     }
 
     this.query.valueChanges.subscribe(selectedValue => {
-      this.busy.next();
-      this.searchSttring = selectedValue;
-      this.searchPatients(this.searchSttring, 1);
+      console.log( selectedValue ) 
+      if (selectedValue !== null) {
+        this.busy.next(selectedValue);
+        this.searchSttring = selectedValue;
+        this.searchPatients(this.searchSttring, 1);
+      }
     })
   }
 
-  respond(value, lastName, firstName) {
+  respond(value, patientsData:PatientsData) {
     this.patientList = [];
     this.searchSttring = "";
     this.searchForm.patchValue({
-      query: lastName + " " + firstName,
+      query: patientsData.lastName + " " + patientsData.firstName,
     });
-    this.refresh.next(value);
+    this.refresh.next({id: value, data: patientsData});
   }
 
   searchPatients(value, page) {
@@ -89,6 +93,10 @@ export class SearchPatientComponent implements OnInit, OnChanges {
     this.ngOnInit();
   }
 
+  clearForm() {
+    this.searchForm.reset();
+  }
+
   getRouteParams() {
     // Route parameters
     this.activatedRoute.params.subscribe(params => {
@@ -108,5 +116,4 @@ export class SearchPatientComponent implements OnInit, OnChanges {
 
     return string;
   }
-
 }

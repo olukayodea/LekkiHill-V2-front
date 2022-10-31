@@ -1,1 +1,281 @@
-<p>visitors works!</p>
+<div class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <app-header></app-header>
+    <app-sidebar [page]="'visitors'" [subPage]="'manage'"></app-sidebar>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Visitors</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                <li class="breadcrumb-item active">Visitors</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="sticky-top mb-3">
+                <div class="card card-primary card-outline" *ngIf="showDetails">
+                  <div class="card-body box-profile">
+                    <h3 class="profile-username text-center">{{visitorsData.lastName + " " + visitorsData.firstName}}
+                    </h3>
+                  </div>
+                  <!-- form start -->
+                  <div class="card-body">
+                    <ul class="list-group list-group-unbordered mb-3">
+                      <li class="list-group-item">
+                        <b>Email</b> <a class="float-right">{{visitorsData.email}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Phone Number</b> <a class="float-right">{{visitorsData.phoneNumber}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Address</b> <a class="float-right">{{visitorsData.address}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Who to See</b> <a class="float-right">{{visitorsData.whomToSee.name}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Reason</b> <a class="float-right">{{visitorsData.whomToSee.reason}}</a>
+                      </li>
+                      <li class="list-group-item" *ngIf="visitorsData.createdBy.lastName !== undefined">
+                        <b>Created By</b> <a
+                          class="float-right">{{visitorsData.createdBy.lastName + "  " + visitorsData.createdBy.firstName}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Time</b> <a class="float-right">{{visitorsData.date.created}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Last Modified</b> <a class="float-right">{{visitorsData.date.modified}}</a>
+                      </li>
+                    </ul>
+                    <button [disabled]='processing' data-toggle="modal" data-target="#modal-delete"
+                      class="btn btn-danger btn-block"><b>Delete</b></button>
+
+                  </div>
+                  <!-- /.card-body -->
+                  <!-- /.card-body -->
+                </div>
+                <div class="card card-primary card-outline" *ngIf="!showDetails">
+                  <div class="card-header">
+                    <h4 class="card-title">{{formHeader}}</h4>
+                  </div>
+                  <!-- form start -->
+                  <form [formGroup]="loginForm">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" required
+                          [ngClass]="(last_name.invalid && (last_name.dirty || last_name.touched)) ? 'form-control is-invalid' : (last_name.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="last_name" id="last_name" placeholder="Last Name">
+                        <div *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="last_name.errors.required">Last Name is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" required
+                          [ngClass]="(first_name.invalid && (first_name.dirty || first_name.touched)) ? 'form-control is-invalid' : (first_name.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="first_name" id="first_name" placeholder="First Name">
+                        <div *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="first_name.errors.required">First Name is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="phone_number">Phone Number</label>
+                        <input type="number" required
+                          [ngClass]="(phone_number.invalid && (phone_number.dirty || phone_number.touched)) ? 'form-control is-invalid' : (phone_number.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="phone_number" id="phone_number" placeholder="Phone Number">
+                        <div *ngIf="phone_number.invalid && (phone_number.dirty || phone_number.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="phone_number.errors.required">Phone Number is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="email">E-Mail Address</label>
+                        <input type="email" required
+                          [ngClass]="(email.invalid && (email.dirty || email.touched)) ? 'form-control is-invalid' : (email.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="email" id="email" placeholder="Email">
+                        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback">
+                          <div *ngIf="email.errors.required">E-mail is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea required
+                          [ngClass]="(address.invalid && (address.dirty || address.touched)) ? 'form-control is-invalid' : (address.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="address" id="address" placeholder="Address"></textarea>
+                        <div *ngIf="address.invalid && (address.dirty || address.touched)" class="invalid-feedback">
+                          <div *ngIf="address.errors.required">Address is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="whom_to_see">Whome to see</label>
+                        <input type="text" required required
+                          [ngClass]="(whom_to_see.invalid && (whom_to_see.dirty || whom_to_see.touched)) ? 'form-control is-invalid' : (whom_to_see.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="whom_to_see" id="whom_to_see" placeholder="Next of Kin Name">
+                        <div *ngIf="whom_to_see.invalid && (whom_to_see.dirty || whom_to_see.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="whom_to_see.errors.required">Whom to see is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="resason">Reason of Visit</label>
+                        <textarea required
+                          [ngClass]="(resason.invalid && (resason.dirty || resason.touched)) ? 'form-control is-invalid' : (resason.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="resason" id="resason" placeholder="Next of Kin Address"></textarea>
+                        <div *ngIf="resason.invalid && (resason.dirty || resason.touched)" class="invalid-feedback">
+                          <div *ngIf="resason.errors.required">reason of visit is required</div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                      <button type="submit" [disabled]="!loginForm.valid || loginForm.pending || processing"
+                        (click)="onCreate()" class="btn btn-primary">{{buttonText}}</button>
+                    </div>
+                  </form>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+              <div class="card card-primary card-outline">
+                <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                <!-- Default box -->
+                <div class="card card-solid" [hidden]='loading'>
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-edit"></i>
+                      {{mainHeader}}
+                      <small *ngIf="searchResult"><br>{{searchRowData}}</small>
+                    </h3>
+                    <form [formGroup]="searchForm">
+                      <div class="text-right">
+                        <div class="btn-group">
+                          <div class="input-group-sm">
+                            <input type="text" formControlName="q" required
+                              [ngClass]="(q.invalid && (q.dirty || q.touched)) ? 'form-control is-invalid' : (q.valid)? 'form-control is-valid':'form-control'"
+                              id="q" placeholder="Search">
+                          </div>
+                          <button type="submit" [disabled]="!searchForm.valid || searchForm.pending || processing"
+                            (click)="onSearch()" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                          <button *ngIf="searchResult" type="button" (click)="onSearchClose()"
+                            class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>Names</th>
+                          <th>Phone Number</th>
+                          <th>E-Mail</th>
+                          <th>Created</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let visitorsRow of visitorsList; let i = index">
+                          <td><i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#modal-delete"
+                              (click)="getData(visitorsRow)"></i> </td>
+                          <td>{{count.prevRow + 1 + i}}
+                          </td>
+                          <td><a [routerLink]=""
+                              (click)="open(visitorsRow)">{{ visitorsRow.lastName + " " + visitorsRow.firstName}}</a>
+                          </td>
+                          <td>{{visitorsRow.phoneNumber}}</td>
+                          <td>{{visitorsRow.email}}</td>
+                          <td>{{visitorsRow.date.created}}</td>
+                        </tr>
+                        <tr *ngIf="visitorsList.length == 0">
+                          <td colspan="8" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>Names</th>
+                          <th>Phone Number</th>
+                          <th>E-Mail</th>
+                          <th>Created</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer" *ngIf="visitorsList.length > 0 && !searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getPatients($event)"></app-pagination>
+                  </div>
+                  <div class="card-footer" *ngIf="visitorsList.length > 0 && searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="search(query, $event)"></app-pagination>
+                  </div>
+                  <!-- /.card-footer -->
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /.content-wrapper -->
+    <app-footer></app-footer>
+  </div>
+  <!-- ./wrapper -->
+</div>
+
+<div class="modal fade" id="modal-delete">
+  <div class="modal-dialog">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Visitors</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p
+          [innerHTML]="'This action will delete the visitors\' entryx for ' + visitorsData.lastName + ' ' + visitorsData.firstName + '. This action is not reversable, are you sure you want to continue ?'">
+        </p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-light" (click)="deleteVisitor(visitorsData)">Delete
+          Appointment</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

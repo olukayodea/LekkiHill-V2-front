@@ -28,7 +28,7 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/assets/css/fontawesome-free/css/all.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/styles.css",
               "src/assets/css/adminlte.min.css",
               "node_modules/ngx-toastr/toastr.css"

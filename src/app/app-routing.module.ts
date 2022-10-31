@@ -5,6 +5,7 @@ import { ClinicComponent } from './clinic/clinic.component';
 import { DemoComponent } from './demo/demo.component';
 import { FinanceComponent } from './finance/finance.component';
 import { ManageComponentsComponent } from './finance/manage-components/manage-components.component';
+import { PrintInvoiceComponent } from './finance/print-invoice/print-invoice.component';
 import { ViewInvoiceComponent } from './finance/view-invoice/view-invoice.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { LoginComponent } from './login/login.component';
@@ -16,6 +17,9 @@ import { VisitorsComponent } from './visitors/visitors.component';
 
 const routes: Routes = [
   { path: "", component: DemoComponent },
+  { path: "appointments/records/:view", component: AppointmentsComponent },
+  { path: "appointments/view/:id", component: AppointmentsComponent },
+  { path: "appointments/:view", component: AppointmentsComponent },
   { path: "appointments", component: AppointmentsComponent },
 
   { path: "login", component: LoginComponent },
@@ -33,6 +37,7 @@ const routes: Routes = [
   { path: "finance/components", component: ManageComponentsComponent },
   { path: "finance/report", component: FinanceComponent },
   { path: "finance/view/:id", component: ViewInvoiceComponent },
+  { path: "finance/print/:id", component: PrintInvoiceComponent },
   { path: "finance/:view", component: FinanceComponent },
   { path: "finance", component: FinanceComponent },
 

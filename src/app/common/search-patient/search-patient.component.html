@@ -14,7 +14,7 @@
           <p *ngIf="patientList.length > 0">Search for "<b>{{searchSttring}}</b>" brought back <b>{{count.totalRows}}</b> {{addS("result row", count.totalRows)}}</p>
           <ul class="list-group list-group-unbordered mb-3" *ngIf="patientList.length > 0">
               <li class="list-group-item" *ngFor="let reportRow of patientList;">
-                  <b><a [routerLink]="" (click)="respond(reportRow.ref, reportRow.lastName, reportRow.firstName)">{{reportRow.lastName}} {{reportRow.firstName}}</a></b><br>
+                  <b><a [routerLink]="" (click)="respond(reportRow.ref, reportRow)">{{reportRow.lastName}} {{reportRow.firstName}}</a></b><br>
                   <small>{{reportRow.email}}</small>
               </li>
 

@@ -32,6 +32,7 @@ export class Error {
 }
 
 export class DateFormat {
+    next: string;
     due: string;
     created: string;
     modified: string;

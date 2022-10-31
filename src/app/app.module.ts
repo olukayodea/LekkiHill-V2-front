@@ -26,6 +26,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { ViewInvoiceComponent } from './finance/view-invoice/view-invoice.component';
 import { ManageComponentsComponent } from './finance/manage-components/manage-components.component';
 import { SearchPatientComponent } from './common/search-patient/search-patient.component';
+import { PrintInvoiceComponent } from './finance/print-invoice/print-invoice.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { SearchPatientComponent } from './common/search-patient/search-patient.c
     ViewInvoiceComponent,
     ManageComponentsComponent,
     SearchPatientComponent,
+    PrintInvoiceComponent,
   ],
   imports: [
     BrowserModule,
