@@ -1,4 +1,4 @@
-import { Counts, DateFormat } from "./data";
+import { Counts, DateFormat, Error } from "./data";
 import { AdminDataMin } from "./users";
 
 export class Visitors {

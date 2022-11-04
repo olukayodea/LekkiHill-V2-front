@@ -2,17 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Params, ActivatedRoute, Router } from '@angular/router';
 import { Counts } from 'src/app/_models/data';
+import { InventoryCategoryData } from 'src/app/_models/inventoryCategory';
 import { InvoiceComponentData } from 'src/app/_models/invoiceComponent';
 import { ApiService } from 'src/app/_services/api.service';
 import { ChecksService } from 'src/app/_services/checks.service';
 import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
-  selector: 'app-manage-components',
-  templateUrl: './manage-components.component.html',
-  styleUrls: ['./manage-components.component.css']
+  selector: 'app-inventory-category',
+  templateUrl: './inventory-category.component.html',
+  styleUrls: ['./inventory-category.component.css']
 })
-export class ManageComponentsComponent implements OnInit {
+export class InventoryCategoryComponent implements OnInit {
   routeParams: Params;
   queryParams: Params;
 
@@ -21,41 +22,38 @@ export class ManageComponentsComponent implements OnInit {
 
   pageUrl = this.router.url.slice(1);
 
-  mainHeader: string = "All Invoice Components";
-  formHeader: string = "Add New Invoice Component";
+  mainHeader: string = "All Inventory Categories";
+  formHeader: string = "Add New Inventory Category";
+  view: string = "";
   searchRowData: string = "";
   query: string = "";
 
   processing: boolean = false;
   loading: boolean = true;
 
-  buttonText: string = "Add New Invoice Component";
+  buttonText: string = "Add New Inventory Category";
 
-  invoiceComponentList: InvoiceComponentData[] = [];
+  categoryList: InventoryCategoryData[] = [];
 
-  edit: boolean = false;
   searchResult: boolean = false;
+  activeActive: boolean = false;
+  inactiveActive: boolean = false;
+  allActive: boolean = true;
 
   componentName: string;
   componentRef: number;
 
   loginForm = this.fb.group({
-    ref: [""],
-    title: ['', Validators.required],
-    cost: ['', Validators.required],
-    description: ['', Validators.maxLength(100)]
+    title: ['', Validators.required]
   });
 
   get title() { return this.loginForm.get('title'); }
-  get cost() { return this.loginForm.get('cost'); }
-  get description() { return this.loginForm.get('description'); }
 
   searchForm = this.fb.group({
     q: ['', Validators.required]
   });
 
   get q() { return this.searchForm.get('q'); }
-
 
   constructor(
     private fb: FormBuilder,
@@ -70,24 +68,42 @@ export class ManageComponentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.routeParams['view'] !== undefined) {
+      this.view = this.routeParams['view'];
+      if (this.view == "active") {
+        this.mainHeader = "All Active Categories";
+        this.activeActive = true;
+        this.inactiveActive = false;
+        this.allActive = false;
+      } else if (this.view == "inactive") {
+        this.mainHeader = "All Inactive Categories";
+        this.activeActive = false;
+        this.inactiveActive = true;
+        this.allActive = false;
+      } else {
+        this.view = "";
+      }
+      this.view = this.view.toLowerCase();
+    }
+
     if (this.queryParams['page'] !== undefined) {
       this.page = this.queryParams['page'];
     } else {
       this.page = 1;
     }
-    this.getInvoiceComponent(this.page);
+    this.getInventoryCategory(this.page);
   }
 
-  getInvoiceComponent(page) {
+  getInventoryCategory(page) {
     this.loading = true;
 
-    this.apiService.getInvoiceComponent(page).subscribe(
+    this.apiService.getInventoryCategory(page, this.view).subscribe(
       data => {
         this.checkService.checkLoggedin(data);
         this.loading = false
         if (data.success == true) {
           this.count = data.counts;
-          this.invoiceComponentList = data.data;
+          this.categoryList = data.data;
         } else {
           this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
@@ -98,27 +114,27 @@ export class ManageComponentsComponent implements OnInit {
   onSearch() {
     this.query = this.searchForm.value.q;
     this.search(this.query, this.page);
-    this.mainHeader = "All Invoice Components";
+    this.mainHeader = "All Inventory Categories";
   }
 
   onSearchClose() {
     this.searchForm.reset();
     this.searchResult = false;
 
-    this.getInvoiceComponent(this.page);
+    this.getInventoryCategory(this.page);
   }
 
   search(q:string, page:number) {
     this.loading = true;
 
-    this.apiService.searchInvoiceComponent(q, page).subscribe(
+    this.apiService.searchInventoryCategory(q, page).subscribe(
       data => {
         this.checkService.checkLoggedin(data);
         this.loading = false
         if (data.success == true) {
           this.searchResult = true;
           this.count = data.counts;
-          this.invoiceComponentList = data.data;
+          this.categoryList = data.data;
           this.mainHeader = "Search Result for '" + q + "'";
           this.searchRowData = (data.data.length > 0 && data.counts.totalRows > 0) ? data.counts.totalRows + " rows(s) found" : "No matching rows found";
           this.searchForm.reset();
@@ -132,57 +148,28 @@ export class ManageComponentsComponent implements OnInit {
 
   onCreate() {
     var data: object = {
-      title: this.loginForm.value.title,
-      cost: this.loginForm.value.cost,
-      description: this.loginForm.value.description
+      title: this.loginForm.value.title
     };
 
-    if (this.edit === true) {
-      data['ref'] = this.loginForm.value.ref;
-
-      this.editInvoiceComponent(data);
-    } else {
-      this.createInvoiceComponent(data);
-    }
+    this.createInventoryCategory(data);
   }
 
-  createInvoiceComponent(data) {
+  createInventoryCategory(data) {
     this.processing = true;
 
     this.buttonText = "Saving...";
-    this.apiService.createInvoiceComponent(data).subscribe(
+    this.apiService.createInventoryCategory(data).subscribe(
       user => {
         this.checkService.checkLoggedin(user);
         this.processing = false
         if (user.success == true) {
-          this.notifyService.showSuccess("Created " + data.title + " as a Invoice Component", "Invoice Component Created");
+          this.notifyService.showSuccess("Created " + data.title + " as an Inventory Category", "Inventory Category Created");
           this.ngOnInit();
           this.loginForm.reset();
         } else {
           this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
-        this.buttonText = "Add New Invoice Component";
-      }
-    );
-  }
-
-  editInvoiceComponent(data) {
-    this.processing = true;
-
-    this.buttonText = "Saving Changes...";
-    this.apiService.editInvoiceComponent(data).subscribe(
-      user => {
-        this.checkService.checkLoggedin(user);
-        this.processing = false
-        if (user.success == true) {
-          this.notifyService.showSuccess("saved changes made to Invoice Component", "Invoice Component Modified");
-          this.ngOnInit();
-          this.loginForm.reset();
-        } else {
-          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
-        }
-        this.buttonText = "Add New Invoice Component";
-        this.edit = false;
+        this.buttonText = "Add New Inventory Category";
       }
     );
   }
@@ -195,12 +182,12 @@ export class ManageComponentsComponent implements OnInit {
       ref: ref,
       status: status
     }
-    this.apiService.changeComponentStatus(data).subscribe(
+    this.apiService.changeInventoryCategoryStatus(data).subscribe(
       user => {
         this.checkService.checkLoggedin(user);
         this.processing = false
         if (user.success == true) {
-          this.notifyService.showSuccess("saved changes made to Invoice Component", "Invoice Component Modified");
+          this.notifyService.showSuccess("saved changes made to Inventory Category", "Inventory Category Modified");
           this.ngOnInit();
         } else {
           this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
@@ -209,26 +196,20 @@ export class ManageComponentsComponent implements OnInit {
     );
   }
 
-  onCancel() {
-    this.edit = false;
-    this.loginForm.reset();
-    this.formHeader = this.buttonText = "Add New Invoice Component";
-  }
-
   getDataForModal(name:string, ref:number) {
     this.componentName = name;
     this.componentRef = ref;
   }
 
-  deleteComponent(ref:number) {
+  deleteInventoryComponent(ref:number) {
     this.processing = true;
 
-    this.apiService.deleteComponent(ref).subscribe(
+    this.apiService.deleteInventoryComponent(ref).subscribe(
       user => {
         this.checkService.checkLoggedin(user);
         this.processing = false
         if (user.success == true) {
-          this.notifyService.showSuccess("Component Removed Successfully", "Billing Component Deleted");
+          this.notifyService.showSuccess("Category Removed Successfully", "Inventory Category Deleted");
           this.ngOnInit();
         } else {
           this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
@@ -254,5 +235,4 @@ export class ManageComponentsComponent implements OnInit {
       this.ngOnInit();
     });
   }
-
 }

@@ -55,7 +55,7 @@ export class PrintInvoiceComponent implements OnInit {
             exit;
           })();
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );

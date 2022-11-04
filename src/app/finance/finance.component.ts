@@ -39,11 +39,6 @@ export class FinanceComponent implements OnInit {
   submit: boolean = false;
   submitButton: boolean = false;
 
-  success: string;
-  successMsg: boolean;
-  error: string;
-  errorMsg: boolean;
-
   buttonText: string = "Add New Invoice";
 
   invoiceList: InvoiceData[] = [];
@@ -142,7 +137,7 @@ export class FinanceComponent implements OnInit {
           this.count = data.counts;
           this.invoiceList = data.data;
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -191,7 +186,7 @@ export class FinanceComponent implements OnInit {
           this.count = data.counts;
           this.invoiceComponentList = data.data;
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -257,7 +252,7 @@ export class FinanceComponent implements OnInit {
           this.searchRowData = (data.data.length > 0 && data.counts.totalRows > 0) ? data.counts.totalRows + " rows(s) found" : "No matching rows found";
           this.searchForm.reset();
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -293,7 +288,7 @@ export class FinanceComponent implements OnInit {
           this.ngOnInit();
           this.loginForm.reset();
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
         this.buttonText = "Create Invoice";
       }
@@ -313,7 +308,7 @@ export class FinanceComponent implements OnInit {
           this.ngOnInit();
           this.loginForm.reset();
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
         this.buttonText = "Create Invoice";
         this.edit = false;

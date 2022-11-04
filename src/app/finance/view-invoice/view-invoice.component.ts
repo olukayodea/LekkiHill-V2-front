@@ -26,11 +26,6 @@ export class ViewInvoiceComponent implements OnInit {
   processing: boolean = false;
   loading: boolean = true;
 
-  success: string;
-  successMsg: boolean;
-  error: string;
-  errorMsg: boolean;
-
   invoiceData: InvoiceData;
 
   invoiceRef: number;
@@ -84,7 +79,7 @@ export class ViewInvoiceComponent implements OnInit {
           
           this.amount.setValidators([Validators.max(this.invoiceData.due.value)]);
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -101,7 +96,7 @@ export class ViewInvoiceComponent implements OnInit {
           this.notifyService.showSuccess("Invoice " + this.invoiceData.invoiceNumber +" Removed Successfully", "Invoice Deleted");
            this.router.navigate(['/finance']);
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
 
         document.getElementById('modal-delete').click();
@@ -128,7 +123,7 @@ export class ViewInvoiceComponent implements OnInit {
           this.ngOnInit();
           this.extendForm.reset();
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
       }
     );

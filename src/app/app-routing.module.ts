@@ -7,6 +7,8 @@ import { FinanceComponent } from './finance/finance.component';
 import { ManageComponentsComponent } from './finance/manage-components/manage-components.component';
 import { PrintInvoiceComponent } from './finance/print-invoice/print-invoice.component';
 import { ViewInvoiceComponent } from './finance/view-invoice/view-invoice.component';
+import { InventoryCategoryComponent } from './inventory/inventory-category/inventory-category.component';
+import { InventoryReportComponent } from './inventory/inventory-report/inventory-report.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { LoginComponent } from './login/login.component';
 import { PatientComponent } from './patient/patient.component';
@@ -32,6 +34,10 @@ const routes: Routes = [
 
   { path: "visitors", component: VisitorsComponent },
 
+  { path: "inventory/category/:view", component: InventoryCategoryComponent },
+  { path: "inventory/category", component: InventoryCategoryComponent },
+  { path: "inventory/report/:view", component: InventoryReportComponent },
+  { path: "inventory/report", component: InventoryReportComponent },
   { path: "inventory", component: InventoryComponent },
   
   { path: "finance/components", component: ManageComponentsComponent },

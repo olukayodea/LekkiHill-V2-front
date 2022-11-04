@@ -1,41 +1,38 @@
-import { Counts, DateFormat, MoneyFormat, Error } from "./data";
+import { Counts, DateFormat, Error } from "./data";
 import { AdminDataMin } from "./users";
 
-export class InvoiceComponent {
+export class InventoryCategory {
     success: true | false;
     results: string;
     error: Error;
     counts: Counts
-    data: InvoiceComponentData[] = [];
+    data: InventoryCategoryData[] = [];
 }
 
-export class OneInvoiceComponent {
+export class OneInventoryCategoryData {
     success: true | false;
     error: Error;
     results: string;
-    data: InvoiceComponentData;
+    data: InventoryCategoryData;
 }
 
-export class InvoiceComponentData {
+export class InventoryCategoryData {
     ref: number;
     title: string;
-    cost: MoneyFormat;
-    description: string;
-    status: InvoiceComponentStatus;
+    status: InventoryCategoryStatus;
     createdBy: AdminDataMin;
     lastModifiedBy: AdminDataMin;
     date: DateFormat;
 
     constructor() {
-        this.cost = new MoneyFormat();
-        this.status = new InvoiceComponentStatus();
+        this.status = new InventoryCategoryStatus();
         this.createdBy = new AdminDataMin();
         this.lastModifiedBy = new AdminDataMin();
         this.date = new DateFormat();
     }
 }
 
-export class InvoiceComponentStatus {
+export class InventoryCategoryStatus {
     active: boolean;
     inActive: boolean;
 }

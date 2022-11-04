@@ -46,11 +46,6 @@ export class AppointmentsComponent implements OnInit {
   submit: boolean = false;
   submitButton: boolean = false;
 
-  success: string;
-  successMsg: boolean;
-  error: string;
-  errorMsg: boolean;
-
   buttonText: string = "Schedule";
 
   appointmentList: AppointmentsData[] = [];
@@ -205,7 +200,7 @@ export class AppointmentsComponent implements OnInit {
           this.count = data.counts;
           this.appointmentList = data.data;
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -222,7 +217,7 @@ export class AppointmentsComponent implements OnInit {
           this.count = data.counts;
           this.appointmentList = data.data;
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -257,7 +252,7 @@ export class AppointmentsComponent implements OnInit {
           this.open(user.data);
           this.extendForm.reset();
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
       }
     );
@@ -375,7 +370,7 @@ export class AppointmentsComponent implements OnInit {
           this.searchRowData = (data.data.length > 0 && data.counts.totalRows > 0) ? data.counts.totalRows + " rows(s) found" : "No matching rows found";
           this.searchForm.reset();
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -417,7 +412,7 @@ export class AppointmentsComponent implements OnInit {
           this.searchPatientComponent.clearForm();
           this.showForm = false;
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
         this.buttonText = "Book Appointment";
       }
@@ -437,7 +432,7 @@ export class AppointmentsComponent implements OnInit {
           this.ngOnInit();
           this.loginForm.reset();
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
         this.buttonText = "Book Appointment";
         this.edit = false;
@@ -463,7 +458,7 @@ export class AppointmentsComponent implements OnInit {
           this.router.navigate(['/appointments']);
           this.showDetails = false;
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
 
         document.getElementById('modal-cancel').click();
@@ -485,7 +480,7 @@ export class AppointmentsComponent implements OnInit {
           this.showDetails = false
           this.open(appointmentsData);
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
 
         document.getElementById('modal-cancel').click();

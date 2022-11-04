@@ -1,4 +1,4 @@
-import { Counts, DateFormat, MoneyFormat } from "./data";
+import { Counts, DateFormat, MoneyFormat, Error } from "./data";
 import { PatientsData } from "./patients";
 import { AdminDataMin } from "./users";
 

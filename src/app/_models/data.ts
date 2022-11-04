@@ -29,6 +29,7 @@ export class Counts {
 export class Error {
     code: number;
     message: string;
+    additional_message: string;
 }
 
 export class DateFormat {

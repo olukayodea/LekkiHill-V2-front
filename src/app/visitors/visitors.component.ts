@@ -31,11 +31,6 @@ export class VisitorsComponent implements OnInit {
   processing: boolean = false;
   loading: boolean = true;
 
-  success: string;
-  successMsg: boolean;
-  error: string;
-  errorMsg: boolean;
-
   buttonText: string = "Add New Visitor";
 
   visitorsList: VisitorsData[] = [];
@@ -114,7 +109,7 @@ export class VisitorsComponent implements OnInit {
           this.count = data.counts;
           this.visitorsList = data.data;
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -147,7 +142,7 @@ export class VisitorsComponent implements OnInit {
           this.searchRowData = (data.data.length > 0 && data.counts.totalRows > 0) ? data.counts.totalRows + " rows(s) found" : "No matching rows found";
           this.searchForm.reset();
         } else {
-          this.notifyService.showError(data.error.message, "Error")
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
       }
     );
@@ -181,7 +176,7 @@ export class VisitorsComponent implements OnInit {
           this.ngOnInit();
           this.loginForm.reset();
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
         this.buttonText = "Add New Visitor";
       }
@@ -201,7 +196,7 @@ export class VisitorsComponent implements OnInit {
           this.router.navigate(['/visitors']);
           this.showDetails = false;
         } else {
-          this.notifyService.showError(user.error.message, "Error")
+          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
 
         document.getElementById('modal-delete').click();
