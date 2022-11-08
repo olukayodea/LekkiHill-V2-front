@@ -37,16 +37,18 @@
                   <!-- form start -->
                   <form [formGroup]="loginForm">
                     <div class="card-body">
-                        <app-search-patient (refresh)="getPatientData($event)" (busy)="setBusy()"></app-search-patient>
+                      <app-search-patient (refresh)="getPatientData($event)" (busy)="setBusy()"></app-search-patient>
                       <div class="form-group" *ngIf="showForm">
                         <label for="componentId">Invoice Component</label>
                         <select required
                           [ngClass]="(componentId.invalid && (componentId.dirty || componentId.touched)) ? 'form-control is-invalid' : (componentId.valid)? 'form-control is-valid':'form-control'"
                           formControlName="componentId" id="componentId">
                           <option value="">Select One</option>
-                          <option *ngFor="let invoiceComponentRow of invoiceComponentList;let i = index" value="{{i}}">{{invoiceComponentRow.title}}</option>
+                          <option *ngFor="let invoiceComponentRow of invoiceComponentList;let i = index" value="{{i}}">
+                            {{invoiceComponentRow.title}}</option>
                         </select>
-                        <div *ngIf="componentId.invalid && (componentId.dirty || componentId.touched)" class="invalid-feedback">
+                        <div *ngIf="componentId.invalid && (componentId.dirty || componentId.touched)"
+                          class="invalid-feedback">
                           <div *ngIf="componentId.errors.required">Select an Invoice</div>
                         </div>
                       </div>
@@ -64,32 +66,37 @@
                         <textarea required
                           [ngClass]="(description.invalid && (description.dirty || description.touched)) ? 'form-control is-invalid' : (description.valid)? 'form-control is-valid':'form-control'"
                           formControlName="description" id="description" placeholder="Description"></textarea>
-                        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
+                        <div *ngIf="description.invalid && (description.dirty || description.touched)"
+                          class="invalid-feedback">
                           <div *ngIf="description.errors.required">Description is required</div>
-                            <div *ngIf="description.errors.maxLength">Description should not be longer than 100 characters</div>
+                          <div *ngIf="description.errors.maxLength">Description should not be longer than 100 characters
+                          </div>
                         </div>
                       </div>
 
-                      <button type="button" [hidden]="!showForm" [disabled]="!loginForm.valid || loginForm.pending || processing" (click)="addComponent()"
+                      <button type="button" [hidden]="!showForm"
+                        [disabled]="!loginForm.valid || loginForm.pending || processing" (click)="addComponent()"
                         class="btn btn-primary">Add to Invoice</button>
-                      <small *ngIf="!showForm">To create new invoice, please select a patient by searching for the patient above</small>
+                      <small *ngIf="!showForm">To create new invoice, please select a patient by searching for the
+                        patient above</small>
 
                       <ul class="list-group list-group-unbordered mb-3" *ngIf="showForm">
                         <br><br>
                         <li class="list-group-item" *ngFor="let row of componentList; let i = index">
-                            <b [innerHTML]="row.title"></b> <a class="float-right">{{row.quantity}} x <span [innerHTML]="row.cost.label"></span> </a>
+                          <b [innerHTML]="row.title"></b> <a class="float-right">{{row.quantity}} x <span
+                              [innerHTML]="row.cost.label"></span> </a>
                         </li>
                         <li class="list-group-item">
-                            <b>Total</b> <a class="float-right"> &#8358;{{total.toLocaleString()}}</a>
+                          <b>Total</b> <a class="float-right"> &#8358;{{total.toLocaleString()}}</a>
                         </li>
-                    </ul>
+                      </ul>
                     </div>
                     <!-- /.card-body -->
 
                     <div class="card-footer" *ngIf="showForm">
                       <input type="hidden" formControlName="ref" id="ref">
-                      <button type="submit" [disabled]="!submitButton || !submit || processing"
-                        (click)="onCreate()" class="btn btn-primary">{{buttonText}}</button>&nbsp;
+                      <button type="submit" [disabled]="!submitButton || !submit || processing" (click)="onCreate()"
+                        class="btn btn-primary">{{buttonText}}</button>&nbsp;
                       <button type="button" [hidden]="!edit" (click)="onCancel()"
                         class="btn btn-primary">Cancel</button>
                     </div>
@@ -115,13 +122,19 @@
                     <form [formGroup]="searchForm">
                       <div class="text-right">
                         <div class="btn-group">
-                          <a [routerLink]="['/finance']" [class]="allActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                          <a [routerLink]="['/finance']"
+                            [class]="allActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
                             type="button">All</a>&nbsp;
-                          <a [routerLink]="['/finance/UnPaid']" [class]="unpaidActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'" type="button">Un-Paid
+                          <a [routerLink]="['/finance/UnPaid']"
+                            [class]="unpaidActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">Un-Paid
                             Invoice</a>&nbsp;
-                          <a [routerLink]="['/finance/partiallyPaid']" [class]="partialActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                          <a [routerLink]="['/finance/partiallyPaid']"
+                            [class]="partialActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
                             type="button">Partially Paid</a>&nbsp;
-                          <a [routerLink]="['/finance/Paid']" [class]="paidActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'" type="button">Paid
+                          <a [routerLink]="['/finance/Paid']"
+                            [class]="paidActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">Paid
                             Invoice</a>&nbsp;
                           <div class="input-group-sm">
                             <input type="text" formControlName="q" required
@@ -156,7 +169,8 @@
                           <td><a [routerLink]="['/finance/view', invoiceRow.ref]">{{invoiceRow.invoiceNumber}}</a>&nbsp;
                             <span
                               [class]="invoiceRow.status.partiallyPaid === true ? 'badge bg-warning' : invoiceRow.status.paid === true ? 'badge bg-success' : 'badge bg-danger'"
-                              [innerHTML]="invoiceRow.status.unPaid === true ? 'Unpaid' : invoiceRow.status.partiallyPaid === true ? 'Partially Paid' : 'Paid'"></span></td>
+                              [innerHTML]="invoiceRow.status.unPaid === true ? 'Unpaid' : invoiceRow.status.partiallyPaid === true ? 'Partially Paid' : 'Paid'"></span>
+                          </td>
                           <td><a
                               [routerLink]="['/patients/view', invoiceRow.patient.ref]">{{invoiceRow.patient.lastName + " " + invoiceRow.patient.firstName}}</a>
                           </td>

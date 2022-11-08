@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Params, ActivatedRoute, Router } from '@angular/router';
-import { Counts, MoneyFormat } from 'src/app/_models/data';
-import { InvoiceData, OneInvoice } from 'src/app/_models/invoice';
+import { Counts } from 'src/app/_models/data';
+import { InventoryData } from 'src/app/_models/inventory';
+import { InvoiceData } from 'src/app/_models/invoice';
 import { ApiService } from 'src/app/_services/api.service';
 import { ChecksService } from 'src/app/_services/checks.service';
 import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
-  selector: 'app-view-invoice',
-  templateUrl: './view-invoice.component.html',
-  styleUrls: ['./view-invoice.component.css']
+  selector: 'app-inventory-view',
+  templateUrl: './inventory-view.component.html',
+  styleUrls: ['./inventory-view.component.css']
 })
-export class ViewInvoiceComponent implements OnInit {
+export class InventoryViewComponent implements OnInit {
+
   routeParams: Params;
   queryParams: Params;
 
@@ -22,16 +24,17 @@ export class ViewInvoiceComponent implements OnInit {
   pageUrl = this.router.url.slice(1);
 
   view: string = "";
+  minimum: number = 50;
 
   processing: boolean = false;
   loading: boolean = true;
 
-  invoiceData: InvoiceData;
+  inventoryData: InventoryData;
 
   invoiceRef: number;
 
   extendForm = this.fb.group({
-    amount: ["", Validators.required]
+    amount: ["", [Validators.required, Validators.min(this.minimum)]]
   }, {});
   get amount() { return this.extendForm.get('amount'); }
 
@@ -45,7 +48,7 @@ export class ViewInvoiceComponent implements OnInit {
   ) {
     this.checkService.checkSession();
     this.getRouteParams();
-    this.invoiceData = new InvoiceData();
+    this.inventoryData = new InventoryData();
   }
 
   ngOnInit(): void {
@@ -62,25 +65,25 @@ export class ViewInvoiceComponent implements OnInit {
     } else {
       this.page = 1;
     }
-    this.getOneInvoice(this.invoiceRef);
+    this.getOneInventory(this.invoiceRef);
 
   }
 
-  getOneInvoice(invoiceRef) {
+  getOneInventory(invoiceRef) {
     this.loading = true;
 
-    this.apiService.getOneInvoice(invoiceRef).subscribe(
+    this.apiService.getOneInventory(invoiceRef).subscribe(
       data => {
         this.checkService.checkLoggedin(data);
         this.loading = false
         if (data.success == true) {
-          this.invoiceData = data.data;
+          this.inventoryData = data.data;
 
-          this.extendForm.patchValue({
-            amount: this.invoiceData.due.value,
-          });
+          // this.extendForm.patchValue({
+          //   amount: this.inventoryData.due.value,
+          // });
           
-          this.amount.setValidators([Validators.max(this.invoiceData.due.value)]);
+          // this.amount.setValidators([Validators.max(this.inventoryData.due.value)]);
         } else {
           this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
         }
@@ -96,7 +99,7 @@ export class ViewInvoiceComponent implements OnInit {
         this.checkService.checkLoggedin(user);
         this.processing = false
         if (user.success == true) {
-          this.notifyService.showSuccess("Invoice " + this.invoiceData.invoiceNumber +" Removed Successfully", "Invoice Deleted");
+          this.notifyService.showSuccess("Invoice " + this.inventoryData.sku +" Removed Successfully", "Invoice Deleted");
            this.router.navigate(['/finance']);
         } else {
           this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
@@ -109,7 +112,7 @@ export class ViewInvoiceComponent implements OnInit {
 
   doPost() {
     var data: object = {
-      ref: this.invoiceData.ref,
+      ref: this.inventoryData.ref,
       amount: this.extendForm.value.amount
     };
     this.postPayment(data);
@@ -132,6 +135,10 @@ export class ViewInvoiceComponent implements OnInit {
     );
   }
 
+  returnAbsolute( number: number ) {
+    return (number < 0) ? "(" + Math.abs(number) + ")" : number;
+  }
+
   getRouteParams() {
     // Route parameters
     this.activatedRoute.params.subscribe(params => {
@@ -148,5 +155,4 @@ export class ViewInvoiceComponent implements OnInit {
       this.ngOnInit();
     });
   }
-
 }

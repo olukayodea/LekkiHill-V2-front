@@ -33,6 +33,7 @@
 
                 <div class="card card-primary card-outline" *ngIf="showDetails">
                   <div class="card-body box-profile">
+                    <a [routerLink]="" (click)="onCancel()" class="float-right"><i class="fa-solid fa-xmark"></i></a>&nbsp;&nbsp;
                     <h3 class="profile-username text-center">{{appointmentsData.procedure}} <i
                       class="fa-solid fa-pen" (click)="getEdit(appointmentsData)"
                       *ngIf="!appointmentsData.status.passed"></i></h3>

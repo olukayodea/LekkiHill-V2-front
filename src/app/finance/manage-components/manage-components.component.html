@@ -43,7 +43,7 @@
                           [ngClass]="(title.invalid && (title.dirty || title.touched)) ? 'form-control is-invalid' : (title.valid)? 'form-control is-valid':'form-control'"
                           formControlName="title" id="title" placeholder="Title">
                         <div *ngIf="title.invalid && (title.dirty || title.touched)" class="invalid-feedback">
-                          <div *ngIf="last_name.errors.required">Component Title is required</div>
+                          <div *ngIf="title.errors.required">Component Title is required</div>
                         </div>
                       </div>
                       <div class="form-group">

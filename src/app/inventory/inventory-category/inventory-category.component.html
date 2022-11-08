@@ -43,7 +43,7 @@
                             [ngClass]="(title.invalid && (title.dirty || title.touched)) ? 'form-control is-invalid' : (title.valid)? 'form-control is-valid':'form-control'"
                             formControlName="title" id="title" placeholder="Title">
                           <div *ngIf="title.invalid && (title.dirty || title.touched)" class="invalid-feedback">
-                            <div *ngIf="last_name.errors.required">Category Title is required</div>
+                            <div *ngIf="title.errors.required">Category Title is required</div>
                           </div>
                         </div>
                       </div>
@@ -105,19 +105,19 @@
                             <th>&nbsp;</th>
                             <th>Titile</th>
                             <th>Created By</th>
-                            <th>Modified By</th>
                             <th>Created</th>
+                            <th>Modified By</th>
                             <th>Last Modified</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let categoryRow of categoryList; let i = index">
-                            <th>
+                            <td>
                               <i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#modal-delete"
                                 (click)="getDataForModal(categoryRow.title, categoryRow.ref)"></i>&nbsp;
                                 <i (click)="changeStatus(categoryRow.ref, 'deactivate')" *ngIf="categoryRow.status.active" class="fa-solid fa-toggle-on"></i>&nbsp;
                                 <i (click)="changeStatus(categoryRow.ref, 'activate')" *ngIf="!categoryRow.status.active" class="fa-solid fa-toggle-off "></i>
-                              </th>
+                              </td>
                             <td>{{count.prevRow + 1 + i}}</td>
                             <td>{{categoryRow.title}}&nbsp;
                               <span [class]="categoryRow.status.active === true ? 'badge bg-success' : 'badge bg-danger'"
@@ -147,7 +147,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer" *ngIf="categoryList.length > 0 && !searchResult">
-                      <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getInvoiceComponent($event)">
+                      <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getInventoryCategory($event)">
                       </app-pagination>
                     </div>
                     <div class="card-footer" *ngIf="categoryList.length > 0 && searchResult">

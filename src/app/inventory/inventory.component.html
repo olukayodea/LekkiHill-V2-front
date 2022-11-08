@@ -1,1 +1,260 @@
-<p>inventory works!</p>
+<div class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <app-header></app-header>
+    <app-sidebar [page]="'inventory'" [subPage]="'manage'"></app-sidebar>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Inventory</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                <li class="breadcrumb-item active">Inventory</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="sticky-top mb-3">
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h4 class="card-title">{{formHeader}}</h4>
+                  </div>
+                  <!-- form start -->
+                  <form [formGroup]="loginForm">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="title">Inventory Title</label>
+                        <input type="text" required
+                          [ngClass]="(title.invalid && (title.dirty || title.touched)) ? 'form-control is-invalid' : (title.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="title" id="title" placeholder="Inventory">
+                        <div *ngIf="title.invalid && (title.dirty || title.touched)" class="invalid-feedback">
+                          <div *ngIf="title.errors.required">Inventory Title is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="cost">Unit Cost</label>
+                        <input type="number" step="0.01" required
+                          [ngClass]="(cost.invalid && (cost.dirty || cost.touched)) ? 'form-control is-invalid' : (title.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="cost" id="cost" placeholder="Title">
+                        <div *ngIf="cost.invalid && (cost.dirty || cost.touched)" class="invalid-feedback">
+                          <div *ngIf="cost.errors.required">Unit Cost is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="qty_desc">Quantity Description</label>
+                        <textarea
+                          [ngClass]="(qty_desc.invalid && (qty_desc.dirty || qty_desc.touched)) ? 'form-control is-invalid' : (qty_desc.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="qty_desc" id="qty_desc" placeholder="e.g: 1 Tab"></textarea>
+
+                        <div *ngIf="qty_desc.invalid && (qty_desc.dirty || qty_desc.touched)" class="invalid-feedback">
+                          <div *ngIf="qty_desc.errors.required">Quantity Description is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="!edit">
+                        <label for="inventory_added">Opening Stock</label>
+                        <input type="number" required
+                          [ngClass]="(inventory_added.invalid && (inventory_added.dirty || inventory_added.touched)) ? 'form-control is-invalid' : (inventory_added.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="inventory_added" id="inventory_added" placeholder="Title">
+                        <div *ngIf="inventory_added.invalid && (inventory_added.dirty || inventory_added.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="inventory_added.errors.required">Opening Stock is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="category_id">Category</label>
+                        <select required
+                          [ngClass]="(category_id.invalid && (category_id.dirty || category_id.touched)) ? 'form-control is-invalid' : (category_id.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="category_id" id="category_id">
+                          <option value="">Select One</option>
+                          <option *ngFor="let inventoryCategoryRow of inventoryCategoryList;let i = index"
+                            value="{{inventoryCategoryRow.ref}}">{{inventoryCategoryRow.title}}</option>
+                        </select>
+                        <div *ngIf="category_id.invalid && (category_id.dirty || category_id.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="category_id.errors.required">Select an Invoice</div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                      <input type="hidden" formControlName="ref" id="ref">
+                      <button type="submit" [disabled]="!loginForm.valid || loginForm.pending || processing"
+                        (click)="onCreate()" class="btn btn-primary">{{buttonText}}</button>&nbsp;
+                      <button type="button" [hidden]="!edit" (click)="onCancel()"
+                        class="btn btn-primary">Cancel</button>
+                    </div>
+                  </form>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+              <div class="card card-primary card-outline">
+                <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                <!-- Default box -->
+                <div class="card card-solid" [hidden]='loading'>
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-edit"></i>
+                      {{mainHeader}}
+                      <small *ngIf="searchResult"><br>{{searchRowData}}</small>
+                    </h3>
+                    <form [formGroup]="searchForm">
+                      <div class="text-right">
+                        <div class="btn-group">
+                          <a [routerLink]="['/inventory']"
+                            [class]="allActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">All</a>&nbsp;
+                          <a [routerLink]="['/inventory/active']"
+                            [class]="activeActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">Active</a>&nbsp;
+                          <a [routerLink]="['/inventory/inactive']"
+                            [class]="inactiveActive ? 'btn btn-primary btn-sm active' : 'btn btn-primary btn-sm'"
+                            type="button">In-Active</a>&nbsp;
+                          <div class="input-group-sm">
+                            <input type="text" formControlName="q" required
+                              [ngClass]="(q.invalid && (q.dirty || q.touched)) ? 'form-control is-invalid' : (q.valid)? 'form-control is-valid':'form-control'"
+                              id="q" placeholder="Search">
+                          </div>
+                          <button type="submit" [disabled]="!searchForm.valid || searchForm.pending || processing"
+                            (click)="onSearch()" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                          <button *ngIf="searchResult" type="button" (click)="onSearchClose()"
+                            class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>SKU</th>
+                          <th>Titile</th>
+                          <th>Quantity</th>
+                          <th>Cost</th>
+                          <th>Category</th>
+                          <th>Created By</th>
+                          <th>Modified By</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let inventoryRow of inventoryList; let i = index">
+                          <td>
+                            <i class="fa-solid fa-trash-can" data-toggle="modal" data-target="#modal-delete"
+                              (click)="getDataForModal(inventoryRow.title, inventoryRow.ref)"></i>&nbsp;
+                            <i class="fa-solid fa-pen" (click)="getEdit(inventoryRow)"></i>&nbsp;
+                            <i (click)="changeStatus(inventoryRow.ref, 'deactivate')" *ngIf="inventoryRow.status.active"
+                              class="fa-solid fa-toggle-on"></i>&nbsp;
+                            <i (click)="changeStatus(inventoryRow.ref, 'activate')" *ngIf="!inventoryRow.status.active"
+                              class="fa-solid fa-toggle-off "></i>
+                          </td>
+                          <td>{{count.prevRow + 1 + i}}</td>
+                          <td><i *ngIf="inventoryRow.status.lowAlert === true" class="fa-solid fa-triangle-exclamation"></i>&nbsp;<a [routerLink]="['/inventory/view', inventoryRow.ref]">{{inventoryRow.sku}}</a></td>
+                          <td>{{inventoryRow.title}}&nbsp;
+                            <span [class]="inventoryRow.status.active === true ? 'badge bg-success' : 'badge bg-danger'"
+                              [innerHTML]="inventoryRow.status.active === true ? 'Active' : 'In-Active'"></span>
+                          </td>
+                          <td>{{inventoryRow.quantity}}</td>
+                          <td [innerHTML]="inventoryRow.cost.label"></td>
+                          <td>{{inventoryRow.category.title}}</td>
+                          <td>{{inventoryRow.createdBy.name}}</td>
+                          <td>{{inventoryRow.date.created}}</td>
+                          <td>{{inventoryRow.lastModifiedBy.name}}</td>
+                          <td>{{inventoryRow.date.modified}}</td>
+                        </tr>
+                        <tr *ngIf="inventoryList.length == 0">
+                          <td colspan="11" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>SKU</th>
+                          <th>Titile</th>
+                          <th>Quantity</th>
+                          <th>Cost</th>
+                          <th>Category</th>
+                          <th>Created By</th>
+                          <th>Modified By</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer" *ngIf="inventoryList.length > 0 && !searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getInventory($event)">
+                    </app-pagination>
+                  </div>
+                  <div class="card-footer" *ngIf="inventoryList.length > 0 && searchResult">
+                    <app-pagination [url]='pageUrl' [counts]='count' (refresh)="search(query, $event)"></app-pagination>
+                  </div>
+                  <!-- /.card-footer -->
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /.content-wrapper -->
+    <app-footer></app-footer>
+  </div>
+  <!-- ./wrapper -->
+</div>
+
+<div class="modal fade" id="modal-delete">
+  <div class="modal-dialog">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Inventory</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p
+          [innerHTML]="'This action will remove '+inventoryName+'. This action is not reversable, are you sure you want to continue ?'">
+        </p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-light" (click)="deleteInventory(inventoryRef)">Delete
+          Inventory</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -9,8 +9,10 @@ import { PrintInvoiceComponent } from './finance/print-invoice/print-invoice.com
 import { ViewInvoiceComponent } from './finance/view-invoice/view-invoice.component';
 import { InventoryCategoryComponent } from './inventory/inventory-category/inventory-category.component';
 import { InventoryReportComponent } from './inventory/inventory-report/inventory-report.component';
+import { InventoryViewComponent } from './inventory/inventory-view/inventory-view.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
 import { PatientComponent } from './patient/patient.component';
 import { ViewPatientComponent } from './patient/view-patient/view-patient.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
@@ -25,6 +27,7 @@ const routes: Routes = [
   { path: "appointments", component: AppointmentsComponent },
 
   { path: "login", component: LoginComponent },
+  { path: "logout", component: LogoutComponent },
   { path: "recoverPassword", component: RecoverPasswordComponent },
 
   { path: "patients/view/:id", component: ViewPatientComponent },
@@ -38,6 +41,8 @@ const routes: Routes = [
   { path: "inventory/category", component: InventoryCategoryComponent },
   { path: "inventory/report/:view", component: InventoryReportComponent },
   { path: "inventory/report", component: InventoryReportComponent },
+  { path: "inventory/view/:id", component: InventoryViewComponent },
+  { path: "inventory/:view", component: InventoryComponent },
   { path: "inventory", component: InventoryComponent },
   
   { path: "finance/components", component: ManageComponentsComponent },

@@ -11,6 +11,7 @@ import { InvoiceComponent, OneInvoiceComponent } from '../_models/invoiceCompone
 import { Appointments, OneAppointment } from '../_models/appointments';
 import { OneVisitor, Visitors } from '../_models/visitors';
 import { InventoryCategory, OneInventoryCategoryData } from '../_models/inventoryCategory';
+import { Inventory, OneInventoryData } from '../_models/inventory';
 
 @Injectable({
   providedIn: 'root'
@@ -184,6 +185,23 @@ export class ApiService {
     return responseData;
   }
 
+  createInventory(data): Observable<OneInventoryData> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.post(this.baseUrl + 'inventory/manage', JSON.stringify(data), httpOptions);
+
+    return responseData;
+  }
+
   createInventoryCategory(data): Observable<OneInventoryCategoryData> {
     var token = this.checkService.getToken();
     var gateway_passcode = btoa(this.product_key + "_" + token);
@@ -215,6 +233,24 @@ export class ApiService {
     }
 
     const responseData = this.put(this.baseUrl + 'patient/manage', JSON.stringify(data), httpOptions);
+
+    return responseData;
+  }
+
+  editInventory(data): Observable<OneInventoryData> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+
+    const responseData = this.put(this.baseUrl + 'inventory/manage', JSON.stringify(data), httpOptions);
 
     return responseData;
   }
@@ -269,6 +305,24 @@ export class ApiService {
     }
 
     const responseData = this.put(this.baseUrl + 'billingComponent/status', JSON.stringify(data), httpOptions);
+
+    return responseData;
+  }
+
+  changeInventoryStatus(data): Observable<OneInventoryData> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+
+    const responseData = this.put(this.baseUrl + 'inventory/manage/status', JSON.stringify(data), httpOptions);
 
     return responseData;
   }
@@ -359,6 +413,23 @@ export class ApiService {
     return await this.http.get<Patients>(this.baseUrl + 'patient/manage/' + value, httpOptions).toPromise();
   }
 
+  getOneInventory(ref:number): Observable<OneInventoryData> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'inventory/manage/' + ref, httpOptions);
+
+    return responseData;
+  }
+
   getOneInvoice(ref:number): Observable<OneInvoice> {
     var token = this.checkService.getToken();
     var gateway_passcode = btoa(this.product_key + "_" + token);
@@ -427,6 +498,23 @@ export class ApiService {
     return responseData;
   }
 
+  getActiveInventoryCategory(): Observable<InventoryCategory> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'inventory/category/active', httpOptions);
+
+    return responseData;
+  }
+
   getActiveInvoiceComponent(): Observable<InvoiceComponent> {
     var token = this.checkService.getToken();
     var gateway_passcode = btoa(this.product_key + "_" + token);
@@ -457,6 +545,23 @@ export class ApiService {
       })
     }
     const responseData = this.get(this.baseUrl + 'billingComponent/manage/list/?page='+page, httpOptions);
+
+    return responseData;
+  }
+
+  getInventory(page:number, view:string): Observable<Inventory> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'inventory/manage/list/' + view + '?page='+page, httpOptions);
 
     return responseData;
   }
@@ -563,6 +668,23 @@ export class ApiService {
     return responseData;
   }
 
+  searchInventory(q:string, page:number): Observable<Inventory> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'inventory/manage/search/'+ encodeURI(q.trim()) +'?page='+page, httpOptions);
+
+    return responseData;
+  }
+
   searchInventoryCategory(q:string, page:number): Observable<InventoryCategory> {
     var token = this.checkService.getToken();
     var gateway_passcode = btoa(this.product_key + "_" + token);
@@ -593,6 +715,23 @@ export class ApiService {
       })
     }
     const responseData = this.delete(this.baseUrl + 'billingComponent/manage/'+ref, httpOptions);
+
+    return responseData;
+  }
+
+  deleteInventory(ref): Observable<OneInventoryData> {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.delete(this.baseUrl + 'inventory/manage/'+ref, httpOptions);
 
     return responseData;
   }

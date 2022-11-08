@@ -29,6 +29,8 @@ import { SearchPatientComponent } from './common/search-patient/search-patient.c
 import { PrintInvoiceComponent } from './finance/print-invoice/print-invoice.component';
 import { InventoryCategoryComponent } from './inventory/inventory-category/inventory-category.component';
 import { InventoryReportComponent } from './inventory/inventory-report/inventory-report.component';
+import { InventoryViewComponent } from './inventory/inventory-view/inventory-view.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,8 @@ import { InventoryReportComponent } from './inventory/inventory-report/inventory
     PrintInvoiceComponent,
     InventoryCategoryComponent,
     InventoryReportComponent,
+    InventoryViewComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,

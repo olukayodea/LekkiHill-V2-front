@@ -135,7 +135,7 @@ export class LoginComponent implements OnInit {
           }
         } else {
           this.errorMsg = true;
-          this.error = user.error.message + " " + user.error.additional_message;
+          this.error = user.error.message;
           this.buttonText = "Login";
           this.processing = false;
         }
@@ -185,7 +185,7 @@ export class LoginComponent implements OnInit {
           // this.router.navigate(['/'+decodeURIComponent(this.redirect)]);
         } else {
           this.errorMsg = true;
-          this.error = user.error.message + " " + user.error.additional_message;
+          this.error = user.error.message;
           this.passwordButtonText = "Change";
           this.processing = false;
         }

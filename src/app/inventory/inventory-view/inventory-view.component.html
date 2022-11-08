@@ -1,0 +1,186 @@
+<div class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <app-header></app-header>
+    <app-sidebar [page]="'finance'" [subPage]="'manage'"></app-sidebar>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Invoices</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/inventory']">Inventory</a></li>
+                <li class="breadcrumb-item active">{{inventoryData.sku}}</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="sticky-top mb-3">
+                <div class="card card-primary card-outline">
+                  <div class="card-body box-profile">
+                    <img [src]="inventoryData.links.barcode" class="card-img-top" [alt]="inventoryData.sku">
+                    <h3 class="profile-username text-center">{{inventoryData.title}}</h3>
+                    <p class="text-muted text-center">{{inventoryData.sku}}</p>
+                  </div>
+                  <!-- form start -->
+                  <div class="card-body">
+                    <ul class="list-group list-group-unbordered mb-3">
+                      <li class="list-group-item">
+                        <b>SKU</b> <a class="float-right">{{inventoryData.sku}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Available Quantity</b> <a class="float-right">{{inventoryData.quantity}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Description</b> <a class="float-right">{{inventoryData.qty_desc}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Category</b> <a class="float-right">{{inventoryData.category.title}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Cost</b> <a class="float-right" [innerHTML]="inventoryData.cost.label"></a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Status</b> <a class="float-right">
+                          <span [class]="inventoryData.status.active === true ? 'badge bg-primary' : 'badge bg-danger'"
+                            [innerHTML]="inventoryData.status.active === true ? 'Active' : 'Inactive'">
+                          </span>
+                        </a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Added By</b> <a class="float-right">{{inventoryData.createdBy.name}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Created</b> <a class="float-right">{{inventoryData.date.created}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Last Modified By</b> <a class="float-right">{{inventoryData.lastModifiedBy.name}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Last Modified</b> <a class="float-right">{{inventoryData.date.modified}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Download</b> <span class="float-right"> <a [href]="inventoryData.links.pdf" target="_blank"
+                            title="Download as PDF"><i class="fa-solid fa-file-pdf"></i> PDF</a>&nbsp;&nbsp;&nbsp;<a
+                            [href]="inventoryData.links.csv" target="_blank" title="Download as Excel"><i
+                              class="fa-solid fa-file-excel"></i> Excel</a></span>
+                      </li>
+                    </ul>
+
+                    <form *ngIf="inventoryData.status.active" [formGroup]="extendForm">
+                      <div class="form-group">
+                        <label for="amount">Inventory Count</label>
+                        <input type="number" required
+                          [ngClass]="(amount.invalid && (amount.dirty || amount.touched)) ? 'form-control is-invalid' : (amount.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="amount" id="amount" placeholder="Amount Due">
+                        <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="invalid-feedback">
+                          <div *ngIf="amount.errors.required">Amount is required</div>
+                          <div *ngIf="amount.errors.min">You can only post a minimum of {{minimum}}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+
+
+                      <button [disabled]='!extendForm.valid || extendForm.pending || processing' (click)="doPost()"
+                        class="btn btn-success btn-block"><b>Post Payment</b></button><br>
+                    </form>
+
+                    <button [disabled]='processing' data-toggle="modal" data-target="#modal-delete"
+                      class="btn btn-success btn-block"><b><span [innerHTML]="inventoryData.status.active === true ? 'Deactivate' : 'Activate'">
+                      </span></b></button>
+                    <button [disabled]='processing' data-toggle="modal" data-target="#modal-delete"
+                      class="btn btn-danger btn-block"><b>Delete</b></button>
+
+                  </div>
+                  <!-- /.card-body -->
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+              <div class="card card-primary card-outline">
+                <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                <!-- Default box -->
+                <div [hidden]='loading'>
+                  <div class="card-header">
+                    <h3 class="card-title">
+                        <a [routerLink]="['/inventory']" [queryParams]="{back:true}"><i class="fas fa-angle-double-left"></i></a>&nbsp;&nbsp;
+                      <i class="fas fa-edit"></i>
+                      History
+                    </h3>
+                  </div>
+
+                  <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Date</th>
+                          <th>Quantity Left</th>
+                          <th>Amount Added/Removed</th>
+                          <th>Total Quantity</th>
+                          <th>Added By</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let inventoryRow of inventoryData.activities; let i = index">
+                          <td>{{i + 1}}</td>
+                          <td>{{inventoryRow.date.created}}</td>
+                          <td>{{returnAbsolute( inventoryRow.count.before) }}</td>
+                          <td>{{returnAbsolute( inventoryRow.count.inventoryAdded) }}</td>
+                          <td>{{returnAbsolute( inventoryRow.count.after) }}</td>
+                          <td>{{inventoryRow.createdBy.name}}</td>
+                        </tr>
+                        <tr *ngIf="inventoryData.activities.length == 0">
+                          <td colspan="6" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Date</th>
+                          <th>Quantity Left</th>
+                          <th>Amount Added/Removed</th>
+                          <th>Total Quantity</th>
+                          <th>Added By</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /.content-wrapper -->
+    <app-footer></app-footer>
+  </div>
+  <!-- ./wrapper -->
+</div>

@@ -162,6 +162,8 @@ export class AppointmentsComponent implements OnInit {
       this.getAppointment(this.page);
     }
     this.date = new Date;
+
+    this.showDetails = false;
   }
 
   getData(data: AppointmentsData) {
@@ -442,6 +444,7 @@ export class AppointmentsComponent implements OnInit {
 
   onCancel() {
     this.edit = false;
+    this.showDetails = false;
     this.loginForm.reset();
     this.formHeader = this.buttonText = "Book Appointment";
   }

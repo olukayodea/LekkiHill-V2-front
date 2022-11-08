@@ -78,3 +78,9 @@ export class PaymentStatus {
     approved: boolean;
     notApproved: boolean;
 }
+
+export class links {
+    barcode: string;
+    pdf: string;
+    csv: string;
+}

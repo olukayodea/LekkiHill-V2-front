@@ -3,7 +3,6 @@ import { Validators, FormBuilder } from '@angular/forms';
 import { Params, ActivatedRoute, Router } from '@angular/router';
 import { Counts } from 'src/app/_models/data';
 import { InventoryCategoryData } from 'src/app/_models/inventoryCategory';
-import { InvoiceComponentData } from 'src/app/_models/invoiceComponent';
 import { ApiService } from 'src/app/_services/api.service';
 import { ChecksService } from 'src/app/_services/checks.service';
 import { NotificationService } from 'src/app/_services/notification.service';

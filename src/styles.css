@@ -1,6 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 .btn-primary:hover {
-    color: #ddf7aa;
-    background-color: #95b0b6;
-    border-color: #455963;
+    color: #ddf7aa !important;
+    background-color: #95b0b6 !important;
+    border-color: #455963 !important;
   }
+
+  .fa-trash-can, .fa-toggle-off:hover{
+    color:red !important;
+ }
+
+ .fa-toggle-on:hover{
+  color:green !important;
+}
+
+.fa-triangle-exclamation {
+  color:#FFA533 !important;
+}
+
