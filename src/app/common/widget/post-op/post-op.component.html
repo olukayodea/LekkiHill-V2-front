@@ -1,0 +1,222 @@
+<div class="modal fade" id="modal-post-op">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Post Operative Note</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="pageForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <label for="surgery">Surgery</label>
+                            <input type="text" [ngClass]="(surgery.invalid && (surgery.dirty || surgery.touched)) ? 'form-control is-invalid' : (surgery.valid)? 'form-control is-valid':'form-control'" formControlName="surgery" id="surgery" value="" required />
+
+                            <div *ngIf="surgery.invalid && (surgery.dirty || surgery.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="surgery.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="surgery_category"> Surgery Category</label>
+                            <select formControlName="surgery_category" [ngClass]="(surgery_category.invalid && (surgery_category.dirty || surgery_category.touched)) ? 'form-control is-invalid' : (surgery_category.valid)? 'form-control is-valid':'form-control'" id="surgery_category" required>
+                              <option value="">Select One</option>
+                              <option value="Major">Major</option>
+                              <option value="Intermediate">Intermediate</option>
+                              <option value="Minor">Minor</option>
+                            </select>
+
+                            <div *ngIf="surgery_category.invalid && (surgery_category.dirty || surgery_category.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="surgery_category.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="surgeon"> Surgeon</label>
+                            <input type="text" formControlName="surgeon" id="surgeon"value="" [ngClass]="(surgeon.invalid && (surgeon.dirty || surgeon.touched)) ? 'form-control is-invalid' : (surgeon.valid)? 'form-control is-valid':'form-control'"  [ngClass]="(surgeon.invalid && (surgeon.dirty || surgeon.touched)) ? 'form-control is-invalid' : (surgeon.valid)? 'form-control is-valid':'form-control'" required />
+
+                            <div *ngIf="surgeon.invalid && (surgeon.dirty || surgeon.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="surgeon.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="asst_surgeon"> Assistant Surgeon</label>
+                            <input type="text" formControlName="asst_surgeon" id="asst_surgeon"value="" [ngClass]="(asst_surgeon.invalid && (asst_surgeon.dirty || asst_surgeon.touched)) ? 'form-control is-invalid' : (asst_surgeon.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="asst_surgeon.invalid && (asst_surgeon.dirty || asst_surgeon.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="asst_surgeon.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="per_op_nurse"> Peri Op Nurse</label>
+                            <input type="text" formControlName="per_op_nurse" id="per_op_nurse"value="" [ngClass]="(per_op_nurse.invalid && (per_op_nurse.dirty || per_op_nurse.touched)) ? 'form-control is-invalid' : (per_op_nurse.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="per_op_nurse.invalid && (per_op_nurse.dirty || per_op_nurse.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="per_op_nurse.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="circulating_nurse"> Circulating Nurse</label>
+                            <input type="text" formControlName="circulating_nurse" id="circulating_nurse"value="" [ngClass]="(circulating_nurse.invalid && (circulating_nurse.dirty || circulating_nurse.touched)) ? 'form-control is-invalid' : (circulating_nurse.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="circulating_nurse.invalid && (circulating_nurse.dirty || circulating_nurse.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="circulating_nurse.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="anaesthesia"> Anaesthesia</label>
+                            <input type="text" formControlName="anaesthesia" id="anaesthesia"value="" [ngClass]="(anaesthesia.invalid && (anaesthesia.dirty || anaesthesia.touched)) ? 'form-control is-invalid' : (anaesthesia.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="anaesthesia.invalid && (anaesthesia.dirty || anaesthesia.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="anaesthesia.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="anaesthesia_time"> Anaesthesia Time</label>
+                            <input type="datetime-local" formControlName="anaesthesia_time" id="anaesthesia_time"value="" [ngClass]="(anaesthesia_time.invalid && (anaesthesia_time.dirty || anaesthesia_time.touched)) ? 'form-control is-invalid' : (anaesthesia_time.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="anaesthesia_time.invalid && (anaesthesia_time.dirty || anaesthesia_time.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="anaesthesia_time.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="knife_on_skin"> Knife on Skin</label>
+                            <input type="datetime-local" formControlName="knife_on_skin" id="knife_on_skin"value="" [ngClass]="(knife_on_skin.invalid && (knife_on_skin.dirty || knife_on_skin.touched)) ? 'form-control is-invalid' : (knife_on_skin.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="knife_on_skin.invalid && (knife_on_skin.dirty || knife_on_skin.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="knife_on_skin.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="infiltration_time"> Infiltration Time</label>
+                            <input type="datetime-local" formControlName="infiltration_time" id="infiltration_time"value="" [ngClass]="(infiltration_time.invalid && (infiltration_time.dirty || infiltration_time.touched)) ? 'form-control is-invalid' : (infiltration_time.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="infiltration_time.invalid && (infiltration_time.dirty || infiltration_time.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="infiltration_time.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="liposuction_time"> Liposuction Time</label>
+                            <input type="datetime-local" formControlName="liposuction_time" id="liposuction_time"value="" [ngClass]="(liposuction_time.invalid && (liposuction_time.dirty || liposuction_time.touched)) ? 'form-control is-invalid' : (liposuction_time.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="liposuction_time.invalid && (liposuction_time.dirty || liposuction_time.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="liposuction_time.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="end_of_surgery"> End of Surgery</label>
+                            <input type="datetime-local" formControlName="end_of_surgery" id="end_of_surgery"value="" [ngClass]="(end_of_surgery.invalid && (end_of_surgery.dirty || end_of_surgery.touched)) ? 'form-control is-invalid' : (end_of_surgery.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="end_of_surgery.invalid && (end_of_surgery.dirty || end_of_surgery.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="end_of_surgery.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="indication"> Indication</label>
+                            <textarea formControlName="indication" id="indication" [ngClass]="(indication.invalid && (indication.dirty || indication.touched)) ? 'form-control is-invalid' : (indication.valid)? 'form-control is-valid':'form-control'"  required></textarea>
+
+                            <div *ngIf="indication.invalid && (indication.dirty || indication.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="indication.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="procedure"> Procedure</label>
+                            <textarea formControlName="procedure" id="procedure2" [ngClass]="(procedure.invalid && (procedure.dirty || procedure.touched)) ? 'form-control is-invalid' : (procedure.valid)? 'form-control is-valid':'form-control'"  required></textarea>
+
+                            <div *ngIf="procedure.invalid && (procedure.dirty || procedure.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="procedure.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="amt_of_fat_right"> Amount of Fat transfered to Right Buttock</label>
+                            <input type="text" formControlName="amt_of_fat_right" id="amt_of_fat_right"value="" [ngClass]="(amt_of_fat_right.invalid && (amt_of_fat_right.dirty || amt_of_fat_right.touched)) ? 'form-control is-invalid' : (amt_of_fat_right.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="amt_of_fat_right.invalid && (amt_of_fat_right.dirty || amt_of_fat_right.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="amt_of_fat_right.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="amt_of_fat_left"> Amount of Fat transfered to Left Buttock</label>
+                            <input type="text" formControlName="amt_of_fat_left" id="amt_of_fat_left"value="" [ngClass]="(amt_of_fat_left.invalid && (amt_of_fat_left.dirty || amt_of_fat_left.touched)) ? 'form-control is-invalid' : (amt_of_fat_left.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="amt_of_fat_left.invalid && (amt_of_fat_left.dirty || amt_of_fat_left.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="amt_of_fat_left.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="amt_of_fat_other">Amount of Fat transfered to Other Areas</label>
+                            <input type="text" formControlName="amt_of_fat_other" id="amt_of_fat_other"value="" [ngClass]="(amt_of_fat_other.invalid && (amt_of_fat_other.dirty || amt_of_fat_other.touched)) ? 'form-control is-invalid' : (amt_of_fat_other.valid)? 'form-control is-valid':'form-control'"  required />
+
+                            <div *ngIf="amt_of_fat_other.invalid && (amt_of_fat_other.dirty || amt_of_fat_other.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="amt_of_fat_other.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="ebl">EBL</label>
+                            <textarea formControlName="ebl" id="ebl" [ngClass]="(ebl.invalid && (ebl.dirty || ebl.touched)) ? 'form-control is-invalid' : (ebl.valid)? 'form-control is-valid':'form-control'" required></textarea>
+
+                            <div *ngIf="ebl.invalid && (ebl.dirty || ebl.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="ebl.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="plan">Plan</label>
+                            <textarea formControlName="plan" id="plan" [ngClass]="(plan.invalid && (plan.dirty || plan.touched)) ? 'form-control is-invalid' : (plan.valid)? 'form-control is-valid':'form-control'" required></textarea>
+
+                            <div *ngIf="plan.invalid && (plan.dirty || plan.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="plan.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal"
+                        (click)="onClose()">Close</button>
+                    <button type="submit" [disabled]="!pageForm.valid || pageForm.pending || processing"
+                        (click)="onCreate()" class="btn btn-success">Add Record</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
