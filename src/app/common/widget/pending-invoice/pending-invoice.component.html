@@ -1,0 +1,49 @@
+<div class="modal fade" id="modal-pending-invoice">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pending Invoice</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="postInvoiceForm">
+                <div class="modal-body">
+                    <div *ngFor="let control of postInvoiceForm.controls | keyvalue;let i=index">
+                    <!-- <div *ngFor="let invoiceDataRow of invoice;let i = index"> -->
+                        <div class="form-group row">
+                            <label for="amount" class="col-sm-3 col-form-label"><a
+                                    [routerLink]="['/finance/view', invoice[i].ref]"
+                                    title="Manage Invoice">{{invoice[i].invoiceNumber}}
+                                </a></label>
+                            <label for="amount" class="col-sm-3 col-form-label">&nbsp;Total:
+                                <span [innerHTML]="invoice[i].amount.label"></span>
+                            </label>
+                            <label for="amount" class="col-sm-2 col-form-label">Due</label>
+                            <div class="col-sm-4">
+                                <input type="number" [formControlName]="invoice[i].ref" required id="amount" value="" [ngClass]="(control.invalid && (control.dirty || control.touched)) ? 'form-control is-invalid' : (control.valid)? 'form-control is-valid':'form-control'">
+
+
+                                <div *ngIf="control.invalid && (control.dirty || control.touched)"
+                                class="invalid-feedback">
+                                    <div *ngIf="control.errors.required">Amount type is required</div>
+                                    <div *ngIf="control.errors.max">Amount is grater than the maximum due</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal"
+                        (click)="onClose()">Close</button>
+                    <button type="submit" [disabled]="!postInvoiceForm.valid || postInvoiceForm.pending || processing"
+                        (click)="onCreate()" class="btn btn-success">Post Payment</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
