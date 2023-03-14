@@ -22,8 +22,10 @@ export class SearchPatientComponent implements OnInit, OnChanges {
 
   page: number = 1;
   count: Counts;
+  totalRows: number = 0;
 
   searchSttring: string = "";
+  showSearchSttring: boolean = false;
 
   patientList: PatientsData[] = [];
   patientsData: PatientsData;
@@ -54,10 +56,10 @@ export class SearchPatientComponent implements OnInit, OnChanges {
     }
 
     this.query.valueChanges.subscribe(selectedValue => {
-      console.log( selectedValue ) 
       if (selectedValue !== null) {
         this.busy.next(selectedValue);
         this.searchSttring = selectedValue;
+        this.showSearchSttring = true;
         this.searchPatients(this.searchSttring, 1);
       }
     })
@@ -69,6 +71,7 @@ export class SearchPatientComponent implements OnInit, OnChanges {
     this.searchForm.patchValue({
       query: patientsData.lastName + " " + patientsData.firstName,
     });
+    this.showSearchSttring = false;
     this.refresh.next({id: value, data: patientsData});
   }
 
@@ -80,11 +83,17 @@ export class SearchPatientComponent implements OnInit, OnChanges {
         this.checkService.checkLoggedin(data);
         this.loading = false
         if (data.success == true) {
+          if (data.counts === undefined) {
+            this.totalRows = 0;
+          } else {
+            this.totalRows = data.counts.totalRows;
+          }
           this.count = data.counts;
           this.patientList = data.data;
         } else {
           this.patientList = [];
         }
+        console.log(data);
       }
     );
   }
@@ -94,6 +103,8 @@ export class SearchPatientComponent implements OnInit, OnChanges {
   }
 
   clearForm() {
+    this.searchSttring = "";
+    this.showSearchSttring = false;
     this.searchForm.reset();
   }
 

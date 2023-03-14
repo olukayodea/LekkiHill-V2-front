@@ -10,8 +10,8 @@
         </div>
       </div>
       <img [hidden]='!loading' width="64" [class]="loading?'mx-auto d-block':''" src="assets/img/loading_2.gif">
-      <div *ngIf="!loading && searchSttring != ''" class="card-body box-profile">
-          <p *ngIf="patientList.length > 0">Search for "<b>{{searchSttring}}</b>" brought back <b>{{count.totalRows}}</b> {{addS("result row", count.totalRows)}}</p>
+      <div *ngIf="!loading && showSearchSttring === true" class="card-body box-profile">
+          <p >Search for "<b>{{searchSttring}}</b>" brought back <b>{{totalRows}}</b> {{addS("result row", totalRows)}}</p>
           <ul class="list-group list-group-unbordered mb-3" *ngIf="patientList.length > 0">
               <li class="list-group-item" *ngFor="let reportRow of patientList;">
                   <b><a [routerLink]="" (click)="respond(reportRow.ref, reportRow)">{{reportRow.lastName}} {{reportRow.firstName}}</a></b><br>
