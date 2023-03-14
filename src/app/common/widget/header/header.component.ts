@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserData } from 'src/app/_models/users';
+import { ChecksService } from 'src/app/_services/checks.service';
 
 @Component({
   selector: 'app-header',
@@ -6,8 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  userData: UserData;
 
-  constructor() { }
+  constructor(
+    private checkService: ChecksService,
+  ) {
+    this.userData = this.checkService.checkSession();
+  }
 
   ngOnInit(): void {
   }
