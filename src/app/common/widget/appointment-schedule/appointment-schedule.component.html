@@ -1,0 +1,75 @@
+<div class="modal fade" id="modal-schedule-appointment">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Schedule Appointments</h4>
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="vitalForm">
+                <div class="modal-body">
+                      <div class="form-group">
+                        <label for="location">Location</label>
+                        <select required
+                          [ngClass]="(location.invalid && (location.dirty || location.touched)) ? 'form-control is-invalid' : (location.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="location" id="location">
+                          <option value="">Select One</option>
+                          <option value="Lagos">Lagos</option>
+                          <option value="Abuja">Abuja</option>
+                          <option value="Rivers">Rivers</option>
+                          <option value="Outside Nigeria">Outside Nigeria</option>
+                        </select>
+                        <div *ngIf="location.invalid && (location.dirty || location.touched)" class="invalid-feedback">
+                          <div *ngIf="location.errors.required">Select an Location</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="procedure">Procedure</label>
+                        <select required
+                          [ngClass]="(procedure.invalid && (procedure.dirty || procedure.touched)) ? 'form-control is-invalid' : (procedure.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="procedure" id="procedure">
+                          <option value="">Select One</option>
+                          <option value="Boady Confidence">Boady Confidence</option>
+                          <option value="Facials">Facials</option>
+                          <option value="Breast">Breast</option>
+                          <option value="Skin">Skin</option>
+                        </select>
+                        <div *ngIf="procedure.invalid && (procedure.dirty || procedure.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="procedure.errors.required">Select an Procedure</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="next_appointment">Appointment Date</label>
+                        <input type="datetime-local" required
+                          [ngClass]="(next_appointment.invalid && (next_appointment.dirty || next_appointment.touched)) ? 'form-control is-invalid' : (next_appointment.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="next_appointment" id="next_appointment" placeholder="Appointment Date"
+                          min="{{date | date:'yyyy-MM-ddTHH:mm'}}">
+                        <div *ngIf="next_appointment.invalid && (next_appointment.dirty || next_appointment.touched)"
+                          class="invalid-feedback">
+                          <div *ngIf="next_appointment.errors.required">appointment date is required</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea
+                          [ngClass]="(message.invalid && (message.dirty || message.touched)) ? 'form-control is-invalid' : (message.valid)? 'form-control is-valid':'form-control'"
+                          formControlName="message" id="message" placeholder="Description"></textarea>
+                        <div *ngIf="message.invalid && (message.dirty || message.touched)" class="invalid-feedback">
+                          <div *ngIf="message.errors.maxLength">Message is required</div>
+                        </div>
+                      </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="onClose()">Close</button>
+                    <button type="submit" [disabled]="!vitalForm.valid || vitalForm.pending || processing" (click)="onCreate()" class="btn btn-success">Book Appointment</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
