@@ -1,0 +1,104 @@
+<div class="modal fade" id="modal-record-vital">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Record Vitals</h4>
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="vitalForm">
+                <div class="modal-body">
+                    <small>values from last readings taken at {{patientData.date.created}} have been pre-filled </small>
+                    <div class="form-group">
+                        <label for="temprature">Temperature (⁰C)</label>
+                        <input type="number" formControlName="temprature" id="temprature"
+                        [ngClass]="(temprature.invalid && (temprature.dirty || temprature.touched)) ? 'form-control is-invalid' : (temprature.valid)? 'form-control is-valid':'form-control'"required step="0.01" />
+
+                        <div *ngIf="temprature.invalid && (temprature.dirty || temprature.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="temprature.errors.required">temprature is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pulse">Pulse Rate (bpm)</label>
+                        <input type="number" formControlName="pulse" id="pulse" [ngClass]="(pulse.invalid && (pulse.dirty || pulse.touched)) ? 'form-control is-invalid' : (pulse.valid)? 'form-control is-valid':'form-control'"
+                            required />
+
+                        <div *ngIf="pulse.invalid && (pulse.dirty || pulse.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="pulse.errors.required">pulse is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bp_sys">Blood Pressure-SYS (mmHg)</label>
+                        <input type="number" formControlName="bp_sys" id="bp_sys" [ngClass]="(bp_sys.invalid && (bp_sys.dirty || bp_sys.touched)) ? 'form-control is-invalid' : (bp_sys.valid)? 'form-control is-valid':'form-control'"
+                            required />
+
+                        <div *ngIf="bp_sys.invalid && (bp_sys.dirty || bp_sys.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="bp_sys.errors.required">Blood Pressure-SYS is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bp_dia">Blood Pressure-DIA (mmHg)</label>
+                        <input type="number" formControlName="bp_dia" id="bp_dia" [ngClass]="(bp_dia.invalid && (bp_dia.dirty || bp_dia.touched)) ? 'form-control is-invalid' : (bp_dia.valid)? 'form-control is-valid':'form-control'"
+                            required />
+
+                        <div *ngIf="bp_dia.invalid && (bp_dia.dirty || bp_dia.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="bp_dia.errors.required">Blood Pressure-DIA is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (Kg)</label>
+                        <input type="number" formControlName="weight" id="weight" [ngClass]="(weight.invalid && (weight.dirty || weight.touched)) ? 'form-control is-invalid' : (weight.valid)? 'form-control is-valid':'form-control'"
+                            required step="0.01" />
+
+                        <div *ngIf="weight.invalid && (weight.dirty || weight.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="weight.errors.required">Weight is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" formControlName="height" id="height" [ngClass]="(height.invalid && (height.dirty || height.touched)) ? 'form-control is-invalid' : (height.valid)? 'form-control is-valid':'form-control'"
+                            required step="0.01" />
+
+                        <div *ngIf="height.invalid && (height.dirty || height.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="height.errors.required">height is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="spo2">SpO2 (%)</label>
+                        <input type="number" formControlName="spo2" id="spo2" [ngClass]="(spo2.invalid && (spo2.dirty || spo2.touched)) ? 'form-control is-invalid' : (spo2.valid)? 'form-control is-valid':'form-control'" required />
+
+                        <div *ngIf="spo2.invalid && (spo2.dirty || spo2.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="spo2.errors.required">spo2 is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="respiratory">Respiratory (cpm)</label>
+                        <input type="number" formControlName="respiratory" id="respiratory"
+                        [ngClass]="(respiratory.invalid && (respiratory.dirty || respiratory.touched)) ? 'form-control is-invalid' : (respiratory.valid)? 'form-control is-valid':'form-control'" required step="0.01" />
+
+                        <div *ngIf="respiratory.invalid && (respiratory.dirty || respiratory.touched)"
+                            class="invalid-feedback">
+                            <div *ngIf="respiratory.errors.required">respiratory is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="onClose()">Close</button>
+                    <button type="submit" [disabled]="!vitalForm.valid || vitalForm.pending || processing" (click)="onCreate()" class="btn btn-success">Record Vitals</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
