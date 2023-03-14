@@ -1,1 +1,271 @@
-<p>view-patient works!</p>
+<div class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <app-header></app-header>
+    <app-sidebar [page]="'patients'" [subPage]="'manage'"></app-sidebar>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Patients</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a [routerLink]="['/']">patients</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/inventory']">Patients</a></li>
+                <li class="breadcrumb-item active">{{patientData.patienrNumber}}</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="sticky-top mb-3">
+                <div class="card card-primary card-outline">
+                  <div class="card-body box-profile">
+                    <div class="text-center">
+                        <img class="profile-user-img img-fluid img-circle" src="https://ui-avatars.com/api/?name={{patientData.lastName + ' ' + patientData.firstName}}&background=069445&color=fff" [alt]="patientData.lastName + ' ' + patientData.firstName">
+                    </div>
+                    <h3 class="profile-username text-center">{{patientData.lastName + ' ' + patientData.firstName}}</h3>
+                    <p class="text-muted text-center">{{patientData.patienrNumber}}</p>
+                  </div>
+                  <!-- form start -->
+                  <div class="card-body">
+                    <ul class="list-group list-group-unbordered mb-3">
+                      <li class="list-group-item">
+                        <b>E-Mail</b> <a class="float-right">{{patientData.email}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Phone Number</b> <a class="float-right">{{patientData.phoneNumber}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Date of Birth</b> <a class="float-right">{{patientData.age}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Gender</b> <a class="float-right">{{patientData.sex}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Allergies</b> <a class="float-right" [innerHTML]="patientData.allergies"></a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Address</b> <a class="float-right" [innerHTML]="patientData.address"></a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Name (Next of Kin)</b> <a class="float-right" [innerHTML]="patientData.kin.name"></a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Address (Next of Kin)</b> <a class="float-right" [innerHTML]="patientData.kin.address"></a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Contact (Next of Kin)</b> <a class="float-right" [innerHTML]="patientData.kin.contact"></a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Added By</b> <a class="float-right">{{patientData.createdBy.name}}</a>
+                      </li>
+                      <li class="list-group-item">
+                        <b>Created</b> <a class="float-right">{{patientData.date.created}}</a>
+                      </li>
+                    </ul>
+
+                    <button [disabled]='processing' data-toggle="modal" data-target="#modal-record-vital"
+                      class="btn btn-success btn-block"><b>Record Vitals</b></button>
+                      <button *ngIf="dueInvoice" [disabled]='processing' data-toggle="modal" data-target="#modal-pending-invoice"
+                        class="btn btn-warning btn-block"><b>Pending Invoices</b></button>
+                      <button [disabled]='processing' data-toggle="modal" data-target="#modal-post-payment"
+                        class="btn btn-success btn-block"><b>Post Payments</b></button>
+                      <button [disabled]='processing' data-toggle="modal" data-target="#modal-schedule-appointment"
+                        class="btn btn-success btn-block"><b>Schedule Appointment</b></button>
+                    <button [disabled]='processing' [routerLink]="['/clinic', patientData.ref]" data-toggle="modal" data-target="#modal-delete"
+                      class="btn btn-success btn-block"><b>Clinic</b></button>
+                    <button [disabled]='processing' data-toggle="modal" data-target="#modal-delete"
+                      class="btn btn-danger btn-block"><b>Delete</b></button>
+
+                  </div>
+                  <!-- /.card-body -->
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+              <div class="card card-primary card-outline">
+                <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                <!-- Default box -->
+                <div [hidden]='loading'>
+                  <div class="card-header">
+                    <app-alerts [data]="notification" *ngFor="let notification of patientData.notification;"></app-alerts>
+                    <ul class="nav nav-pills">
+                      <li class="nav-item"><a class="nav-link" [routerLink]="['/patients']" [queryParams]="{back:true}"
+                          data-toggle="tab"><i class="fas fa-angle-double-left"></i></a></li>&nbsp;
+                      <li class="nav-item"><a (click)="changeTab('appointment')" class="nav-link active"
+                          href="#activity" data-toggle="tab">Appointments</a></li>
+                      <li class="nav-item"><a (click)="changeTab('invoices')" class="nav-link" href="#activity"
+                          data-toggle="tab">Invoices</a></li>
+                      <li class="nav-item"><a (click)="changeTab('medication')" class="nav-link" href="#timeline"
+                          data-toggle="tab">Medications</a></li>
+                    </ul>
+                  </div>
+                  <div *ngIf="appointment === true" class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>Date</th>
+                          <th>Name</th>
+                          <th>Procedure</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let appointmentRow of patientData.appointments; let i = index">
+                          <td><i class="fa-solid fa-trash-can" data-toggle="modal" *ngIf="appointmentRow.status.new"
+                              data-target="#modal-delete" (click)="getData(appointmentRow)"></i> &nbsp; <i
+                              class="fa-solid fa-pen" (click)="getEdit(appointmentRow)"
+                              *ngIf="!appointmentRow.status.passed"></i></td>
+                          <td>{{ 1 + i}}
+                          </td>
+                          <td>{{appointmentRow.date.next}}</td>
+                          <td><a [routerLink]="['/appointments/view', appointmentRow.ref]"><span
+                                [innerHTML]="stringDivider(appointmentRow.names, 40)"></span></a>&nbsp;
+                            <span
+                              [class]="appointmentRow.status.new === true ? 'badge bg-secondary' : (appointmentRow.status.passed === false && appointmentRow.status.scheduled === true) ? 'badge bg-success' : appointmentRow.status.passed === true ? 'badge bg-warning' : 'badge bg-danger'"
+                              [innerHTML]="appointmentRow.status.new === true ? 'Uscheduled' : (appointmentRow.status.passed === false && appointmentRow.status.scheduled === true) ? 'Scheduled' : appointmentRow.status.passed === true ? 'Passed' : 'Cancelled'"></span>
+                          </td>
+                          <td>{{appointmentRow.procedure}}</td>
+                          <td><a href="mailTo:{{appointmentRow.email}}" target="_blank">{{appointmentRow.email}}</a>
+                          </td>
+                          <td><a href="tel:{{appointmentRow.phone}}" target="_blank">{{appointmentRow.phone}}</a></td>
+                        </tr>
+                        <tr *ngIf="patientData.appointments.length == 0">
+                          <td colspan="7" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>&nbsp;</th>
+                          <th>Date</th>
+                          <th>Name</th>
+                          <th>Procedure</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <div *ngIf="invoices === true" class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Invoice</th>
+                          <th>Amount</th>
+                          <th>Due</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let invoiceRow of patientData.invoice; let i = index">
+                          <td>{{1 + i}}
+                          </td>
+                          <td><a [routerLink]="['/finance/view', invoiceRow.ref]">{{invoiceRow.invoiceNumber}}</a>&nbsp;
+                            <span
+                              [class]="invoiceRow.status.partiallyPaid === true ? 'badge bg-warning' : invoiceRow.status.paid === true ? 'badge bg-success' : 'badge bg-danger'"
+                              [innerHTML]="invoiceRow.status.unPaid === true ? 'Unpaid' : invoiceRow.status.partiallyPaid === true ? 'Partially Paid' : 'Paid'"></span>
+                          </td>
+                          <td [innerHTML]="invoiceRow.amount.label"></td>
+                          <td [innerHTML]="invoiceRow.due.label"></td>
+                          <td>{{invoiceRow.date.created}}</td>
+                          <td>{{invoiceRow.date.modified}}</td>
+                        </tr>
+                        <tr *ngIf="patientData.invoice.length == 0">
+                          <td colspan="6" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Invoice</th>
+                          <th>Amount</th>
+                          <th>Due</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <div *ngIf="medication === true" class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Date</th>
+                          <th>Quantity Left</th>
+                          <th>Amount Added/Removed</th>
+                          <th>Total Quantity</th>
+                          <th>Added By</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let inventoryRow of patientData.medication; let i = index">
+                          <td>{{i + 1}}</td>
+                          <td>{{inventoryRow.date.created}}</td>
+                          <td>{{returnAbsolute( inventoryRow.count.before) }}</td>
+                          <td>{{returnAbsolute( inventoryRow.count.inventoryAdded) }}</td>
+                          <td>{{returnAbsolute( inventoryRow.count.after) }}</td>
+                          <td>{{inventoryRow.createdBy.name}}</td>
+                        </tr>
+                        <tr *ngIf="patientData.medication.length == 0">
+                          <td colspan="6" class="text-center">No record to show</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th>Date</th>
+                          <th>Quantity Left</th>
+                          <th>Amount Added/Removed</th>
+                          <th>Total Quantity</th>
+                          <th>Added By</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /.content-wrapper -->
+    <app-footer></app-footer>
+  </div>
+  <!-- ./wrapper -->
+</div>
+<app-vitals *ngIf="patientData.ref !== undefined" [patient_id]="patientData.ref" (refresh)="ngOnInit()"></app-vitals>
+<app-appointment-schedule *ngIf="patientData.ref !== undefined" [patientData]="patientData" (refresh)=" ngOnInit()"></app-appointment-schedule>
+<app-post-payment *ngIf="patientData.ref !== undefined" [patientData]="patientData" (refresh)=" ngOnInit()"></app-post-payment>
+<app-pending-invoice *ngIf="patientData.ref !== undefined" [patientData]="patientData" (refresh)=" ngOnInit()"></app-pending-invoice>
+
