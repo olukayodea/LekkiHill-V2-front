@@ -48,7 +48,6 @@ export class FinanceComponent implements OnInit {
 
   patient_id:number;
 
-  edit: boolean = false;
   searchResult: boolean = false;
   showForm: boolean = false;
 
@@ -144,7 +143,6 @@ export class FinanceComponent implements OnInit {
   }
 
   getPatientData( data:{id:number, data:PatientsData} ) {
-    console.log(data);
     this.patient_id = data.id;
     if (data.id > 1) {
       this.submitButton = true;
@@ -264,15 +262,8 @@ export class FinanceComponent implements OnInit {
       patient_id: this.patient_id,
       billing_component: this.componentList
     };
-    console.log(data);
 
-    if (this.edit === true) {
-      data['ref'] = this.loginForm.value.ref;
-
-      this.editPatient(data);
-    } else {
-      this.createInvoice(data);
-    }
+    this.createInvoice(data);
   }
 
   createInvoice(data) {
@@ -287,39 +278,15 @@ export class FinanceComponent implements OnInit {
           this.notifyService.showSuccess("Payment Invoice " + user.data.invoiceNumber + " was created successfully", "Invoice Created");
           this.ngOnInit();
           this.loginForm.reset();
+          this.componentList = [];
+          this.total = 0;
+          this.showForm = false;
         } else {
           this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
         }
         this.buttonText = "Create Invoice";
       }
     );
-  }
-
-  editPatient(data) {
-    this.processing = true;
-
-    this.buttonText = "Saving Changes...";
-    this.apiService.editPatient(data).subscribe(
-      user => {
-        this.checkService.checkLoggedin(user);
-        this.processing = false
-        if (user.success == true) {
-          this.notifyService.showSuccess("saved changes made to Invoice", "Invoice Modified");
-          this.ngOnInit();
-          this.loginForm.reset();
-        } else {
-          this.notifyService.showError(user.error.message + " " + user.error.additional_message, "Error")
-        }
-        this.buttonText = "Create Invoice";
-        this.edit = false;
-      }
-    );
-  }
-
-  onCancel() {
-    this.edit = false;
-    this.loginForm.reset();
-    this.formHeader = this.buttonText = "Create Invoice";
   }
 
   getRouteParams() {
