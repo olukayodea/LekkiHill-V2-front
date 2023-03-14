@@ -1,1 +1,625 @@
-<p>clinic works!</p>
+<div class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <app-header></app-header>
+        <app-sidebar [page]="'clinic'" [subPage]="'manage'"></app-sidebar>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Patients</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                                <li class="breadcrumb-item"><a [routerLink]="" data-toggle="modal" data-target="#modal-view-clinic">Clinic</a></li>
+                                <li class="breadcrumb-item active">{{patientData.data.patienrNumber}}</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="sticky-top mb-3">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-body box-profile">
+                                        <div class="text-center">
+                                            <img class="profile-user-img img-fluid img-circle"
+                                                src="https://ui-avatars.com/api/?name={{patientData.data.lastName + ' ' + patientData.data.firstName}}&background=069445&color=fff"
+                                                [alt]="patientData.data.lastName + ' ' + patientData.data.firstName">
+                                        </div>
+                                        <h3 class="profile-username text-center">{{patientData.data.lastName + ' ' +
+                                            patientData.data.firstName}}</h3>
+                                        <p class="text-muted text-center"><a
+                                                [routerLink]="['/patients/view', patientData.data.ref]">{{patientData.data.patienrNumber}}</a>
+                                        </p>
+                                    </div>
+                                    <!-- form start -->
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-unbordered mb-3">
+                                            <li class="list-group-item">
+                                                <b>E-Mail</b> <a class="float-right">{{patientData.data.email}}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Phone Number</b> <a
+                                                    class="float-right">{{patientData.data.phoneNumber}}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Date of Birth</b> <a class="float-right">{{patientData.data.age}}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Gender</b> <a class="float-right">{{patientData.data.sex}}</a>
+                                            </li>
+                                        </ul>
+
+                                        <button [disabled]='processing' data-toggle="modal"
+                                            data-target="#modal-record-vital"
+                                            class="btn btn-success btn-block"><b>Record Vitals</b></button>
+
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-9">
+                            <div class="card card-primary card-outline">
+                                <img [hidden]='!loading' [class]="loading?'mx-auto d-block':''"
+                                    src="assets/img/loading.gif">
+
+                                <!-- Default box -->
+                                <div [hidden]='loading'>
+                                    <div class="card-header">
+                                        <ul class="nav nav-pills">
+                                            <li class="nav-item"><a [ngClass]="summaryTab ?'nav-link active' : 'nav-link'" (click)="switchTab('summaryTab')">Summary</a></li>
+                                            <li class="nav-item"><a [routerLink]="" [ngClass]="doctorsReportTab ?'nav-link active' : 'nav-link'" (click)="switchTab('doctorsReportTab')">Doctor's Note</a>
+                                            </li>
+                                            <li class="nav-item"><a [ngClass]="medicationsTab ?'nav-link active' : 'nav-link'" [routerLink]="" (click)="switchTab('medicationsTab')">Medications</a>
+                                            </li>
+                                            <li class="nav-item"><a [ngClass]="vitalsTab ?'nav-link active' : 'nav-link'" [routerLink]="" (click)="switchTab('vitalsTab')">Vitals</a>
+                                            </li>
+                                            <li class="nav-item"><a [ngClass]="postOpTab ?'nav-link active' : 'nav-link'" [routerLink]="" (click)="switchTab('postOpTab')">Post Operative</a>
+                                            </li>
+                                            <li class="nav-item"><a [ngClass]="fluidBalanceTab ?'nav-link active' : 'nav-link'" [routerLink]="" (click)="switchTab('fluidBalanceTab')">Fluid Balance</a>
+                                            </li>
+                                            <li class="nav-item"><a [ngClass]="labouratoryTab ?'nav-link active' : 'nav-link'" [routerLink]="" (click)="switchTab('labouratoryTab')">Labouratory</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div *ngIf="summaryTab">
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <div class="col-12" *ngIf="patientData.data.ref !== undefined">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">
+                                                                <i class="fa-light fa-chart-simple"></i>
+                                                                Vitals Chart
+                                                            </h3>
+                                                        </div>
+                                                        <!-- /.card-header -->
+                                                        <div class="card-body">
+                                                            <app-charts [patient_id]="patientData.data.ref" [statistics]="patientData.vitalsGraph"></app-charts>
+                                                            <!-- /.card-body -->
+                                                            <!-- /.col -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">
+                                                                <i class="fa-solid fa-bed-pulse"></i>
+                                                                Doctor's Notes
+                                                            </h3>
+                                                        </div>
+                                                        <!-- /.card-header -->
+                                                        <div class="card-body">
+                                                            <div class="alert alert-warning" *ngIf="!doctorsReport">
+                                                                <button type="button" class="close" data-dismiss="alert"
+                                                                    aria-hidden="true">&times;</button>
+                                                                <i class="icon fas fa-exclamation-triangle"></i>No data to
+                                                                display in this view yet, <a [routerLink]="" data-toggle="modal"
+                                                                data-target="#modal-doctors-report" class="btn btn-primary">Add Note</a>
+                                                            </div>
+
+                                                            <div *ngIf="doctorsReport">
+                                                                <p [innerHTML]="patientData.doctorsReport.report"></p>
+                                                                <div class="container">
+                                                                    <div class="row">
+                                                                    <div *ngIf="patientData.doctorsReport.labTest.length > 0" class="col-4">
+                                                                        <strong>Lab Tests</strong>
+                                                                    </div>
+                                                                    <div *ngIf="patientData.doctorsReport.medication.length > 0" class="col-4">
+                                                                        <strong>Medications</strong><br>
+                                                                        <ul class="list-group list-group-flush">
+                                                                            <li class="list-group-item" *ngFor="let medicationRow of patientData.doctorsReport.medication;">
+                                                                                <spam *ngIf="medicationRow.inventory > 0">
+                                                                                    <a [routerLink]="['inventory/view', medicationRow.inventory]">{{medicationRow.medication}}</a>
+                                                                                </spam>
+                                                                                <spam *ngIf="medicationRow.inventory == 0">
+                                                                                    {{medicationRow.medication}}
+                                                                                </spam>
+                                                                                (<strong>Q:</strong> {{medicationRow.quantity}})
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                                <strong class="float-left">{{patientData.doctorsReport.createdBy.name}}.</strong>
+                                                                <small class="float-right">{{patientData.doctorsReport.date.modified}}</small><br>
+                                                            </div>
+                                                            <a [routerLink]="" *ngIf="doctorsReport" data-toggle="modal"
+                                                                data-target="#modal-doctors-report" class="btn btn-primary">Add Note</a>
+                                                        </div>
+                                                        <!-- /.card-body -->
+                                                        <!-- /.col -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">
+                                                                <i class="fa-solid fa-prescription"></i>
+                                                                Medications
+                                                            </h3>
+                                                        </div>
+                                                        <!-- /.card-header -->
+                                                        <div class="card-body">
+                                                            <div class="alert alert-warning" *ngIf="!medications">
+                                                                <button type="button" class="close" data-dismiss="alert"
+                                                                    aria-hidden="true">&times;</button>
+                                                                <i class="icon fas fa-exclamation-triangle"></i>No data to
+                                                                display in this view yet, <a [routerLink]="" data-toggle="modal"
+                                                                data-target="#modal-medication"
+                                                                    class="btn btn-primary">Add Medication</a>
+                                                            </div>
+                                                            <dl class="row" *ngIf="medications">
+                                                                <dt class="col-sm-4">Medication</dt>
+                                                                <dd class="col-sm-8" *ngIf="patientData.medications.inventory == 0">{{patientData.medications.medication}}</dd>
+                                                                <dd class="col-sm-8" *ngIf="patientData.medications.inventory > 0"><a [routerLink]="['inventory/view', patientData.medications.inventory]">{{patientData.medications.medication}}</a></dd>
+                                                                <dt class="col-sm-4">Quantity</dt>
+                                                                <dd class="col-sm-8">{{patientData.medications.quantity}}</dd>
+                                                                <dt class="col-sm-4">Dose</dt>
+                                                                <dd class="col-sm-8">{{patientData.medications.dose}}</dd>
+                                                                <dt class="col-sm-4">Frequency</dt>
+                                                                <dd class="col-sm-8">{{patientData.medications.frequency}}</dd>
+                                                                <dt class="col-sm-4">Route</dt>
+                                                                <dd class="col-sm-8">{{patientData.medications.route}}</dd>
+                                                                <dt class="col-sm-4">Added By</dt>
+                                                                <dd class="col-sm-8">{{patientData.medications.createdBy.name}}</dd>
+                                                                <dt class="col-sm-4">Added On</dt>
+                                                                <dd class="col-sm-8">{{patientData.medications.date.modified}}</dd>
+                                                            </dl>
+                                                            <a [routerLink]="" *ngIf="medications" data-toggle="modal"
+                                                            data-target="#modal-medication"
+                                                                class="btn btn-primary">Add New Medication</a>
+                                                        </div>
+                                                        <!-- /.card-body -->
+                                                        <!-- /.col -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">
+                                                                <i class="fa-solid fa-glass-water"></i>
+                                                                Fliud Balance
+                                                            </h3>
+                                                        </div>
+                                                        <!-- /.card-header -->
+                                                        <div class="card-body">
+                                                            <div class="alert alert-warning" *ngIf="!fluidBalance">
+                                                                <button type="button" class="close" data-dismiss="alert"
+                                                                    aria-hidden="true">&times;</button>
+                                                                <i class="icon fas fa-exclamation-triangle"></i>No data to
+                                                                display in this view yet, <a [routerLink]="" data-toggle="modal"
+                                                                data-target="#modal-fluid-balance"
+                                                                    class="btn btn-primary">Add Record</a>
+                                                            </div>
+                                                            <dl class="row" *ngIf="fluidBalance">
+
+                                                                <dd class="col-sm-12">Intake (ML)</dd>
+                                                                <dt class="col-sm-4">Type of IV Fluid</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.iv_fluid}}</dd>
+                                                                <dt class="col-sm-4">Amount</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.amount}}</dd>
+                                                                <dt class="col-sm-4">Oral Fluid</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.oral_fluid}}</dd>
+                                                                <dt class="col-sm-4">NG Tube Feeding</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.ng_tube_feeding}}</dd>
+                                                                <dd class="col-sm-12">Output (ML)</dd>
+                                                                <dt class="col-sm-4">Vomit</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.vomit}}</dd>
+                                                                <dt class="col-sm-4">Urine</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.urine}}</dd>
+                                                                <dt class="col-sm-4">Drains</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.drains}}</dd>
+                                                                <dt class="col-sm-4">NG Tube Drainage</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.ng_tube_drainage}}</dd>
+                                                                <dt class="col-sm-4">Added By</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.createdBy.name}}</dd>
+                                                                <dt class="col-sm-4">Added On</dt>
+                                                                <dd class="col-sm-8">{{patientData.fluidBalance.date.modified}}</dd>
+                                                            </dl><a *ngIf="fluidBalance" [routerLink]="" data-toggle="modal"
+                                                            data-target="#modal-fluid-balance"
+                                                                class="btn btn-primary">Add New Record</a>
+                                                        </div>
+                                                        <!-- /.card-body -->
+                                                        <!-- /.col -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">
+                                                                <i class="fa-light fa-clipboard"></i>
+                                                                Post Operative Note
+                                                            </h3>
+                                                        </div>
+                                                        <!-- /.card-header -->
+                                                        <div class="card-body">
+                                                            <div class="alert alert-warning" *ngIf="!postOp">
+                                                                <button type="button" class="close" data-dismiss="alert"
+                                                                    aria-hidden="true">&times;</button>
+                                                                <i class="icon fas fa-exclamation-triangle"></i>No data to
+                                                                display in this view yet, <a [routerLink]="" data-toggle="modal"
+                                                                data-target="#modal-post-op"
+                                                                    class="btn btn-primary">Add Record</a>
+                                                            </div>
+                                                            <dl class="row" *ngIf="postOp">
+                                                                <dt class="col-sm-4">Surgery</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.surgery}}</dd>
+                                                                <dt class="col-sm-4">Surgery Category</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.surgery_category}}</dd>
+                                                                <dt class="col-sm-4">Surgeon</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.surgeon}}</dd>
+                                                                <dt class="col-sm-4">Assistant Surgeon</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.asst_surgeon}}</dd>
+                                                                <dt class="col-sm-4">Peri Op Nurse</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.per_op_nurse}}</dd>
+                                                                <dt class="col-sm-4">Circulating Nurse</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.circulating_nurse}}</dd>
+                                                                <dt class="col-sm-4">Anaesthesia</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.anaesthesia}}</dd>
+                                                                <dt class="col-sm-4">Anaesthesia Time</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.anaesthesia_time}}</dd>
+                                                                <dt class="col-sm-4">Knife on Skin</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.knife_on_skin}}</dd>
+                                                                <dt class="col-sm-4">Infiltration Time</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.infiltration_time}}</dd>
+                                                                <dt class="col-sm-4">Liposuction Time</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.liposuction_time}}</dd>
+                                                                <dt class="col-sm-4">End of Surgery</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.end_of_surgery}}</dd>
+                                                                <dt class="col-sm-4">Indication</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.indication}}</dd>
+                                                                <dt class="col-sm-4">Procedure</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.procedure}}</dd>
+                                                                <dt class="col-sm-4">Amount of Fat transfered to Right Buttock</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.amt_of_fat_right}}</dd>
+                                                                <dt class="col-sm-4">Amount of Fat transfered to Left Buttock</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.amt_of_fat_left}}</dd>
+                                                                <dt class="col-sm-4">Amount of Fat transfered to Other Areas</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.amt_of_fat_other}}</dd>
+                                                                <dt class="col-sm-4">EBL</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.ebl}}</dd>
+                                                                <dt class="col-sm-4">Plan</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.plan}}</dd>
+                                                                <dt class="col-sm-4">Added By</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.createdBy.name}}</dd>
+                                                                <dt class="col-sm-4">Added On</dt>
+                                                                <dd class="col-sm-8">{{patientData.postOp.date.modified}}</dd>
+                                                            </dl>
+                                                            <a *ngIf="postOp" [routerLink]="" data-toggle="modal"
+                                                                data-target="#modal-post-op"
+                                                                    class="btn btn-primary">Add New Record</a>
+                                                        </div>
+                                                        <!-- /.card-body -->
+                                                        <!-- /.col -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">
+                                                                <i class="fa-solid fa-flask-vial"></i>
+                                                                Labouratory
+                                                            </h3>
+                                                        </div>
+                                                        <!-- /.card-header -->
+                                                        <div class="card-body">
+                                                            <div class="alert alert-warning" *ngIf="!labouratory">
+                                                                <button type="button" class="close" data-dismiss="alert"
+                                                                    aria-hidden="true">&times;</button>
+                                                                <i class="icon fas fa-exclamation-triangle"></i>No data to
+                                                                display in this view yet, <a [routerLink]="" data-toggle="modal"
+                                                                data-target="#modal-request-lab"
+                                                                    class="btn btn-primary">Add Request</a>
+                                                            </div>
+                                                            <dl class="row" *ngIf="labouratory">
+                                                                <dt class="col-sm-4">Description lists</dt>
+                                                                <dd class="col-sm-8">A description list is perfect for
+                                                                    defining terms.</dd>
+                                                                <dt class="col-sm-4">Euismod</dt>
+                                                                <dd class="col-sm-8">Vestibulum id ligula porta felis
+                                                                    euismod semper eget lacinia odio sem nec elit.</dd>
+                                                                <dd class="col-sm-8 offset-sm-4">Donec id elit non mi porta
+                                                                    gravida at eget metus.</dd>
+                                                                <dt class="col-sm-4">Malesuada porta</dt>
+                                                                <dd class="col-sm-8">Etiam porta sem malesuada magna mollis
+                                                                    euismod.</dd>
+                                                                <dt class="col-sm-4">Felis euismod semper eget lacinia</dt>
+                                                                <dd class="col-sm-8">Fusce dapibus, tellus ac cursus
+                                                                    commodo, tortor mauris condimentum nibh, ut fermentum
+                                                                    massa justo
+                                                                    sit amet risus.
+                                                                </dd>
+                                                            </dl>
+                                                            <a *ngIf="labouratory" [routerLink]="" data-toggle="modal"
+                                                                data-target="#modal-request-lab"
+                                                                    class="btn btn-primary">Add New Request</a>
+                                                        </div>
+                                                        <!-- /.card-body -->
+                                                        <!-- /.col -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                    </div>
+                                    <div *ngIf="doctorsReportTab">
+                                        <div class="card-header">
+                                            <div class="text-right">
+                                              <div class="btn-group">
+                                                <a [routerLink]="" data-toggle="modal"
+                                                      data-target="#modal-doctors-report" class="btn btn-primary">Add New Note</a>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <img [hidden]='!loadingSection' [class]="loadingSection?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                                            <div [hidden]='loadingSection'>
+                                                <div class="card-body">
+                                                    <div *ngFor="let doctorsReportRow of doctorsReportList; let i = index" class="shadow p-3 mb-3 bg-white rounded">
+                                                        <p [innerHTML]="doctorsReportRow.report"></p>
+                                                        <div class="container">
+                                                            <div class="row">
+                                                              <div *ngIf="doctorsReportRow.labTest.length > 0" class="col-4">
+                                                                <strong>Lab Tests</strong>
+                                                              </div>
+                                                              <div *ngIf="doctorsReportRow.medication.length > 0" class="col-4">
+                                                                <strong>Medications</strong><br>
+                                                                <ul class="list-group list-group-flush">
+                                                                    <li class="list-group-item" *ngFor="let medicationRow of doctorsReportRow.medication;">
+                                                                        <spam *ngIf="medicationRow.inventory > 0">
+                                                                            <a [routerLink]="['inventory/view', medicationRow.inventory]">{{medicationRow.medication}}</a>
+                                                                        </spam>
+                                                                        <spam *ngIf="medicationRow.inventory == 0">
+                                                                            {{medicationRow.medication}}
+                                                                        </spam>
+                                                                        (<strong>Q:</strong> {{medicationRow.quantity}})
+                                                                    </li>
+                                                                </ul>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        <strong class="float-left">{{doctorsReportRow.createdBy.name}}.</strong>
+                                                        <small class="float-right">{{doctorsReportRow.date.modified}}</small><br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer" *ngIf="doctorsReportList.length > 0">
+                                          <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getDoctorsReport($event)"></app-pagination>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="medicationsTab">
+                                        <div class="card-header">
+                                            <div class="text-right">
+                                              <div class="btn-group">
+                                                  <a [routerLink]="" data-toggle="modal"
+                                                  data-target="#modal-medication"
+                                                      class="btn btn-primary">Add New Medication</a>
+                                              </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <img [hidden]='!loadingSection' [class]="loadingSection?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                                                <table [hidden]='loadingSection' class="table table-hover text-nowrap">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th>Medication</th>
+                                                        <th>Route</th>
+                                                        <th>Frequency</th>
+                                                        <th>Dose</th>
+                                                        <th>Added By</th>
+                                                        <th>Added</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr *ngFor="let medicationRow of medicationList; let i = index">
+                                                        <td>{{count.prevRow + 1 + i}}
+                                                        </td>
+                                                        <td>
+                                                            {{medicationRow.quantity}}x 
+                                                            <spam *ngIf="medicationRow.inventory > 0">
+                                                                <a [routerLink]="['inventory/view', medicationRow.inventory]">{{medicationRow.medication}}</a>
+                                                            </spam>
+                                                            <spam *ngIf="medicationRow.inventory == 0">
+                                                                {{medicationRow.medication}}
+                                                            </spam>
+                                                            &nbsp;
+                                                        <span
+                                                            [class]="medicationRow.status.notSold === true ? 'badge bg-primary' : medicationRow.status.paid === true ? 'badge bg-success' : 'badge bg-danger'"
+                                                            [innerHTML]="medicationRow.status.unPaid === true ? 'Unpaid' : medicationRow.status.notSold === true ? 'Not Sold' : 'Paid'"></span>
+                                                        </td>
+                                                        <td>{{medicationRow.route}}</td>
+                                                        <td>{{medicationRow.frequency}}</td>
+                                                        <td>{{medicationRow.dose}}</td>
+                                                        <td>{{medicationRow.createdBy.username}}</td>
+                                                        <td>{{medicationRow.date.created}}</td>
+                                                    </tr>
+                                                    <tr *ngIf="medicationList.length == 0">
+                                                        <td colspan="7" class="text-center">No record to show</td>
+                                                    </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th>Medication</th>
+                                                        <th>Route</th>
+                                                        <th>Frequency</th>
+                                                        <th>Dose</th>
+                                                        <th>Added By</th>
+                                                        <th>Added</th>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer" *ngIf="medicationList.length > 0">
+                                          <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getMedication($event)"></app-pagination>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="postOpTab">
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <img [hidden]='!loadingSection' [class]="loadingSection?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                    </div>
+                                    <div *ngIf="fluidBalanceTab">
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <img [hidden]='!loadingSection' [class]="loadingSection?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                    </div>
+                                    <div *ngIf="vitalsTab">
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <img [hidden]='!loadingSection' [class]="loadingSection?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                                                <table [hidden]='loadingSection' class="table table-hover text-nowrap">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th>Temp. (⁰C)</th>
+                                                        <th>Pulse (bpm)</th>
+                                                        <th>SYS (mmHg)</th>
+                                                        <th>DIA (mmHg)</th>
+                                                        <th>Weight (Kg)</th>
+                                                        <th>Height (cm)</th>
+                                                        <th>SpO2 (%)</th>
+                                                        <th>Respiratory (cpm)</th>
+                                                        <th>Added By</th>
+                                                        <th>Added</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr *ngFor="let vitalRow of VitalsList; let i = index">
+                                                        <td>{{count.prevRow + 1 + i}}</td>
+                                                        <td>{{vitalRow.temprature}}</td>
+                                                        <td>{{vitalRow.pulse}}</td>
+                                                        <td>{{vitalRow.bp_sys}}</td>
+                                                        <td>{{vitalRow.bp_dia}}</td>
+                                                        <td>{{vitalRow.weight}}</td>
+                                                        <td>{{vitalRow.height}}</td>
+                                                        <td>{{vitalRow.spo2}}</td>
+                                                        <td>{{vitalRow.respiratory}}</td>
+                                                        <td>{{vitalRow.createdBy.username}}</td>
+                                                        <td>{{vitalRow.date.created}}</td>
+                                                    </tr>
+                                                    <tr *ngIf="VitalsList.length == 0">
+                                                        <td colspan="7" class="text-center">No record to show</td>
+                                                    </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th>Temp. (⁰C)</th>
+                                                        <th>Pulse (bpm)</th>
+                                                        <th>SYS (mmHg)</th>
+                                                        <th>DIA (mmHg)</th>
+                                                        <th>Weight (Kg)</th>
+                                                        <th>Height (cm)</th>
+                                                        <th>SpO2 (%)</th>
+                                                        <th>Respiratory (cpm)</th>
+                                                        <th>Added By</th>
+                                                        <th>Added</th>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer" *ngIf="VitalsList.length > 0">
+                                          <app-pagination [url]='pageUrl' [counts]='count' (refresh)="getVitals($event)"></app-pagination>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="labouratoryTab">
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <img [hidden]='!loadingSection' [class]="loadingSection?'mx-auto d-block':''" src="assets/img/loading.gif">
+
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+            <!-- /.content-wrapper -->
+
+        </div>
+        <!-- /.content-wrapper -->
+        <app-footer></app-footer>
+    </div>
+    <!-- ./wrapper -->
+</div>
+<app-vitals *ngIf="patientData.data.ref !== undefined" [patient_id]="patientData.data.ref"
+    (refresh)="ngOnInit()"></app-vitals>
+<app-doctors-report *ngIf="patientData.data.ref !== undefined" [patient_id]="patientData.data.ref"
+    (refresh)="ngOnInit()"></app-doctors-report>
+<app-fluid-balance *ngIf="patientData.data.ref !== undefined" [patient_id]="patientData.data.ref"
+    (refresh)="ngOnInit()"></app-fluid-balance>
+<app-medication *ngIf="patientData.data.ref !== undefined" [patient_id]="patientData.data.ref"
+    (refresh)="ngOnInit()"></app-medication>
+<app-post-op *ngIf="patientData.data.ref !== undefined" [patient_id]="patientData.data.ref"
+    (refresh)="ngOnInit()"></app-post-op>
+<app-request-lab *ngIf="patientData.data.ref !== undefined" [patient_id]="patientData.data.ref"
+    (refresh)="ngOnInit()"></app-request-lab>
