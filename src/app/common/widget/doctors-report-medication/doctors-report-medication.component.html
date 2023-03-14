@@ -1,0 +1,124 @@
+<div class="modal fade" id="modal-doctors-report-medication">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Medication</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="pageForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <label for="m_medication"> Medication</label>
+
+                            <div class="ngx-autocomplete">
+                                <ngx-autocomplete [data]="data" [searchOnProperty]="keyword" (selected)='selectEvent($event)'
+                                    (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)'
+                                    formControlName="m_medication"
+                                    [inputClass]="(m_medication.invalid && (m_medication.dirty || m_medication.touched)) ? 'form-control is-invalid' : (m_medication.valid)? 'form-control is-valid':'form-control'"
+                                    required 
+                                    [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                                </ngx-autocomplete>
+
+                                <ng-template #itemTemplate let-item>
+                                    <a [innerHTML]="item.title"></a>
+                                </ng-template>
+
+                                <ng-template #notFoundTemplate let-notFound>
+                                    <div [innerHTML]="notFound"></div>
+                                </ng-template>
+                            </div>
+                            <!-- <input type="text" formControlName="m_medication" id="m_medication" value=""
+                                [ngClass]="(m_medication.invalid && (m_medication.dirty || m_medication.touched)) ? 'form-control is-invalid' : (m_medication.valid)? 'form-control is-valid':'form-control'"
+                                [ngClass]="(m_medication.invalid && (m_medication.dirty || m_medication.touched)) ? 'form-control is-invalid' : (m_medication.valid)? 'form-control is-valid':'form-control'"
+                                required /> -->
+
+                            <div *ngIf="m_medication.invalid && (m_medication.dirty || m_medication.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="m_medication.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" formControlName="quantity" id="quantity" value=""
+                                [ngClass]="(quantity.invalid && (quantity.dirty || quantity.touched)) ? 'form-control is-invalid' : (quantity.valid)? 'form-control is-valid':'form-control'"
+                                [ngClass]="(quantity.invalid && (quantity.dirty || quantity.touched)) ? 'form-control is-invalid' : (quantity.valid)? 'form-control is-valid':'form-control'"
+                                required />
+
+                            <div *ngIf="quantity.invalid && (quantity.dirty || quantity.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="quantity.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="m_route"> Route of Administration</label>
+                            <input type="text" formControlName="m_route" id="m_route" value=""
+                                [ngClass]="(m_route.invalid && (m_route.dirty || m_route.touched)) ? 'form-control is-invalid' : (m_route.valid)? 'form-control is-valid':'form-control'"
+                                [ngClass]="(m_route.invalid && (m_route.dirty || m_route.touched)) ? 'form-control is-invalid' : (m_route.valid)? 'form-control is-valid':'form-control'"
+                                required />
+
+                            <div *ngIf="m_route.invalid && (m_route.dirty || m_route.touched)" class="invalid-feedback">
+                                <div *ngIf="m_route.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="m_dose"> Dose</label>
+                            <input type="text" formControlName="m_dose" id="m_dose" value=""
+                                [ngClass]="(m_dose.invalid && (m_dose.dirty || m_dose.touched)) ? 'form-control is-invalid' : (m_dose.valid)? 'form-control is-valid':'form-control'"
+                                [ngClass]="(m_dose.invalid && (m_dose.dirty || m_dose.touched)) ? 'form-control is-invalid' : (m_dose.valid)? 'form-control is-valid':'form-control'"
+                                required />
+
+                            <div *ngIf="m_dose.invalid && (m_dose.dirty || m_dose.touched)" class="invalid-feedback">
+                                <div *ngIf="m_dose.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="m_frequency"> Frequency</label>
+                            <input type="text" formControlName="m_frequency" id="m_frequency" value=""
+                                [ngClass]="(m_frequency.invalid && (m_frequency.dirty || m_frequency.touched)) ? 'form-control is-invalid' : (m_frequency.valid)? 'form-control is-valid':'form-control'"
+                                [ngClass]="(m_frequency.invalid && (m_frequency.dirty || m_frequency.touched)) ? 'form-control is-invalid' : (m_frequency.valid)? 'form-control is-valid':'form-control'"
+                                required />
+
+                            <div *ngIf="m_frequency.invalid && (m_frequency.dirty || m_frequency.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="m_frequency.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="sales_status"> Charge to Customer</label>
+                            <select formControlName="sales_status"
+                                [ngClass]="(sales_status.invalid && (sales_status.dirty || sales_status.touched)) ? 'form-control is-invalid' : (sales_status.valid)? 'form-control is-valid':'form-control'"
+                                id="sales_status" required>
+                                <option value="">Select One</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+
+                            <div *ngIf="sales_status.invalid && (sales_status.dirty || sales_status.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="sales_status.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <input type="hidden" formControlName="inventory_id" id="inventory_id">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal"
+                        (click)="onClose()">Close</button>
+                    <button type="submit" [disabled]="!pageForm.valid || pageForm.pending || processing"
+                        (click)="onCreate()" class="btn btn-success">Add</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
