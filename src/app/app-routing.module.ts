@@ -11,10 +11,13 @@ import { InventoryCategoryComponent } from './inventory/inventory-category/inven
 import { InventoryReportComponent } from './inventory/inventory-report/inventory-report.component';
 import { InventoryViewComponent } from './inventory/inventory-view/inventory-view.component';
 import { InventoryComponent } from './inventory/inventory.component';
+import { ComponentComponent } from './lab/component/component.component';
+import { LabComponent } from './lab/lab.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { PatientComponent } from './patient/patient.component';
 import { ViewPatientComponent } from './patient/view-patient/view-patient.component';
+import { ProfileComponent } from './profile/profile.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
 import { SettingsComponent } from './settings/settings.component';
 import { VisitorsComponent } from './visitors/visitors.component';
@@ -35,7 +38,12 @@ const routes: Routes = [
   
   { path: "settings", component: SettingsComponent },
 
+  { path: "lab/component", component: ComponentComponent },
+  { path: "lab", component: LabComponent },
+
   { path: "visitors", component: VisitorsComponent },
+
+  { path: "profile", component: ProfileComponent },
 
   { path: "inventory/category/:view", component: InventoryCategoryComponent },
   { path: "inventory/category", component: InventoryCategoryComponent },
@@ -52,7 +60,8 @@ const routes: Routes = [
   { path: "finance/:view", component: FinanceComponent },
   { path: "finance", component: FinanceComponent },
 
-  { path: "clinic", component: ClinicComponent },
+  { path: "clinic/:id/:view", component: ClinicComponent },
+  { path: "clinic/:id", component: ClinicComponent },
 ];
 
 @NgModule({
