@@ -104,7 +104,10 @@ export class AppointmentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.routeParams['view'] !== undefined) {
+
+    if (this.routeParams['id'] !== undefined) {
+      this.getOneAppointment(this.routeParams['id']);
+    } else if (this.routeParams['view'] !== undefined) {
       this.view = this.routeParams['view'];
       if (this.view == "new") {
         this.mainHeader = "Unscheduled Appointments";
@@ -174,7 +177,7 @@ export class AppointmentsComponent implements OnInit {
     this.edit = true;
     this.showDetails = false;
     this.formHeader = "Edit Appointment";
-    console.log(data);
+
     this.loginForm.patchValue({
       ref: data.ref,
       names: data.names,
@@ -190,7 +193,24 @@ export class AppointmentsComponent implements OnInit {
 
     this.buttonText = "Save Changes";
   }
+  
 
+  getOneAppointment(id) {
+    this.loading = true;
+
+    this.apiService.getOneAppointment(id).subscribe(
+      data => {
+        this.checkService.checkLoggedin(data);
+        this.loading = false
+        if (data.success == true) {
+          this.appointmentsData = data.data;
+          this.open(this.appointmentsData);
+        } else {
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
+        }
+      }
+    );
+  }
   getAppointment(page) {
     this.loading = true;
 
@@ -408,7 +428,7 @@ export class AppointmentsComponent implements OnInit {
         this.checkService.checkLoggedin(user);
         this.processing = false
         if (user.success == true) {
-          this.notifyService.showSuccess("Appointment scheduled for " + this.patient_name + " was created successfully", "Appointment Created");
+          this.notifyService.showSuccess("Appointment schedule for " + this.patient_name + " was created successfully", "Appointment Created");
           this.ngOnInit();
           this.loginForm.reset();
           this.searchPatientComponent.clearForm();
