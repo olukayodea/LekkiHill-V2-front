@@ -1,0 +1,72 @@
+<div class="modal fade" id="modal-doctors-report">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Notes</h4>
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="pageForm">
+                <div class="modal-body">
+                    <div [ngxSummernote]="config" [ngClass]="(report.invalid && (report.dirty || report.touched)) ? 'form-control is-invalid' : (report.valid)? 'form-control is-valid':'form-control'" formControlName="report" id="doctors_note_data"></div>
+
+                    <div *ngIf="report.invalid && (report.dirty || report.touched)"
+                        class="invalid-feedback">
+                        <div *ngIf="report.errors.required">required</div>
+                    </div>
+
+
+                    <div *ngIf="medicationList.length > 0">
+                        <strong>Medications</strong><br>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-start" *ngFor="let medicationRow of medicationList; let i = index">
+
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">{{medicationRow.medication}} (<strong>Q:</strong> {{medicationRow.quantity}})</div>
+                                </div>
+                                <a [routerLink]="" data-toggle="modal" data-target="#modal-delete" (click)="getIndexFOrMedication(i, 'medication')"><i class="fa-solid fa-trash"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="onClose()">Close</button>
+                    <button type="submit" data-toggle="modal" data-target="#modal-doctors-report-medication" [disabled]="processing" class="btn btn-success">Add Medications <span class="badge text-bg-danger">{{medicationList.length}}</span></button>
+                    <button type="submit" [disabled]="processing" (click)="onCreate()" class="btn btn-success">Add Lab. Test </button>
+                    <button type="submit" [disabled]="!pageForm.valid || pageForm.pending || processing" (click)="onCreate()" class="btn btn-success">Save </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<app-doctors-report-medication [patient_id]="patient_id" (refresh)="getMedication($event)"></app-doctors-report-medication>
+
+<div class="modal fade" id="modal-delete">
+    <div class="modal-dialog">
+      <div class="modal-content bg-secondary">
+        <div class="modal-header">
+          <h4 class="modal-title">Confirm Delete</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p
+            [innerHTML]="'Are you sure you want to continue ?'">
+          </p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-outline-light" (click)="remove(deleteIndex, deleteType)">Delete</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
