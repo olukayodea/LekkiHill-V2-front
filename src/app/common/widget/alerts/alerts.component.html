@@ -1,0 +1,20 @@
+<div *ngIf="data.alert == 'danger'" class="alert alert-danger alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+    <span [innerHTML]="data.details"></span>
+</div>
+<div *ngIf="data.alert == 'info'" class="alert alert-info alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5><i class="icon fas fa-info"></i> Alert!</h5>
+    <span [innerHTML]="data.details"></span>
+</div>
+<div *ngIf="data.alert == 'warning'" class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+    <span [innerHTML]="data.details"></span>
+</div>
+<div *ngIf="data.alert == 'success'" class="alert alert-success alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <h5><i class="icon fas fa-check"></i> Alert!</h5>
+    <span [innerHTML]="data.details"></span>
+</div>
