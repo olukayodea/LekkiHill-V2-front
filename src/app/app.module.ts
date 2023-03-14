@@ -31,6 +31,25 @@ import { InventoryCategoryComponent } from './inventory/inventory-category/inven
 import { InventoryReportComponent } from './inventory/inventory-report/inventory-report.component';
 import { InventoryViewComponent } from './inventory/inventory-view/inventory-view.component';
 import { LogoutComponent } from './logout/logout.component';
+import { AlertsComponent } from './common/widget/alerts/alerts.component';
+import { VitalsComponent } from './common/widget/vitals/vitals.component';
+import { AppointmentScheduleComponent } from './common/widget/appointment-schedule/appointment-schedule.component';
+import { LabComponent } from './lab/lab.component';
+import { ComponentComponent } from './lab/component/component.component';
+import { PostPaymentComponent } from './common/widget/post-payment/post-payment.component';
+import { PendingInvoiceComponent } from './common/widget/pending-invoice/pending-invoice.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ViewClinicComponent } from './common/widget/view-clinic/view-clinic.component';
+import { ChartsComponent } from './common/widget/charts/charts.component';
+import { DoctorsReportComponent } from './common/widget/doctors-report/doctors-report.component';
+import { MedicationComponent } from './common/widget/medication/medication.component';
+import { FluidBalanceComponent } from './common/widget/fluid-balance/fluid-balance.component';
+import { PostOpComponent } from './common/widget/post-op/post-op.component';
+import { RequestLabComponent } from './common/widget/request-lab/request-lab.component';
+import {AutoCompleteModule} from 'angular-ngx-autocomplete';
+import { NgxSummernoteModule } from 'ngx-summernote';
+import { DoctorsReportMedicationComponent } from './common/widget/doctors-report-medication/doctors-report-medication.component';
+import { DoctorsReportRequestLabComponent } from './common/widget/doctors-report-request-lab/doctors-report-request-lab.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +77,23 @@ import { LogoutComponent } from './logout/logout.component';
     InventoryReportComponent,
     InventoryViewComponent,
     LogoutComponent,
+    AlertsComponent,
+    VitalsComponent,
+    AppointmentScheduleComponent,
+    LabComponent,
+    ComponentComponent,
+    PostPaymentComponent,
+    PendingInvoiceComponent,
+    ProfileComponent,
+    ViewClinicComponent,
+    ChartsComponent,
+    DoctorsReportComponent,
+    MedicationComponent,
+    FluidBalanceComponent,
+    PostOpComponent,
+    RequestLabComponent,
+    DoctorsReportMedicationComponent,
+    DoctorsReportRequestLabComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +104,8 @@ import { LogoutComponent } from './logout/logout.component';
     NgbModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
-    
+    AutoCompleteModule,
+    NgxSummernoteModule
   ],
   providers: [],
   bootstrap: [AppComponent]
