@@ -1,0 +1,106 @@
+<div class="modal fade" id="modal-fluid-balance">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Fluid Balance</h4>
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="pageForm">
+                <div class="modal-body">
+                    <h5>Intake (ML)</h5>
+                    <div class="row">
+                        <div class="col">
+                            <label for="iv_fluid">Type of IV Fluid</label>
+                            <input type="text" [ngClass]="(iv_fluid.invalid && (iv_fluid.dirty || iv_fluid.touched)) ? 'form-control is-invalid' : (iv_fluid.valid)? 'form-control is-valid':'form-control'" formControlName="iv_fluid" id="iv_fluid" value="" required />
+
+                            <div *ngIf="iv_fluid.invalid && (iv_fluid.dirty || iv_fluid.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="iv_fluid.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="amount"> Amount</label>
+                            <input type="text" step="0.01" [ngClass]="(amount.invalid && (amount.dirty || amount.touched)) ? 'form-control is-invalid' : (amount.valid)? 'form-control is-valid':'form-control'" formControlName="amount" id="amount" value="" required />
+
+                            <div *ngIf="amount.invalid && (amount.dirty || amount.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="amount.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="oral_fluid"> Oral Fluid</label>
+                            <input type="text" step="0.01" [ngClass]="(oral_fluid.invalid && (oral_fluid.dirty || oral_fluid.touched)) ? 'form-control is-invalid' : (oral_fluid.valid)? 'form-control is-valid':'form-control'" formControlName="oral_fluid" id="oral_fluid" value="" required />
+
+                            <div *ngIf="oral_fluid.invalid && (oral_fluid.dirty || oral_fluid.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="oral_fluid.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="ng_tube_feeding"> NG Tube Feeding</label>
+                            <input type="text" step="0.01" [ngClass]="(ng_tube_feeding.invalid && (ng_tube_feeding.dirty || ng_tube_feeding.touched)) ? 'form-control is-invalid' : (ng_tube_feeding.valid)? 'form-control is-valid':'form-control'" formControlName="ng_tube_feeding" id="ng_tube_feeding" value="" required />
+
+                            <div *ngIf="ng_tube_feeding.invalid && (ng_tube_feeding.dirty || ng_tube_feeding.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="ng_tube_feeding.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5>Output (ML)</h5>
+                    <div class="row">
+                        <div class="col">
+                            <label for="vomit"> Vomit</label>
+                            <input type="number" step="0.01" [ngClass]="(vomit.invalid && (vomit.dirty || vomit.touched)) ? 'form-control is-invalid' : (vomit.valid)? 'form-control is-valid':'form-control'" formControlName="vomit" id="vomit" value="" required />
+
+                            <div *ngIf="vomit.invalid && (vomit.dirty || vomit.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="vomit.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="urine"> Urine</label>
+                            <input type="number" step="0.01" [ngClass]="(urine.invalid && (urine.dirty || urine.touched)) ? 'form-control is-invalid' : (urine.valid)? 'form-control is-valid':'form-control'" formControlName="urine" id="urine" value="" required />
+
+                            <div *ngIf="urine.invalid && (urine.dirty || urine.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="urine.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="drains"> Drains</label>
+                            <input type="number"step="0.01" [ngClass]="(drains.invalid && (drains.dirty || drains.touched)) ? 'form-control is-invalid' : (drains.valid)? 'form-control is-valid':'form-control'" formControlName="drains" id="drains" value="" required />
+
+                            <div *ngIf="drains.invalid && (drains.dirty || drains.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="drains.errors.required">required</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="ng_tube_drainage"> NG Tube Drainage</label>
+                            <input type="number" step="0.01" [ngClass]="(ng_tube_drainage.invalid && (ng_tube_drainage.dirty || ng_tube_drainage.touched)) ? 'form-control is-invalid' : (ng_tube_drainage.valid)? 'form-control is-valid':'form-control'" formControlName="ng_tube_drainage" id="ng_tube_drainage" value="" required />
+
+                            <div *ngIf="ng_tube_drainage.invalid && (ng_tube_drainage.dirty || ng_tube_drainage.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="ng_tube_drainage.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="onClose()">Close</button>
+                    <button type="submit" [disabled]="!pageForm.valid || pageForm.pending || processing" (click)="onCreate()" class="btn btn-success">Add Record</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
