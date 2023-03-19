@@ -1,0 +1,65 @@
+<div class="modal fade" id="modal-doctors-report-request-lab">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Lab. Request</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="pageForm">
+                <div class="modal-body">
+                    <p>Error</p>
+                    <label for="l_category">Test</label>
+                    <div class="row">
+                        <div class="col">
+                            <div class="ngx-autocomplete">
+                                <ngx-autocomplete [data]="data" [searchOnProperty]="keyword"
+                                    (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
+                                    (inputFocused)='onFocused($event)' formControlName="l_category"
+                                    [inputClass]="(l_category.invalid && (l_category.dirty || l_category.touched)) ? 'form-control is-invalid' : (l_category.valid)? 'form-control is-valid':'form-control'"
+                                    required [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                                </ngx-autocomplete>
+
+                                <ng-template #itemTemplate let-item>
+                                    <a [innerHTML]="item.title"></a>
+                                </ng-template>
+
+                                <ng-template #notFoundTemplate let-notFound>
+                                    <div [innerHTML]="notFound"></div>
+                                </ng-template>
+                            </div>
+
+                            <div *ngIf="l_category.invalid && (l_category.dirty || l_category.touched)"
+                                class="invalid-feedback">
+                                <div *ngIf="l_category.errors.required">required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start"
+                            *ngFor="let labTestRow of labTestList; let i = index">
+
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">{{labTestRow.title}} (<span
+                                        [innerHTML]="labTestRow.cost.label"></span>)</div>
+                            </div>
+                            <a [routerLink]=""
+                                (click)="remove(i)"><i class="fa-solid fa-trash"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal"
+                        (click)="onClose()">Close</button>
+                    <button type="submit" [disabled]="labTestList.length < 1 || processing" (click)="onCreate()"
+                        class="btn btn-success">Send Request</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
