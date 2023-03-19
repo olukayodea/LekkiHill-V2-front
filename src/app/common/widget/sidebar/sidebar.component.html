@@ -15,7 +15,7 @@
         <!-- Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library -->
         <li [class]="page == 'clinic'? 'menu-open active' : ''" class="nav-item">
-          <a [routerLink]="['/clinic']" [class]="page == 'clinic'? 'nav-link active' : 'nav-link'"
+          <a [routerLink]="" data-toggle="modal" data-target="#modal-view-clinic" [class]="page == 'clinic'? 'nav-link active' : 'nav-link'"
             data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
             <i class="nav-icon fas fa-building"></i>
             <p>Clinic</p>
@@ -39,14 +39,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a [routerLink]="['/patients']"
-                [class]="page == 'patients' && subPage == 'medications'? 'nav-link active' : 'nav-link'">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Medications</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a [routerLink]="['/patients']"
+              <a [routerLink]="['/labouratory']"
                 [class]="page == 'patients' && subPage == 'labouratory'? 'nav-link active' : 'nav-link'">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Labouratory</p>
@@ -174,12 +167,30 @@
             <p>Visitors</p>
           </a>
         </li>
-        <li [class]="page == 'settings'? 'menu-open active' : ''" class="nav-item">
-          <a [routerLink]="['/settings']" [class]="page == 'settings'? 'nav-link active' : 'nav-link'"
-            data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+        <li [class]="page == 'settings'? 'nav-item menu-open' : 'nav-item'">
+          <a [routerLink]="" [class]="page == 'settings'? 'nav-link active' : 'nav-link'">
             <i class="nav-icon fa fa-gear"></i>
-            <p>Settings</p>
+            <p>
+              Settings
+              <i class="fas fa-angle-left right"></i>
+            </p>
           </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/settings']"
+                [class]="page == 'settings' && subPage == 'manage'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>General</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/labouratory/component']"
+                [class]="page == 'settings' && subPage == 'components'? 'nav-link active' : 'nav-link'">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Lab. Component</p>
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </nav>
@@ -187,3 +198,4 @@
   </div>
   <!-- /.sidebar -->
 </aside>
+<app-view-clinic></app-view-clinic>
