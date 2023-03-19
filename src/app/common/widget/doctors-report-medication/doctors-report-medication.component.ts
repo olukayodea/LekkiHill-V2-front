@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { ApiService } from 'src/app/_services/api.service';
-import { ChecksService } from 'src/app/_services/checks.service';
-import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
   selector: 'app-doctors-report-medication',

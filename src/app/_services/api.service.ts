@@ -20,6 +20,7 @@ import { Medications, MedicationsSingle } from '../_models/clinic/medications';
 import { PostOp, PostOpSingle } from '../_models/clinic/postOp';
 import { DoctorsReport, DoctorsReportSingle } from '../_models/clinic/doctorsReport';
 import { FluidBalance } from '../_models/clinic/fluidBalance';
+import { LabTest, LabTestSingle } from '../_models/clinic/lab';
 
 @Injectable({
   providedIn: 'root'
@@ -344,6 +345,24 @@ export class ApiService {
     return await this.http.post<MedicationsSingle>(this.baseUrl + 'clinic/medication', JSON.stringify(data), httpOptions).toPromise();
   }
 
+  async recordLabTestAsync(data) {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    console.log(data);
+    console.log(JSON.stringify(data));
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    return await this.http.post<LabTestSingle>(this.baseUrl + 'clinic/lab', JSON.stringify(data), httpOptions).toPromise();
+  }
+
   recordNote(data): Observable<DoctorsReportSingle> {
     var token = this.checkService.getToken();
     var gateway_passcode = btoa(this.product_key + "_" + token);
@@ -642,6 +661,22 @@ export class ApiService {
     return await this.http.get<Inventory>(this.baseUrl + 'inventory/manage/search/' + value, httpOptions).toPromise();
   }
 
+  async getLabComponentSearch(value) {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+    
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+
+    return await this.http.get<LabComponent>(this.baseUrl + 'labcomponent/manage/search/' + value, httpOptions).toPromise();
+  }
+
   getRecentVital(ref:number): Observable<ClinicVitalsData> {
     var token = this.checkService.getToken();
     var gateway_passcode = btoa(this.product_key + "_" + token);
@@ -828,6 +863,24 @@ export class ApiService {
       })
     }
     const responseData = this.get(this.baseUrl + 'clinic/vitals/' + id +'?page='+page, httpOptions);
+
+    return responseData;
+
+  }
+
+  getLab( id:number, page:number): Observable<LabTest>  {
+    var token = this.checkService.getToken();
+    var gateway_passcode = btoa(this.product_key + "_" + token);
+
+    // request headers
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+gateway_passcode,
+        'key': this.product_key.toString()
+      })
+    }
+    const responseData = this.get(this.baseUrl + 'clinic/lab/' + id +'?page='+page, httpOptions);
 
     return responseData;
 

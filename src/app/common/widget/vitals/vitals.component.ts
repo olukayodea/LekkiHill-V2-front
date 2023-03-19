@@ -128,7 +128,7 @@ export class VitalsComponent implements OnInit {
           this.notifyService.showSuccess("Patient's vital details saved", "Record Saved");
           this.ngOnInit();
           document.getElementById('modal-record-vital').click();
-          document.getElementById('modal-schedule-appointment').click();
+          // document.getElementById('modal-schedule-appointment').click();
           document.getElementById('modal-post-payment').click();
           document.getElementById('modal-pending-invoice').click();
           document.getElementById('modal-view-clinic').click();

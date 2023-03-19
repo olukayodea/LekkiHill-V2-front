@@ -37,6 +37,7 @@ export class DateFormat {
     due: string;
     created: string;
     modified: string;
+    result: string;
 }
 
 export class MoneyFormat {

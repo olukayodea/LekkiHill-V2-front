@@ -50,6 +50,8 @@ import {AutoCompleteModule} from 'angular-ngx-autocomplete';
 import { NgxSummernoteModule } from 'ngx-summernote';
 import { DoctorsReportMedicationComponent } from './common/widget/doctors-report-medication/doctors-report-medication.component';
 import { DoctorsReportRequestLabComponent } from './common/widget/doctors-report-request-lab/doctors-report-request-lab.component';
+import { PreviewComponent } from './clinic/preview/preview.component';
+import { PreviewPrintComponent } from './clinic/preview-print/preview-print.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +95,9 @@ import { DoctorsReportRequestLabComponent } from './common/widget/doctors-report
     PostOpComponent,
     RequestLabComponent,
     DoctorsReportMedicationComponent,
-    DoctorsReportRequestLabComponent
+    DoctorsReportRequestLabComponent,
+    PreviewComponent,
+    PreviewPrintComponent
   ],
   imports: [
     BrowserModule,

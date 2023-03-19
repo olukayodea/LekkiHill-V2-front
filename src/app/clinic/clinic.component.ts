@@ -12,6 +12,7 @@ import { FluidBalanceData } from '../_models/clinic/fluidBalance';
 import { PostOpData } from '../_models/clinic/postOp';
 import { DoctorsReportData } from '../_models/clinic/doctorsReport';
 import { VitalsData } from '../_models/clinic/vitals';
+import { LabTestData } from '../_models/clinic/lab';
 
 @Component({
   selector: 'app-clinic',
@@ -39,6 +40,9 @@ export class ClinicComponent implements OnInit {
   postOpList: PostOpData[] = [];
   doctorsReportList: DoctorsReportData[] = [];
   VitalsList: VitalsData[] = [];
+  labTestList: LabTestData[] = [];
+
+  previewData: {} = {};
 
   doctorsReport: boolean = false;
   medications: boolean = false;
@@ -215,6 +219,23 @@ export class ClinicComponent implements OnInit {
     );
   }
 
+  getLab( page ) {
+    this.loadingSection = true;
+
+    this.apiService.getLab(this.patientRef, page).subscribe(
+      data => {
+        this.checkService.checkLoggedin(data);
+        this.loadingSection = false
+        if (data.success == true) {
+          this.count = data.counts;
+          this.labTestList = data.data;
+        } else {
+          this.notifyService.showError(data.error.message + " " + data.error.additional_message, "Error")
+        }
+      }
+    );
+  }
+
   getDoctorsReport( page ) {
     this.loadingSection = true;
 
@@ -304,7 +325,14 @@ export class ClinicComponent implements OnInit {
       this.vitalsTab = false;
       this.labouratoryTab = true;
       this.location.replaceState('/clinic/' + this.patientRef + "/labouratory");
+      this.getLab(this.page);
     }
   }
 
+  sendData(title, data) {
+    this.previewData = {
+      title: title,
+      data: data
+    }
+  }
 }

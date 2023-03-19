@@ -31,10 +31,6 @@
                                     <div [innerHTML]="notFound"></div>
                                 </ng-template>
                             </div>
-                            <!-- <input type="text" formControlName="m_medication" id="m_medication" value=""
-                                [ngClass]="(m_medication.invalid && (m_medication.dirty || m_medication.touched)) ? 'form-control is-invalid' : (m_medication.valid)? 'form-control is-valid':'form-control'"
-                                [ngClass]="(m_medication.invalid && (m_medication.dirty || m_medication.touched)) ? 'form-control is-invalid' : (m_medication.valid)? 'form-control is-valid':'form-control'"
-                                required /> -->
 
                             <div *ngIf="m_medication.invalid && (m_medication.dirty || m_medication.touched)"
                                 class="invalid-feedback">

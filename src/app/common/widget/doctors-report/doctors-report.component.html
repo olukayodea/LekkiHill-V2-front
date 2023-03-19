@@ -30,11 +30,15 @@
                             </li>
                         </ul>
                     </div>
+                    <div *ngIf="labList.length > 0">
+                        <strong>Lab Test</strong><br>
+                        <small><i>Open lablist to edit lab test list</i></small>
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="onClose()">Close</button>
-                    <button type="submit" data-toggle="modal" data-target="#modal-doctors-report-medication" [disabled]="processing" class="btn btn-success">Add Medications <span class="badge text-bg-danger">{{medicationList.length}}</span></button>
-                    <button type="submit" [disabled]="processing" (click)="onCreate()" class="btn btn-success">Add Lab. Test </button>
+                    <button type="button" data-toggle="modal" data-target="#modal-doctors-report-medication" [disabled]="processing" class="btn btn-success">Add Medications <span class="badge text-bg-danger">{{medicationList.length}}</span></button>
+                    <button type="button" data-toggle="modal" data-target="#modal-doctors-report-request-lab" [disabled]="processing" class="btn btn-success" class="btn btn-success"><span *ngIf="labList.length == 0">Add Lab. Test</span><span *ngIf="labList.length > 0">Manage Lab. Test</span> <span class="badge text-bg-danger">{{labList.length}}</span></button>
                     <button type="submit" [disabled]="!pageForm.valid || pageForm.pending || processing" (click)="onCreate()" class="btn btn-success">Save </button>
                 </div>
             </form>
@@ -45,6 +49,7 @@
 </div>
 <!-- /.modal -->
 <app-doctors-report-medication [patient_id]="patient_id" (refresh)="getMedication($event)"></app-doctors-report-medication>
+<app-doctors-report-request-lab [patient_id]="patient_id" (refresh)="getLabRequest($event)"></app-doctors-report-request-lab>
 
 <div class="modal fade" id="modal-delete">
     <div class="modal-dialog">

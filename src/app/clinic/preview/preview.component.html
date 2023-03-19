@@ -1,0 +1,153 @@
+<div class="modal fade" id="modal-clinic-preview">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{title}}</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                <div class="modal-body">
+                    <div *ngIf="data.title == 'medication'">
+                        <dl class="row">
+                            <dt class="col-sm-4">Medication</dt>
+                            <dd class="col-sm-8" *ngIf="previewData.inventory == 0">{{previewData.medication}}</dd>
+                            <dd class="col-sm-8" *ngIf="previewData.inventory > 0"><a [routerLink]="['inventory/view', previewData.inventory]">{{previewData.medication}}</a></dd>
+                            <dt class="col-sm-4">Quantity</dt>
+                            <dd class="col-sm-8">{{previewData.quantity}}</dd>
+                            <dt class="col-sm-4">Dose</dt>
+                            <dd class="col-sm-8">{{previewData.dose}}</dd>
+                            <dt class="col-sm-4">Frequency</dt>
+                            <dd class="col-sm-8">{{previewData.frequency}}</dd>
+                            <dt class="col-sm-4">Route</dt>
+                            <dd class="col-sm-8">{{previewData.route}}</dd>
+                            <dt class="col-sm-4">Added By</dt>
+                            <dd class="col-sm-8">{{previewData.createdBy.name}}</dd>
+                            <dt class="col-sm-4">Added On</dt>
+                            <dd class="col-sm-8">{{previewData.date.modified}}</dd>
+                        </dl>
+                    </div>
+                    <div *ngIf="data.title == 'fluidBalance'">
+                        <dl class="row">
+
+                            <dd class="col-sm-12">Intake (ML)</dd>
+                            <dt class="col-sm-4">Type of IV Fluid</dt>
+                            <dd class="col-sm-8">{{previewData.iv_fluid}}</dd>
+                            <dt class="col-sm-4">Amount</dt>
+                            <dd class="col-sm-8">{{previewData.amount}}</dd>
+                            <dt class="col-sm-4">Oral Fluid</dt>
+                            <dd class="col-sm-8">{{previewData.oral_fluid}}</dd>
+                            <dt class="col-sm-4">NG Tube Feeding</dt>
+                            <dd class="col-sm-8">{{previewData.ng_tube_feeding}}</dd>
+                            <dd class="col-sm-12">Output (ML)</dd>
+                            <dt class="col-sm-4">Vomit</dt>
+                            <dd class="col-sm-8">{{previewData.vomit}}</dd>
+                            <dt class="col-sm-4">Urine</dt>
+                            <dd class="col-sm-8">{{previewData.urine}}</dd>
+                            <dt class="col-sm-4">Drains</dt>
+                            <dd class="col-sm-8">{{previewData.drains}}</dd>
+                            <dt class="col-sm-4">NG Tube Drainage</dt>
+                            <dd class="col-sm-8">{{previewData.ng_tube_drainage}}</dd>
+                            <dt class="col-sm-4">Added By</dt>
+                            <dd class="col-sm-8">{{previewData.createdBy.name}}</dd>
+                            <dt class="col-sm-4">Added On</dt>
+                            <dd class="col-sm-8">{{previewData.date.modified}}</dd>
+                        </dl>
+                    </div>
+                    <div *ngIf="data.title == 'vitals'">
+                        <dl class="row">
+                            <dt class="col-sm-4">Temperature (⁰C)</dt>
+                            <dd class="col-sm-8">{{previewData.temprature}}</dd>
+                            <dt class="col-sm-4">Pulse Rate (bpm)</dt>
+                            <dd class="col-sm-8">{{previewData.pulse}}</dd>
+                            <dt class="col-sm-4">Blood Pressure</dt>
+                            <dd class="col-sm-8">{{previewData.bp_sys + "/" + previewData.bp_sys}}</dd>
+                            <dt class="col-sm-4">Weight (Kg)</dt>
+                            <dd class="col-sm-8">{{previewData.weight}}</dd>
+                            <dt class="col-sm-4">Height (cm)</dt>
+                            <dd class="col-sm-8">{{previewData.height}}</dd>
+                            <dt class="col-sm-4">BMI</dt>
+                            <dd class="col-sm-8">{{previewData.bmi}}</dd>
+                            <dt class="col-sm-4">SpO2 (%)</dt>
+                            <dd class="col-sm-8">{{previewData.spo2}}</dd>
+                            <dt class="col-sm-4">Respiratory (cpm)</dt>
+                            <dd class="col-sm-8">{{previewData.respiratory}}</dd>
+                            <dt class="col-sm-4">Added By</dt>
+                            <dd class="col-sm-8">{{previewData.createdBy.name}}</dd>
+                            <dt class="col-sm-4">Added On</dt>
+                            <dd class="col-sm-8">{{previewData.date.modified}}</dd>
+                        </dl>
+                    </div>
+                    <div *ngIf="data.title == 'postOp'">
+                        <dl class="row">
+                            <dt class="col-sm-4">Surgery</dt>
+                            <dd class="col-sm-8">{{previewData.surgery}}</dd>
+                            <dt class="col-sm-4">Surgery Category</dt>
+                            <dd class="col-sm-8">{{previewData.surgery_category}}</dd>
+                            <dt class="col-sm-4">Surgeon</dt>
+                            <dd class="col-sm-8">{{previewData.surgeon}}</dd>
+                            <dt class="col-sm-4">Assistant Surgeon</dt>
+                            <dd class="col-sm-8">{{previewData.asst_surgeon}}</dd>
+                            <dt class="col-sm-4">Peri Op Nurse</dt>
+                            <dd class="col-sm-8">{{previewData.per_op_nurse}}</dd>
+                            <dt class="col-sm-4">Circulating Nurse</dt>
+                            <dd class="col-sm-8">{{previewData.circulating_nurse}}</dd>
+                            <dt class="col-sm-4">Anaesthesia</dt>
+                            <dd class="col-sm-8">{{previewData.anaesthesia}}</dd>
+                            <dt class="col-sm-4">Anaesthesia Time</dt>
+                            <dd class="col-sm-8">{{previewData.anaesthesia_time}}</dd>
+                            <dt class="col-sm-4">Knife on Skin</dt>
+                            <dd class="col-sm-8">{{previewData.knife_on_skin}}</dd>
+                            <dt class="col-sm-4">Infiltration Time</dt>
+                            <dd class="col-sm-8">{{previewData.infiltration_time}}</dd>
+                            <dt class="col-sm-4">Liposuction Time</dt>
+                            <dd class="col-sm-8">{{previewData.liposuction_time}}</dd>
+                            <dt class="col-sm-4">End of Surgery</dt>
+                            <dd class="col-sm-8">{{previewData.end_of_surgery}}</dd>
+                            <dt class="col-sm-4">Indication</dt>
+                            <dd class="col-sm-8">{{previewData.indication}}</dd>
+                            <dt class="col-sm-4">Procedure</dt>
+                            <dd class="col-sm-8">{{previewData.procedure}}</dd>
+                            <dt class="col-sm-4">Amount of Fat transfered to Right Buttock</dt>
+                            <dd class="col-sm-8">{{previewData.amt_of_fat_right}}</dd>
+                            <dt class="col-sm-4">Amount of Fat transfered to Left Buttock</dt>
+                            <dd class="col-sm-8">{{previewData.amt_of_fat_left}}</dd>
+                            <dt class="col-sm-4">Amount of Fat transfered to Other Areas</dt>
+                            <dd class="col-sm-8">{{previewData.amt_of_fat_other}}</dd>
+                            <dt class="col-sm-4">EBL</dt>
+                            <dd class="col-sm-8">{{previewData.ebl}}</dd>
+                            <dt class="col-sm-4">Plan</dt>
+                            <dd class="col-sm-8">{{previewData.plan}}</dd>
+                            <dt class="col-sm-4">Added By</dt>
+                            <dd class="col-sm-8">{{previewData.createdBy.name}}</dd>
+                            <dt class="col-sm-4">Added On</dt>
+                            <dd class="col-sm-8">{{previewData.date.modified}}</dd>
+                        </dl>
+                    </div>
+                    <div *ngIf="data.title == 'labTest'">
+                        <dl class="row">
+                            <dt class="col-sm-4">Category</dt>
+                            <dd class="col-sm-8">{{previewData.category.title}}</dd>
+                            <dt class="col-sm-4">Amount</dt>
+                            <dd class="col-sm-8" [innerHTML]="previewData.category.cost.label"></dd>
+                            <dt class="col-sm-4">Added By</dt>
+                            <dd class="col-sm-8">{{previewData.createdBy.name}}</dd>
+                            <dt class="col-sm-4">Added On</dt>
+                            <dd class="col-sm-8">{{previewData.date.modified}}</dd>
+                            <dt class="col-sm-4">Completed On</dt>
+                            <dd class="col-sm-8">{{previewData.date.result}}</dd>
+                        </dl>
+                        <embed *ngIf="previewData.report !== null" src="pdfFiles/interfaces.pdf" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">
+
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

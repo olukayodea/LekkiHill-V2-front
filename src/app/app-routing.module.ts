@@ -38,8 +38,8 @@ const routes: Routes = [
   
   { path: "settings", component: SettingsComponent },
 
-  { path: "lab/component", component: ComponentComponent },
-  { path: "lab", component: LabComponent },
+  { path: "labouratory/component", component: ComponentComponent },
+  { path: "labouratory", component: LabComponent },
 
   { path: "visitors", component: VisitorsComponent },
 

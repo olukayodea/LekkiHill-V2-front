@@ -77,6 +77,17 @@ export class DoctorsReportComponent implements OnInit {
               });
             });
           }
+
+          if (this.labList.length > 0) {
+            this.labList.forEach(element => {
+              element.doctors_report_id = user.data.ref;
+              this.apiService.recordLabTestAsync(element).then(patientData => {
+                if (patientData.success == true) {
+                  labCount = labCount + 1;
+                }
+              });
+            });
+          }
   
           this.notifyService.showSuccess("Patient's details saved", "Notes Saved");
           if (medCount > 0) {
@@ -105,7 +116,10 @@ export class DoctorsReportComponent implements OnInit {
 
   getMedication( data ) {
     this.medicationList.push(data);
-    console.log(this.medicationList);
+  }
+
+  getLabRequest(data) {
+    this.labList = data;
   }
 
   getIndexFOrMedication(i, t) {

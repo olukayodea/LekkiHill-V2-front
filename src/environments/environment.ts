@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   localKey: 'lQiqiv58A7lOQlVc',
+  docKey: '9yS6%N5Oar7b',
   baseUrl: 'http://127.0.0.1/lekkihill-v2/v1/',
 };
 
